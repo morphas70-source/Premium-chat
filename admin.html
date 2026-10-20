@@ -10,7 +10,18 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, onChildAdded, onValue, remove, onDisconnect } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-const firebaseConfig = { apiKey: "AIzaSyD-EXAMPLE", authDomain: "your-project.firebaseapp.com", databaseURL: "https://your-project-default-rtdb.firebaseio.com", projectId: "your-project", appId: "1:123" };
+
+// உங்க Firebase Config இங்கே சேர்க்கப்பட்டுள்ளது
+const firebaseConfig = {
+  apiKey: "AIzaSyA105KJhAOQxigwc5iltil-aFnz7ykruwI",
+  authDomain: "love-space-3e574.firebaseapp.com",
+  databaseURL: "https://love-space-3e574-default-rtdb.firebaseio.com",
+  projectId: "love-space-3e574",
+  storageBucket: "love-space-3e574.firebasestorage.app",
+  messagingSenderId: "9834363623",
+  appId: "1:9834363623:web:829d60de594b3e7c850042"
+};
+
 if (!String(firebaseConfig.apiKey).includes('EXAMPLE')) {
   try { const app=initializeApp(firebaseConfig); window.FB={db:getDatabase(app), ref, set, onChildAdded, onValue, remove, onDisconnect}; } catch(e){}
 }

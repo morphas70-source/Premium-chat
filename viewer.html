@@ -2,13 +2,11 @@
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="theme-color" content="#fffaf5">
-<link rel="manifest" href="manifest.json">
-<title>Premium Chat</title>
+<title>Premium Chat - FINAL FIXED</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, update, onValue, onChildAdded, push, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-// signInWithRedirect and getRedirectResult ADDED HERE
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
@@ -24,7 +22,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
-window.FB = { db, ref, set, update, onValue, onChildAdded, push, remove, get, auth };
+// FIX: Ella auth functions-um window.FB la expose panniten - ithu than main fix!
+window.FB = { db, ref, set, update, onValue, onChildAdded, push, remove, get, auth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut };
 window.dispatchEvent(new Event('fb-ready'));
 </script>
 <style>
@@ -43,7 +42,7 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 .auth-btn { width:100%; max-width:300px; padding:15px; border-radius:22px; border:3px solid white; background:linear-gradient(145deg,#a5aaff,#b68bff,#e5a6f7); color:white; font-size:15px; font-weight:800; cursor:pointer; box-shadow:0 8px 0 #9983d9,0 14px 28px rgba(95,65,130,.2); transition:transform .15s ease; margin-top:5px; margin-bottom:15px; }
 .auth-btn:active { transform:translateY(5px) scale(.97); box-shadow:0 3px 0 #9983d9; }
 .auth-link { margin-top:10px; font-size:13px; font-weight:700; color:#b84f91; cursor:pointer; text-decoration:underline; }
-.auth-err { color:#ff4d6d; font-size:12px; font-weight:700; margin-bottom:10px; min-height:15px; text-align:center; }
+.auth-err { color:#ff4d6d; font-size:12px; font-weight:700; margin-bottom:10px; min-height:15px; text-align:center; max-width:300px; }
 .google-btn { width:100%; max-width:300px; padding:12px; border-radius:20px; border:2px solid #ddd; background:white; color:#333; font-size:14px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 4px 0 #eee; margin-top:10px; }
 .google-btn img { width:20px; height:20px; }
 .google-btn:active { transform:translateY(3px); box-shadow:0 1px 0 #eee; }
@@ -51,7 +50,6 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 .profile { margin:4px 15px; padding:16px 14px; gap:14px; background:linear-gradient(135deg,rgba(255,225,224,.95),rgba(255,238,232,.95),rgba(242,220,255,.9)); border:3px solid white; border-radius:24px; box-shadow:0 8px 0 #e9d0e5,0 16px 30px rgba(100,65,130,.15); display:flex; align-items:center; cursor:pointer; }
 .p-av { width:68px; height:68px; border:3px solid white; box-shadow:0 5px 0 #e7bdd6; border-radius:50%; overflow:hidden; flex-shrink:0; display:flex; justify-content:center; align-items:center; background:#ffe4d6; font-size:26px; position:relative; }
 .p-av img { width:100%; height:100%; object-fit:cover; }
-.p-av::after { content:'📷'; position:absolute; bottom:-5px; right:-5px; background:white; width:22px; height:22px; border-radius:50%; display:flex; justify-content:center; align-items:center; font-size:10px; box-shadow:0 2px 5px rgba(0,0,0,.2); }
 .p-name { font-size:17px; font-weight:800; }
 .p-on { font-size:11px; font-weight:700; color:#289b65; }
 .logout-btn { margin-left:auto; padding:6px 12px; background:#ff6b6b; color:white; border:2px solid white; border-radius:12px; font-size:10px; font-weight:800; cursor:pointer; box-shadow:0 4px 0 #d94a4a; }
@@ -97,7 +95,6 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 .reply-bar.show { display:block; }
 .msg-menu { position:fixed; background:white; border-radius:16px; box-shadow:0 10px 30px rgba(0,0,0,.2); padding:8px; z-index:500; display:flex; gap:6px; }
 .msg-menu button { border:none; background:#f5edff; padding:8px 12px; border-radius:12px; font-size:18px; cursor:pointer; }
-.msg-menu button:active { transform:scale(.9); }
 .voice-bub { display:flex; align-items:center; gap:8px; min-width:140px; }
 .voice-bub audio { height:30px; }
 .modal { position:fixed; inset:0; background:rgba(0,0,0,.4); backdrop-filter:blur(5px); display:none; justify-content:center; align-items:center; z-index:200; padding:20px; }
@@ -110,45 +107,29 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 .user-row { display:flex; gap:10px; align-items:center; padding:10px; border-radius:14px; cursor:pointer; margin-bottom:8px; text-align:left; }
 .user-row:active { background:#f5edff; }
 .user-row img, .user-row .av { width:42px; height:42px; border-radius:50%; object-fit:cover; background:#ffe4d6; display:flex; justify-content:center; align-items:center; font-weight:800; color:#b84f91; }
-#notifyBanner { position:fixed; top:-100px; left:50%; transform:translateX(-50%); width:90%; max-width:380px; background:rgba(255,255,255,.95); border-radius:20px; padding:12px 15px; display:flex; gap:12px; align-items:center; box-shadow:0 15px 35px rgba(0,0,0,.15); transition:top .4s cubic-bezier(0.175,0.885,0.32,1.275); z-index:9999; border:2.5px solid white; cursor:pointer; }
-#notifyBanner.show { top:20px; }
-#notifyBanner img { width:40px; height:40px; border-radius:50%; }
-#notifyBanner b { font-size:14px; display:block; }
-#notifyBanner p { font-size:12px; color:#666; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .section-title { padding:15px 18px 8px; font-size:11px; font-weight:800; color:#888; text-transform:uppercase; letter-spacing:1px; }
 </style>
 </head><body>
 
-<div id="notifyBanner" onclick="App.openChatFromNotif()">
-  <img id="notifyAv" src="https://cdn-icons-png.flaticon.com/512/1041/1041916.png">
-  <div style="flex:1; min-width:0; text-align:left;"><b id="notifyName">New</b><p id="notifyMsg">Message...</p></div>
-</div>
-
 <div class="phone">
   <div class="head"><div class="app-ic"></div><div class="head-title">Premium Chat</div></div>
 
-  <!-- AUTH -->
   <div id="authScreen" class="auth-screen">
     <h2 id="authTitle">Welcome</h2>
     <p id="authSub">Login or create an account</p>
     <div class="auth-err" id="authErr"></div>
-    
     <input type="text" id="authName" class="auth-inp" placeholder="Your Name (For Sign up)" style="display:none">
     <input type="email" id="authEmail" class="auth-inp" placeholder="Email">
     <input type="password" id="authPass" class="auth-inp" placeholder="Password">
-    
     <button class="auth-btn" id="authBtn" onclick="App.authSubmit()">Login</button>
     <div class="auth-link" id="authToggle" onclick="App.authToggle()">Create a new account</div>
-
     <div style="margin: 15px 0; color: #aaa; font-size: 12px;">-- OR --</div>
-
     <button class="google-btn" onclick="App.googleLogin()">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
       Continue with Google
     </button>
   </div>
 
-  <!-- HOME -->
   <div id="mainHome">
     <div class="profile" onclick="App.openProfile()">
       <div class="p-av" id="userAvatar">👤</div>
@@ -156,39 +137,35 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
       <button class="logout-btn" onclick="event.stopPropagation();App.logout()">Logout</button>
     </div>
     <div class="stats">
-      <div class="stat" onclick="App.openCalendar()"><div class="s3d" style="background:linear-gradient(135deg,#ffd6a5,#ffb88a)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span class="lbl">Calendar</span><b class="num" id="reminderCount">0</b></div>
-      <div class="stat" onclick="App.changeLove()"><div class="s3d" style="background:linear-gradient(135deg,#ff9a9e,#fecfef)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><span class="lbl">Love</span><b class="num" id="loveLevel">70%</b></div>
-      <div class="stat" onclick="App.openTruth()"><div class="s3d" style="background:linear-gradient(135deg,#90c4ff,#68aaff)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><span class="lbl">Truth</span><b class="num" style="font-size:11px">Bible</b></div>
+      <div class="stat" onclick="App.openCalendar()"><div class="s3d" style="background:linear-gradient(135deg,#ffd6a5,#ffb88a)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span class="lbl">Calendar</span><b class="num" id="reminderCount">0</b></div>
+      <div class="stat" onclick="App.changeLove()"><div class="s3d" style="background:linear-gradient(135deg,#ff9a9e,#fecfef)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><span class="lbl">Love</span><b class="num" id="loveLevel">70%</b></div>
+      <div class="stat" onclick="App.openTruth()"><div class="s3d" style="background:linear-gradient(135deg,#90c4ff,#68aaff)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><span class="lbl">Truth</span><b class="num" style="font-size:11px">Bible</b></div>
     </div>
     <div class="q-head">Quick Actions</div>
     <div class="quick">
-      <div class="qc" onclick="App.switchTab('msg')"><div class="q3d"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><b>Messages</b></div>
-      <div class="qc" onclick="App.openNewChat()"><div class="q3d" style="background:linear-gradient(135deg,#8aa8ff,#6a8aff)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div><b>New Chat</b></div>
-      <div class="qc" onclick="App.openTruth()"><div class="q3d" style="background:linear-gradient(135deg,#f0b0e0,#e090c8)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/></svg></div><b>Truth</b></div>
-      <div class="qc" onclick="document.getElementById('fileInp').click()"><div class="q3d" style="background:linear-gradient(135deg,#ffe0b0,#ffcf90)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/></svg></div><b>Media</b></div>
+      <div class="qc" onclick="App.switchTab('msg')"><div class="q3d"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><b>Messages</b></div>
+      <div class="qc" onclick="App.openNewChat()"><div class="q3d" style="background:linear-gradient(135deg,#8aa8ff,#6a8aff)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg></div><b>New Chat</b></div>
+      <div class="qc" onclick="App.openTruth()"><div class="q3d" style="background:linear-gradient(135deg,#f0b0e0,#e090c8)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/></svg></div><b>Truth</b></div>
+      <div class="qc" onclick="document.getElementById('fileInp').click()"><div class="q3d" style="background:linear-gradient(135deg,#ffe0b0,#ffcf90)"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/></svg></div><b>Media</b></div>
     </div>
   </div>
 
-  <!-- MSG LIST -->
   <div id="msgTab" style="flex:1;display:none;flex-direction:column">
     <div style="padding:10px 16px"><div style="padding:12px 16px;background:white;border-radius:18px;border:3px solid white;box-shadow:0 8px 0 #e8ddd0;display:flex;gap:8px">🔍<input id="searchUsers" placeholder="Search users..." style="border:none;outline:none;width:100%;font-weight:700;font-size:12px;background:transparent" oninput="App.searchUsers(this.value)"></div></div>
     <div id="list" style="flex:1;overflow-y:auto;padding:0 16px 10px;display:flex;flex-direction:column;gap:10px"></div>
   </div>
 
-  <!-- NAV -->
   <div class="bottom" id="bottomNav" style="display:none">
     <div class="bt active" id="bHome" onclick="App.switchTab('home')"><span class="ico">🏠</span>HOME</div>
     <div class="bt" id="bMsg" onclick="App.switchTab('msg')"><span class="ico">💬</span>MESSAGES</div>
     <div class="bt" id="bAdmin" onclick="App.openAdmin()" style="display:none"><span class="ico">⚙️</span>ADMIN</div>
   </div>
 
-  <!-- CHAT -->
   <div class="chat-screen" id="chatScreen">
     <div class="cv-head">
       <div class="back" onclick="App.closeChat()">←</div>
       <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;background:#ffe4d6;display:flex;justify-content:center;align-items:center"><img id="peerAvatar" style="width:100%;height:100%;object-fit:cover" src=""><span id="peerAvFallback" style="position:absolute;font-size:18px">👤</span></div>
       <div style="flex:1;min-width:0"><b id="peerName">...</b><div id="typingIndicator" style="font-size:11px;color:#4ade80">Offline</div></div>
-      <button class="back" onclick="App.startCall('voice')" style="font-size:16px">📞</button>
     </div>
     <div class="msgs" id="msgsBox"></div>
     <div class="input">
@@ -200,14 +177,12 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
     </div>
   </div>
 
-  <!-- TRUTH -->
   <div class="truth-screen" id="truthScreen">
     <div class="cv-head"><div class="back" onclick="document.getElementById('truthScreen').classList.remove('open')">←</div><div><b>Seek the Truth 📖</b><div style="font-size:11px;color:#b84f91">Public Bible Chat</div></div></div>
-    <div class="msgs" id="truthBox" style="background-image:radial-gradient(rgba(255,205,170,.25) 1px,transparent 1px);"></div>
+    <div class="msgs" id="truthBox"></div>
     <div class="input"><input id="truthInput" placeholder="Share a passage..." onkeydown="if(event.key==='Enter')App.sendTruth()"><div class="send" onclick="App.sendTruth()">➤</div></div>
   </div>
 
-  <!-- ADMIN -->
   <div class="admin-screen" id="adminScreen">
     <div class="cv-head"><div class="back" onclick="document.getElementById('adminScreen').classList.remove('open')">←</div><div><b>Admin Panel ⚙️</b></div></div>
     <div style="flex:1;overflow-y:auto;padding:15px">
@@ -219,7 +194,6 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
   </div>
 </div>
 
-<!-- MODALS -->
 <div class="modal" id="profileModal"><div class="modal-box">
   <h3>Edit Profile</h3>
   <img id="profilePreview" style="width:80px;height:80px;border-radius:50%;object-fit:cover;margin-bottom:10px;border:3px solid white;box-shadow:0 5px 0 #e7bdd6" src="" onclick="document.getElementById('avatarInp').click()">
@@ -248,23 +222,12 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 <input type="file" id="fileInp" accept="image/*,video/*" hidden>
 <input type="file" id="avatarInp" accept="image/*" hidden>
 
-<!-- CHANGE: type="module" ADDED HERE -->
 <script type="module">
 const App = (()=>{
-  const S = {
-    user: null, profile: null, users: {}, chats: [],
-    currentChat: null, peer: null, msgs: [], truthMsgs: [],
-    replyTo: null, recorder: null, chunks: [], recording: false,
-    authMode: 'login', usersListener: null, msgsListener: null,
-    typingListener: null, peerListener: null, presenceListener: null,
-    chatsListener: null, chatMsgsListeners: {}
-  };
-  const msgSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
-  msgSound.volume = .6;
+  const S = { user:null, profile:null, users:{}, chats:[], currentChat:null, peer:null, msgs:[], truthMsgs:[], replyTo:null, recorder:null, chunks:[], recording:false, authMode:'login' };
   const genId = () => crypto.randomUUID ? crypto.randomUUID() : 'm'+Date.now()+Math.random().toString(36).slice(2,8);
   const chatIdOf = (a,b) => [a,b].sort().join('_');
 
-  // ---- AUTH (Email & Google) ----
   function authToggle(){
     S.authMode = S.authMode === 'login' ? 'signup' : 'login';
     document.getElementById('authTitle').textContent = S.authMode === 'login' ? 'Welcome Back' : 'Create Account';
@@ -282,531 +245,136 @@ const App = (()=>{
     err.textContent = '';
     if(!email || !pass) return err.textContent = 'Email and password required';
     if(S.authMode === 'signup' && !name) return err.textContent = 'Name required';
-    
     try{
       if(S.authMode === 'signup'){
-        const cred = await createUserWithEmailAndPassword(window.FB.auth, email, pass);
-        await set(ref(window.FB.db, 'users/'+cred.user.uid), {
-          name: name, email: email, about: 'Hey! I am using Premium Chat',
-          avatar: '', role: 'user', ts: Date.now()
-        });
+        const cred = await window.FB.createUserWithEmailAndPassword(window.FB.auth, email, pass);
+        await window.FB.set(window.FB.ref(window.FB.db, 'users/'+cred.user.uid), { name, email, about:'Hey! I am using Premium Chat', avatar:'', role:'user', ts:Date.now() });
       } else {
-        await signInWithEmailAndPassword(window.FB.auth, email, pass);
+        await window.FB.signInWithEmailAndPassword(window.FB.auth, email, pass);
       }
-    } catch(e){ 
-      err.textContent = e.message.replace('Firebase: ', ''); 
-    }
+    } catch(e){ err.textContent = e.message.replace('Firebase: ',''); }
   }
 
-  // FIXED GOOGLE LOGIN WITH REDIRECT FALLBACK
   async function googleLogin(){
     const err = document.getElementById('authErr');
     err.textContent = 'Opening Google...';
-    const provider = new GoogleAuthProvider();
-    provider.addScope('profile');
-    provider.addScope('email');
+    const provider = new window.FB.GoogleAuthProvider();
     try {
-      await signInWithPopup(window.FB.auth, provider);
-    } catch(e) { 
-      console.error(e);
+      await window.FB.signInWithPopup(window.FB.auth, provider);
+      err.textContent = '';
+    } catch(e) {
+      console.log('Popup error', e.code);
       if(e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request'){
-        err.textContent = 'Redirecting...';
-        try {
-          await signInWithRedirect(window.FB.auth, provider);
-        } catch(e2) {
-          err.textContent = e2.message;
-        }
+        err.textContent = 'Redirecting to Google...';
+        try { await window.FB.signInWithRedirect(window.FB.auth, provider); } catch(e2){ err.textContent = e2.message; }
+      } else if(e.code === 'auth/unauthorized-domain'){
+        err.textContent = 'Firebase > Auth > Settings > Authorized domains la s70-source.github.io add pannu da!';
       } else {
-        err.textContent = e.message.replace('Firebase: ', '');
+        err.textContent = e.message.replace('Firebase: ','');
       }
     }
   }
 
-  // Catch redirect result
-  getRedirectResult(window.FB.auth).catch((error) => {
-    document.getElementById('authErr').textContent = error.message;
-  });
+  // Handle redirect login
+  window.FB.getRedirectResult(window.FB.auth).then(r=>{ if(r) console.log('Redirect success', r.user.email); }).catch(e=>{ document.getElementById('authErr').textContent = e.message; });
 
-  async function logout(){ await signOut(window.FB.auth); location.reload(); }
+  async function logout(){ await window.FB.signOut(window.FB.auth); location.reload(); }
 
-  // ---- ON LOGIN ----
-  onAuthStateChanged(window.FB.auth, async (u)=>{
+  window.FB.onAuthStateChanged(window.FB.auth, async (u)=>{
     if(!u){ showAuth(); return; }
     S.user = u;
-    const snap = await get(ref(window.FB.db, 'users/'+u.uid));
-    if(!snap.exists()){ 
-      await set(ref(window.FB.db, 'users/'+u.uid), { 
-        name: u.displayName || u.email.split('@')[0] || 'User', 
-        email: u.email, 
-        about: 'Hey! I am using Premium Chat',
-        avatar: u.photoURL || '', 
-        role: 'user', 
-        ts: Date.now() 
-      }); 
+    const snap = await window.FB.get(window.FB.ref(window.FB.db, 'users/'+u.uid));
+    if(!snap.exists()){
+      await window.FB.set(window.FB.ref(window.FB.db, 'users/'+u.uid), { name: u.displayName || u.email.split('@')[0], email:u.email, about:'Hey! I am using Premium Chat', avatar: u.photoURL||'', role:'user', ts:Date.now() });
     }
-    S.profile = (await get(ref(window.FB.db, 'users/'+u.uid))).val();
+    S.profile = (await window.FB.get(window.FB.ref(window.FB.db, 'users/'+u.uid))).val();
     showMain();
     attachGlobalListeners();
-    set(ref(window.FB.db, 'presence/'+u.uid), { online: true, ts: Date.now() });
-    const prec = ref(window.FB.db, 'presence/'+u.uid);
-    try{ onValue(ref(window.FB.db, '.info/connected'), s => {
-      if(s.val()) window.FB.set(prec, { online: true, ts: Date.now() });
-    }); } catch(e){}
+    window.FB.set(window.FB.ref(window.FB.db, 'presence/'+u.uid), { online:true, ts:Date.now() });
     if(S.profile.role === 'admin') document.getElementById('bAdmin').style.display = 'flex';
     updateProfileUI();
   });
 
-  function showAuth(){
-    document.getElementById('authScreen').style.display = 'flex';
-    document.getElementById('mainHome').style.display = 'none';
-    document.getElementById('bottomNav').style.display = 'none';
-  }
-  function showMain(){
-    document.getElementById('authScreen').style.display = 'none';
-    document.getElementById('mainHome').style.display = 'flex';
-    document.getElementById('bottomNav').style.display = 'flex';
-  }
-
+  function showAuth(){ document.getElementById('authScreen').style.display='flex'; document.getElementById('mainHome').style.display='none'; document.getElementById('bottomNav').style.display='none'; }
+  function showMain(){ document.getElementById('authScreen').style.display='none'; document.getElementById('mainHome').style.display='flex'; document.getElementById('bottomNav').style.display='flex'; }
   function updateProfileUI(){
     if(!S.profile) return;
-    document.getElementById('myNameDisplay').textContent = S.profile.name || 'User';
-    document.getElementById('myAboutDisplay').textContent = S.profile.about || 'Available';
+    document.getElementById('myNameDisplay').textContent = S.profile.name||'User';
+    document.getElementById('myAboutDisplay').textContent = S.profile.about||'Available';
     const av = document.getElementById('userAvatar');
-    av.innerHTML = S.profile.avatar ? `<img src="${S.profile.avatar}">` : (S.profile.name || 'U').charAt(0).toUpperCase();
+    av.innerHTML = S.profile.avatar ? `<img src="${S.profile.avatar}">` : (S.profile.name||'U').charAt(0).toUpperCase();
   }
-
-  // ---- LISTENERS ----
   function attachGlobalListeners(){
-    if(S.usersListener) S.usersListener();
-    S.usersListener = onValue(ref(window.FB.db, 'users'), snap => {
-      S.users = snap.val() || {};
-      renderChatList();
-    });
-    if(S.chatsListener) S.chatsListener();
-    S.chatsListener = onValue(ref(window.FB.db, 'chats'), snap => {
-      const all = snap.val() || {};
-      S.chats = Object.entries(all).filter(([id, c]) => c.participants && c.participants[S.user.uid]).map(([id, c]) => ({ id, ...c }));
-      renderChatList();
-    });
-    onChildAdded(ref(window.FB.db, 'truth_messages'), snap => {
-      const m = snap.val(); if(m){ S.truthMsgs.push(m); renderTruth(); }
-    });
+    window.FB.onValue(window.FB.ref(window.FB.db, 'users'), snap=>{ S.users=snap.val()||{}; renderChatList(); });
+    window.FB.onValue(window.FB.ref(window.FB.db, 'chats'), snap=>{ const all=snap.val()||{}; S.chats=Object.entries(all).filter(([id,c])=>c.participants && c.participants[S.user.uid]).map(([id,c])=>({id,...c})); renderChatList(); });
+    window.FB.onChildAdded(window.FB.ref(window.FB.db, 'truth_messages'), snap=>{ const m=snap.val(); if(m){ S.truthMsgs.push(m); renderTruth(); } });
   }
-
-  // ---- TABS ----
   function switchTab(t){
-    document.getElementById('mainHome').style.display = t === 'home' ? 'flex' : 'none';
-    document.getElementById('msgTab').style.display = t === 'msg' ? 'flex' : 'none';
-    document.getElementById('bHome').classList.toggle('active', t === 'home');
-    document.getElementById('bMsg').classList.toggle('active', t === 'msg');
-    if(t === 'msg') renderChatList();
+    document.getElementById('mainHome').style.display=t==='home'?'flex':'none';
+    document.getElementById('msgTab').style.display=t==='msg'?'flex':'none';
+    document.getElementById('bHome').classList.toggle('active',t==='home');
+    document.getElementById('bMsg').classList.toggle('active',t==='msg');
+    if(t==='msg') renderChatList();
   }
-
-  // ---- RENDER CHAT LIST ----
-  function renderChatList(filter){
-    const list = document.getElementById('list');
-    let rows = S.chats.slice().sort((a,b) => (b.lastTs||0) - (a.lastTs||0));
-    if(!rows.length){
-      list.innerHTML = `<div style="text-align:center;color:#aaa;font-size:12px;margin-top:30px">No chats yet. Tap "+" New Chat.</div>`;
-      return;
-    }
-    list.innerHTML = rows.map(c => {
-      const otherUid = Object.keys(c.participants).find(u => u !== S.user.uid);
-      const u = S.users[otherUid] || { name: 'Unknown' };
-      const av = u.avatar ? `<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover">` : (u.name||'?').charAt(0).toUpperCase();
-      const last = c.lastMsg || 'Tap to open';
-      const time = c.lastTs ? new Date(c.lastTs).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'}) : '';
-      return `<div onclick="App.openChat('${otherUid}')" style="padding:12px;background:white;border-radius:18px;border:3px solid white;box-shadow:0 8px 0 #e8ddd0;display:flex;gap:12px;align-items:center;cursor:pointer">
-        <div style="width:48px;height:48px;border-radius:50%;overflow:hidden;border:3px solid white;background:#ffe4d6;display:flex;justify-content:center;align-items:center;font-weight:800;color:#b84f91">${av}</div>
-        <div style="flex:1;min-width:0"><b style="font-size:14px">${u.name||'Unknown'}</b><div style="font-size:12px;color:#777;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${last}</div></div>
-        <div style="font-size:10px;color:#aaa">${time}</div>
-      </div>`;
-    }).join('');
+  function renderChatList(){
+    const list=document.getElementById('list');
+    let rows=S.chats.slice().sort((a,b)=>(b.lastTs||0)-(a.lastTs||0));
+    if(!rows.length){ list.innerHTML=`<div style="text-align:center;color:#aaa;font-size:12px;margin-top:30px">No chats yet. Tap New Chat.</div>`; return; }
+    list.innerHTML=rows.map(c=>{ const otherUid=Object.keys(c.participants).find(u=>u!==S.user.uid); const u=S.users[otherUid]||{name:'Unknown'}; const av=u.avatar?`<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover">`:(u.name||'?').charAt(0).toUpperCase(); const last=c.lastMsg||'Tap to open'; const time=c.lastTs?new Date(c.lastTs).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}):''; return `<div onclick="App.openChat('${otherUid}')" style="padding:12px;background:white;border-radius:18px;border:3px solid white;box-shadow:0 8px 0 #e8ddd0;display:flex;gap:12px;align-items:center;cursor:pointer"><div style="width:48px;height:48px;border-radius:50%;overflow:hidden;border:3px solid white;background:#ffe4d6;display:flex;justify-content:center;align-items:center;font-weight:800;color:#b84f91">${av}</div><div style="flex:1;min-width:0"><b style="font-size:14px">${u.name||'Unknown'}</b><div style="font-size:12px;color:#777;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${last}</div></div><div style="font-size:10px;color:#aaa">${time}</div></div>`; }).join('');
   }
-
   function searchUsers(q, targetId){
-    const target = document.getElementById(targetId || 'newChatResults');
-    if(!target) return;
-    if(!q){ target.innerHTML = ''; return; }
-    const lower = q.toLowerCase();
-    const results = Object.entries(S.users).filter(([uid, u]) => uid !== S.user.uid && (u.name||'').toLowerCase().includes(lower));
-    target.innerHTML = results.map(([uid, u]) => `
-      <div class="user-row" onclick="App.startChatWith('${uid}');document.getElementById('newChatModal').classList.remove('show')">
-        <div class="av">${u.avatar ? `<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">` : (u.name||'?').charAt(0).toUpperCase()}</div>
-        <div><b>${u.name||'User'}</b><div style="font-size:11px;color:#888">${u.about||''}</div></div>
-      </div>`).join('') || '<div style="color:#aaa;font-size:12px;padding:10px">No users found</div>';
+    const target=document.getElementById(targetId||'newChatResults'); if(!target) return; if(!q){ target.innerHTML=''; return; }
+    const lower=q.toLowerCase(); const results=Object.entries(S.users).filter(([uid,u])=>uid!==S.user.uid && (u.name||'').toLowerCase().includes(lower));
+    target.innerHTML=results.map(([uid,u])=>`<div class="user-row" onclick="App.startChatWith('${uid}');document.getElementById('newChatModal').classList.remove('show')"><div class="av">${u.avatar?`<img src="${u.avatar}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`:(u.name||'?').charAt(0).toUpperCase()}</div><div><b>${u.name||'User'}</b><div style="font-size:11px;color:#888">${u.about||''}</div></div></div>`).join('')||'<div style="color:#aaa;font-size:12px;padding:10px">No users found</div>';
   }
-
-  function openNewChat(){
-    document.getElementById('newChatModal').classList.add('show');
-    document.getElementById('newChatSearch').focus();
-    document.getElementById('newChatResults').innerHTML = '';
-  }
-
-  // ---- PROFILE ----
-  function openProfile(){
-    document.getElementById('inputName').value = S.profile.name || '';
-    document.getElementById('inputAbout').value = S.profile.about || '';
-    document.getElementById('profilePreview').src = S.profile.avatar || '';
-    document.getElementById('profileModal').classList.add('show');
-  }
-  async function saveProfile(){
-    const name = document.getElementById('inputName').value.trim() || 'User';
-    const about = document.getElementById('inputAbout').value.trim() || 'Hey!';
-    await update(ref(window.FB.db, 'users/'+S.user.uid), { name, about });
-    S.profile.name = name; S.profile.about = about;
-    updateProfileUI();
-    document.getElementById('profileModal').classList.remove('show');
-  }
-  document.getElementById('avatarInp').onchange = e => {
-    const f = e.target.files[0]; if(!f) return;
-    const r = new FileReader();
-    r.onload = async () => {
-      const dataUrl = r.result;
-      await update(ref(window.FB.db, 'users/'+S.user.uid), { avatar: dataUrl });
-      S.profile.avatar = dataUrl;
-      updateProfileUI();
-      document.getElementById('profilePreview').src = dataUrl;
-    };
-    r.readAsDataURL(f);
-  };
-
-  // ---- CHAT ----
-  async function startChatWith(uid){
-    const cid = chatIdOf(S.user.uid, uid);
-    const snap = await get(ref(window.FB.db, 'chats/'+cid));
-    if(!snap.exists()){
-      await set(ref(window.FB.db, 'chats/'+cid), {
-        participants: { [S.user.uid]: true, [uid]: true },
-        lastMsg: '', lastTs: Date.now()
-      });
-    }
-    openChat(uid);
-  }
-
+  function openNewChat(){ document.getElementById('newChatModal').classList.add('show'); }
+  function openProfile(){ document.getElementById('inputName').value=S.profile.name||''; document.getElementById('inputAbout').value=S.profile.about||''; document.getElementById('profilePreview').src=S.profile.avatar||''; document.getElementById('profileModal').classList.add('show'); }
+  async function saveProfile(){ const name=document.getElementById('inputName').value.trim()||'User'; const about=document.getElementById('inputAbout').value.trim()||'Hey!'; await window.FB.update(window.FB.ref(window.FB.db, 'users/'+S.user.uid), {name, about}); S.profile.name=name; S.profile.about=about; updateProfileUI(); document.getElementById('profileModal').classList.remove('show'); }
+  document.getElementById('avatarInp').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=async()=>{ const dataUrl=r.result; await window.FB.update(window.FB.ref(window.FB.db, 'users/'+S.user.uid), {avatar:dataUrl}); S.profile.avatar=dataUrl; updateProfileUI(); document.getElementById('profilePreview').src=dataUrl; }; r.readAsDataURL(f); };
+  async function startChatWith(uid){ const cid=chatIdOf(S.user.uid, uid); const snap=await window.FB.get(window.FB.ref(window.FB.db, 'chats/'+cid)); if(!snap.exists()){ await window.FB.set(window.FB.ref(window.FB.db, 'chats/'+cid), {participants:{[S.user.uid]:true,[uid]:true}, lastMsg:'', lastTs:Date.now()}); } openChat(uid); }
+  let msgsListener=null, typingListener=null;
   function openChat(peerUid){
-    S.peer = peerUid;
-    S.currentChat = chatIdOf(S.user.uid, peerUid);
-    const peer = S.users[peerUid] || { name: 'User' };
-    document.getElementById('peerName').textContent = peer.name;
-    const av = document.getElementById('peerAvatar');
-    if(peer.avatar){ av.src = peer.avatar; av.style.display = 'block'; document.getElementById('peerAvFallback').style.display = 'none'; }
-    else { av.style.display = 'none'; document.getElementById('peerAvFallback').style.display = 'block'; }
-    document.getElementById('chatScreen').classList.add('open');
-    document.getElementById('notifyBanner').classList.remove('show');
-    S.msgs = [];
-    document.getElementById('msgsBox').innerHTML = '';
-
-    if(S.msgsListener) S.msgsListener();
-    S.msgsListener = onChildAdded(ref(window.FB.db, 'chats/'+S.currentChat+'/messages'), snap => {
-      const m = snap.val();
-      if(!m) return;
-      if(S.msgs.some(x => x.id === m.id)) return;
-      S.msgs.push(m);
-      renderMsgs();
-      if(m.from !== S.user.uid){
-        update(ref(window.FB.db, 'chats/'+S.currentChat+'/messages/'+m.id+'/seenBy'), { [S.user.uid]: true });
-      }
-    });
-
-    if(S.typingListener) S.typingListener();
-    S.typingListener = onValue(ref(window.FB.db, 'typing/'+S.currentChat+'/'+peerUid), s => {
-      const ind = document.getElementById('typingIndicator');
-      if(s.val()) { ind.textContent = 'typing...'; ind.style.color = '#b99aff'; }
-      else {
-        get(ref(window.FB.db, 'presence/'+peerUid)).then(ps => {
-          const online = ps.val()?.online;
-          ind.textContent = online ? 'Online' : 'Offline';
-          ind.style.color = online ? '#4ade80' : '#aaa';
-        });
-      }
-    });
+    S.peer=peerUid; S.currentChat=chatIdOf(S.user.uid, peerUid); const peer=S.users[peerUid]||{name:'User'}; document.getElementById('peerName').textContent=peer.name; const av=document.getElementById('peerAvatar'); if(peer.avatar){ av.src=peer.avatar; av.style.display='block'; document.getElementById('peerAvFallback').style.display='none'; } else { av.style.display='none'; document.getElementById('peerAvFallback').style.display='block'; }
+    document.getElementById('chatScreen').classList.add('open'); S.msgs=[]; document.getElementById('msgsBox').innerHTML='';
+    if(msgsListener) msgsListener(); msgsListener=window.FB.onChildAdded(window.FB.ref(window.FB.db, 'chats/'+S.currentChat+'/messages'), snap=>{ const m=snap.val(); if(!m) return; if(S.msgs.some(x=>x.id===m.id)) return; S.msgs.push(m); renderMsgs(); if(m.from!==S.user.uid){ window.FB.update(window.FB.ref(window.FB.db, 'chats/'+S.currentChat+'/messages/'+m.id+'/seenBy'), {[S.user.uid]:true}); } });
+    if(typingListener) typingListener(); typingListener=window.FB.onValue(window.FB.ref(window.FB.db, 'typing/'+S.currentChat+'/'+peerUid), s=>{ const ind=document.getElementById('typingIndicator'); if(s.val()){ ind.textContent='typing...'; ind.style.color='#b99aff'; } else { window.FB.get(window.FB.ref(window.FB.db, 'presence/'+peerUid)).then(ps=>{ const online=ps.val()?.online; ind.textContent=online?'Online':'Offline'; ind.style.color=online?'#4ade80':'#aaa'; }); } });
   }
-
-  function closeChat(){
-    document.getElementById('chatScreen').classList.remove('open');
-    if(S.msgsListener) S.msgsListener();
-    if(S.typingListener) S.typingListener();
-    S.currentChat = null; S.peer = null; S.msgs = [];
-    cancelReply();
-  }
-
+  function closeChat(){ document.getElementById('chatScreen').classList.remove('open'); if(msgsListener) msgsListener(); if(typingListener) typingListener(); S.currentChat=null; S.peer=null; S.msgs=[]; cancelReply(); }
   function renderMsgs(){
-    const box = document.getElementById('msgsBox');
-    box.innerHTML = S.msgs.length ? '' : `<div style="text-align:center;color:#aaa;font-size:12px;margin-top:40px">Say hi 👋</div>`;
-    S.msgs.forEach(m => {
-      const d = document.createElement('div');
-      d.className = 'bub ' + (m.from === S.user.uid ? 'me' : 'other');
-      if(m.replyTo){
-        const rq = S.msgs.find(x => x.id === m.replyTo);
-        if(rq){
-          const q = document.createElement('div'); q.className = 'reply-quote';
-          q.textContent = '↪ ' + (rq.text || '[media]').slice(0, 50);
-          d.appendChild(q);
-        }
-      }
-      if(m.deleted){
-        const it = document.createElement('i'); it.style.color = '#aaa'; it.textContent = '🚫 Message deleted'; d.appendChild(it);
-      } else if(m.type === 'image' && m.url){
-        const img = document.createElement('img');
-        img.src = m.url; img.style.cssText = 'display:block;max-width:200px;border-radius:12px;border:2px solid white';
-        d.appendChild(img);
-        if(m.text) d.appendChild(document.createTextNode(' ' + m.text));
-      } else if(m.type === 'voice' && m.url){
-        const wrap = document.createElement('div'); wrap.className = 'voice-bub';
-        const audio = document.createElement('audio'); audio.controls = true; audio.src = m.url;
-        wrap.appendChild(audio); d.appendChild(wrap);
-      } else {
-        d.appendChild(document.createTextNode(m.text || ''));
-      }
-      if(m.reactions && Object.keys(m.reactions).length){
-        const r = document.createElement('div'); r.className = 'reactions';
-        r.textContent = Object.keys(m.reactions).join('');
-        d.appendChild(r);
-      }
-      if(m.from === S.user.uid){
-        const tick = document.createElement('span'); tick.className = 'seen-tick';
-        const seen = m.seenBy && Object.keys(m.seenBy).length > 0;
-        tick.textContent = seen ? '✓✓' : '✓';
-        tick.style.color = seen ? '#4ade80' : '#aaa';
-        d.appendChild(tick);
-      }
-      d.addEventListener('click', (e) => showMsgMenu(e, m));
-      box.appendChild(d);
-    });
-    box.scrollTop = box.scrollHeight;
+    const box=document.getElementById('msgsBox'); box.innerHTML=S.msgs.length?'':`<div style="text-align:center;color:#aaa;font-size:12px;margin-top:40px">Say hi 👋</div>`;
+    S.msgs.forEach(m=>{ const d=document.createElement('div'); d.className='bub '+(m.from===S.user.uid?'me':'other'); if(m.replyTo){ const rq=S.msgs.find(x=>x.id===m.replyTo); if(rq){ const q=document.createElement('div'); q.className='reply-quote'; q.textContent='↪ '+(rq.text||'[media]').slice(0,50); d.appendChild(q); } } if(m.deleted){ const it=document.createElement('i'); it.style.color='#aaa'; it.textContent='🚫 Message deleted'; d.appendChild(it); } else if(m.type==='image' && m.url){ const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:200px;border-radius:12px;border:2px solid white'; d.appendChild(img); if(m.text) d.appendChild(document.createTextNode(' '+m.text)); } else if(m.type==='voice' && m.url){ const wrap=document.createElement('div'); wrap.className='voice-bub'; const audio=document.createElement('audio'); audio.controls=true; audio.src=m.url; wrap.appendChild(audio); d.appendChild(wrap); } else { d.appendChild(document.createTextNode(m.text||'')); } if(m.reactions && Object.keys(m.reactions).length){ const r=document.createElement('div'); r.className='reactions'; r.textContent=Object.keys(m.reactions).join(''); d.appendChild(r); } if(m.from===S.user.uid){ const tick=document.createElement('span'); tick.className='seen-tick'; const seen=m.seenBy && Object.keys(m.seenBy).length>0; tick.textContent=seen?'✓✓':'✓'; tick.style.color=seen?'#4ade80':'#aaa'; d.appendChild(tick); } d.addEventListener('click', e=>showMsgMenu(e,m)); box.appendChild(d); }); box.scrollTop=box.scrollHeight;
   }
-
-  function showMsgMenu(ev, m){
-    ev.stopPropagation();
-    document.querySelectorAll('.msg-menu').forEach(x => x.remove());
-    const menu = document.createElement('div');
-    menu.className = 'msg-menu';
-    menu.innerHTML = `
-      <button data-a="react-❤️">❤️</button>
-      <button data-a="react-😂">😂</button>
-      <button data-a="react-👍">👍</button>
-      <button data-a="reply" style="font-size:14px">↪</button>
-      <button data-a="delete" style="font-size:14px">🗑</button>
-    `;
-    menu.style.left = Math.min(ev.clientX, window.innerWidth - 240) + 'px';
-    menu.style.top = ev.clientY + 'px';
-    document.body.appendChild(menu);
-    menu.addEventListener('click', async (e) => {
-      const a = e.target.dataset.a; if(!a) return;
-      menu.remove();
-      if(a === 'reply'){ setReply(m); return; }
-      if(a === 'delete'){
-        const myId = S.user.uid;
-        if(m.from === myId){
-          if(confirm('Delete for everyone?')) await update(ref(window.FB.db, 'chats/'+S.currentChat+'/messages/'+m.id), { deleted: true, text: '', url: '' });
-        } else {
-          alert('You can only delete your own messages');
-        }
-        return;
-      }
-      if(a.startsWith('react-')){
-        const emoji = a.split('-')[1];
-        await update(ref(window.FB.db, 'chats/'+S.currentChat+'/messages/'+m.id+'/reactions'), { [emoji]: { [S.user.uid]: true } });
-      }
-    });
-    setTimeout(() => document.addEventListener('click', () => menu.remove(), { once: true }), 50);
+  function showMsgMenu(ev,m){
+    ev.stopPropagation(); document.querySelectorAll('.msg-menu').forEach(x=>x.remove()); const menu=document.createElement('div'); menu.className='msg-menu'; menu.innerHTML=`<button data-a="react-❤️">❤️</button><button data-a="react-😂">😂</button><button data-a="react-👍">👍</button><button data-a="reply" style="font-size:14px">↪</button><button data-a="delete" style="font-size:14px">🗑</button>`; menu.style.left=Math.min(ev.clientX, window.innerWidth-240)+'px'; menu.style.top=ev.clientY+'px'; document.body.appendChild(menu);
+    menu.addEventListener('click', async e=>{ const a=e.target.dataset.a; if(!a) return; menu.remove(); if(a==='reply'){ setReply(m); return; } if(a==='delete'){ if(m.from===S.user.uid){ if(confirm('Delete for everyone?')) await window.FB.update(window.FB.ref(window.FB.db, 'chats/'+S.currentChat+'/messages/'+m.id), {deleted:true,text:'',url:''}); } else alert('You can only delete your own messages'); return; } if(a.startsWith('react-')){ const emoji=a.split('-')[1]; await window.FB.update(window.FB.ref(window.FB.db, 'chats/'+S.currentChat+'/messages/'+m.id+'/reactions'), {[emoji]:{[S.user.uid]:true}}); } }); setTimeout(()=>document.addEventListener('click', ()=>menu.remove(), {once:true}),50);
   }
-
-  function setReply(m){
-    S.replyTo = m.id;
-    document.getElementById('replyBar').classList.add('show');
-    document.getElementById('replyPreview').textContent = (m.text || '[media]').slice(0, 40);
-    document.getElementById('msgInput').focus();
-  }
-  function cancelReply(){
-    S.replyTo = null;
-    document.getElementById('replyBar').classList.remove('show');
-  }
-
-  async function sendMsg(){
-    const inp = document.getElementById('msgInput');
-    const text = inp.value.trim();
-    if(!text) return;
-    await pushMsg({ text, type: 'text' });
-    inp.value = '';
-    setTyping(false);
-  }
-
-  async function pushMsg(extra){
-    const id = genId();
-    const msg = { id, from: S.user.uid, ts: Date.now(), seenBy: {}, ...extra };
-    if(S.replyTo) msg.replyTo = S.replyTo;
-    await set(ref(window.FB.db, 'chats/'+S.currentChat+'/messages/'+id), msg);
-    await update(ref(window.FB.db, 'chats/'+S.currentChat), {
-      lastMsg: msg.text || (msg.type === 'image' ? '📷 Photo' : msg.type === 'voice' ? '🎤 Voice' : ''),
-      lastTs: msg.ts, lastFrom: S.user.uid
-    });
-    cancelReply();
-  }
-
-  let typingTimeout;
-  document.getElementById('msgInput').addEventListener('input', () => {
-    if(!S.currentChat) return;
-    setTyping(true);
-    clearTimeout(typingTimeout);
-    typingTimeout = setTimeout(() => setTyping(false), 1500);
-    const inp = document.getElementById('msgInput');
-    const rec = document.getElementById('recBtn');
-    const send = document.getElementById('sendBtn');
-    if(inp.value.trim()) { rec.style.display = 'none'; send.style.display = 'flex'; }
-    else { rec.style.display = 'flex'; send.style.display = 'none'; }
-  });
-
-  function setTyping(on){
-    if(!S.currentChat) return;
-    set(ref(window.FB.db, 'typing/'+S.currentChat+'/'+S.user.uid), on);
-  }
-
-  // ---- FILES ----
-  document.getElementById('fileInp').onchange = e => {
-    const f = e.target.files[0]; if(!f) return;
-    const r = new FileReader();
-    r.onload = async () => {
-      const type = f.type.startsWith('image/') ? 'image' : 'file';
-      await pushMsg({ url: r.result, type, text: '' });
-    };
-    r.readAsDataURL(f);
-    e.target.value = '';
-  };
-
-  // ---- VOICE ----
+  function setReply(m){ S.replyTo=m.id; document.getElementById('replyBar').classList.add('show'); document.getElementById('replyPreview').textContent=(m.text||'[media]').slice(0,40); document.getElementById('msgInput').focus(); }
+  function cancelReply(){ S.replyTo=null; document.getElementById('replyBar').classList.remove('show'); }
+  async function sendMsg(){ const inp=document.getElementById('msgInput'); const text=inp.value.trim(); if(!text) return; await pushMsg({text, type:'text'}); inp.value=''; setTyping(false); }
+  async function pushMsg(extra){ const id=genId(); const msg={id, from:S.user.uid, ts:Date.now(), seenBy:{}, ...extra}; if(S.replyTo) msg.replyTo=S.replyTo; await window.FB.set(window.FB.ref(window.FB.db, 'chats/'+S.currentChat+'/messages/'+id), msg); await window.FB.update(window.FB.ref(window.FB.db, 'chats/'+S.currentChat), {lastMsg:msg.text||(msg.type==='image'?'📷 Photo':msg.type==='voice'?'🎤 Voice':''), lastTs:msg.ts, lastFrom:S.user.uid}); cancelReply(); }
+  let typingTimeout; document.getElementById('msgInput').addEventListener('input', ()=>{ if(!S.currentChat) return; setTyping(true); clearTimeout(typingTimeout); typingTimeout=setTimeout(()=>setTyping(false),1500); const inp=document.getElementById('msgInput'); const rec=document.getElementById('recBtn'); const send=document.getElementById('sendBtn'); if(inp.value.trim()){ rec.style.display='none'; send.style.display='flex'; } else { rec.style.display='flex'; send.style.display='none'; } });
+  function setTyping(on){ if(!S.currentChat) return; window.FB.set(window.FB.ref(window.FB.db, 'typing/'+S.currentChat+'/'+S.user.uid), on); }
+  document.getElementById('fileInp').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=async()=>{ const type=f.type.startsWith('image/')?'image':'file'; await pushMsg({url:r.result, type, text:''}); }; r.readAsDataURL(f); e.target.value=''; };
   async function toggleRecord(){
-    if(!S.recording){
-      try{
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-        S.recorder = new MediaRecorder(stream);
-        S.chunks = [];
-        S.recorder.ondataavailable = e => S.chunks.push(e.data);
-        S.recorder.onstop = async () => {
-          const blob = new Blob(S.chunks, { type: 'audio/webm' });
-          const r = new FileReader();
-          r.onload = async () => {
-            await pushMsg({ url: r.result, type: 'voice', text: '' });
-          };
-          r.readAsDataURL(blob);
-          stream.getTracks().forEach(t => t.stop());
-        };
-        S.recorder.start();
-        S.recording = true;
-        document.getElementById('recBtn').textContent = '⏹';
-        document.getElementById('recBtn').style.background = 'linear-gradient(145deg,#ff7979,#ef4444)';
-      } catch(e){ alert('Mic permission denied'); }
-    } else {
-      S.recorder.stop();
-      S.recording = false;
-      document.getElementById('recBtn').textContent = '🎤';
-      document.getElementById('recBtn').style.background = '';
-    }
+    if(!S.recording){ try{ const stream=await navigator.mediaDevices.getUserMedia({audio:true}); S.recorder=new MediaRecorder(stream); S.chunks=[]; S.recorder.ondataavailable=e=>S.chunks.push(e.data); S.recorder.onstop=async()=>{ const blob=new Blob(S.chunks,{type:'audio/webm'}); const r=new FileReader(); r.onload=async()=>{ await pushMsg({url:r.result, type:'voice', text:''}); }; r.readAsDataURL(blob); stream.getTracks().forEach(t=>t.stop()); }; S.recorder.start(); S.recording=true; document.getElementById('recBtn').textContent='⏹'; } catch(e){ alert('Mic permission denied'); } } else { S.recorder.stop(); S.recording=false; document.getElementById('recBtn').textContent='🎤'; }
   }
-
-  // ---- TRUTH ----
   function openTruth(){ document.getElementById('truthScreen').classList.add('open'); renderTruth(); }
-  async function sendTruth(){
-    const inp = document.getElementById('truthInput');
-    const text = inp.value.trim(); if(!text) return;
-    const id = genId();
-    await set(ref(window.FB.db, 'truth_messages/'+id), { id, from: S.user.uid, sender: S.profile.name, text, ts: Date.now() });
-    inp.value = '';
-  }
-  function renderTruth(){
-    const box = document.getElementById('truthBox');
-    box.innerHTML = S.truthMsgs.length ? '' : `<div style="text-align:center;color:#aaa;font-size:12px;margin-top:40px">No passages yet 📖</div>`;
-    S.truthMsgs.slice().sort((a,b) => a.ts - b.ts).forEach(m => {
-      const d = document.createElement('div');
-      d.className = 'bub ' + (m.from === S.user.uid ? 'me' : 'other');
-      const lbl = document.createElement('b'); lbl.style.cssText = 'color:#b84f91;font-size:11px;display:block;margin-bottom:4px';
-      lbl.textContent = '📖 ' + (m.sender || 'User');
-      d.appendChild(lbl);
-      d.appendChild(document.createTextNode(m.text));
-      box.appendChild(d);
-    });
-    box.scrollTop = box.scrollHeight;
-  }
-
-  // ---- CALENDAR ----
-  let selectedDate = new Date(), selectedDay = selectedDate.getDate();
-  let reminders = JSON.parse(localStorage.getItem('chat_reminders') || '[]');
-  function updateReminderCount(){ document.getElementById('reminderCount').textContent = reminders.length; }
-  function openCalendar(){
-    const d = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-    const end = new Date(selectedDate.getFullYear(), selectedDate.getMonth()+1, 0);
-    document.getElementById('calMonthYear').textContent = d.toLocaleString('default', {month:'long',year:'numeric'});
-    let html = 'S M T W T F S'.split(' ').map(x=>`<span>${x}</span>`).join('');
-    for(let i=0;i<d.getDay();i++) html += '<div></div>';
-    for(let i=1;i<=end.getDate();i++) html += `<div style="padding:5px;cursor:pointer;border-radius:50%;${i===selectedDay?'background:#b84f91;color:white':''}" onclick="App.pickDay(${i},this)">${i}</div>`;
-    document.getElementById('calGrid').innerHTML = html;
-    document.getElementById('calendarModal').classList.add('show');
-  }
-  function pickDay(day, el){
-    selectedDay = day;
-    document.querySelectorAll('#calGrid div').forEach(d => { d.style.background = ''; d.style.color = ''; });
-    el.style.background = '#b84f91'; el.style.color = 'white';
-  }
-  function saveReminder(){
-    const t = document.getElementById('reminderInput').value.trim(); if(!t) return;
-    reminders.push({ day: selectedDay, text: t });
-    localStorage.setItem('chat_reminders', JSON.stringify(reminders));
-    updateReminderCount();
-    document.getElementById('calendarModal').classList.remove('show');
-  }
-  const loveLevels = [50,70,85,99]; let loveIdx = 1;
-  function changeLove(){
-    loveIdx = (loveIdx+1) % loveLevels.length;
-    document.getElementById('loveLevel').textContent = loveLevels[loveIdx] + '%';
-  }
-
-  // ---- CALLS ----
-  async function startCall(kind){
-    if(!S.peer) return alert('Open a chat first');
-    alert('Voice/video call: signaling needs multi-user implementation. Basic skeleton ready.');
-  }
-
-  // ---- ADMIN ----
+  async function sendTruth(){ const inp=document.getElementById('truthInput'); const text=inp.value.trim(); if(!text) return; const id=genId(); await window.FB.set(window.FB.ref(window.FB.db, 'truth_messages/'+id), {id, from:S.user.uid, sender:S.profile.name, text, ts:Date.now()}); inp.value=''; }
+  function renderTruth(){ const box=document.getElementById('truthBox'); box.innerHTML=S.truthMsgs.length?'':`<div style="text-align:center;color:#aaa;font-size:12px;margin-top:40px">No passages yet 📖</div>`; S.truthMsgs.slice().sort((a,b)=>a.ts-b.ts).forEach(m=>{ const d=document.createElement('div'); d.className='bub '+(m.from===S.user.uid?'me':'other'); const lbl=document.createElement('b'); lbl.style.cssText='color:#b84f91;font-size:11px;display:block;margin-bottom:4px'; lbl.textContent='📖 '+(m.sender||'User'); d.appendChild(lbl); d.appendChild(document.createTextNode(m.text)); box.appendChild(d); }); box.scrollTop=box.scrollHeight; }
+  let selectedDate=new Date(), selectedDay=selectedDate.getDate(); let reminders=JSON.parse(localStorage.getItem('chat_reminders')||'[]');
+  function openCalendar(){ const d=new Date(selectedDate.getFullYear(), selectedDate.getMonth(),1); const end=new Date(selectedDate.getFullYear(), selectedDate.getMonth()+1,0); document.getElementById('calMonthYear').textContent=d.toLocaleString('default',{month:'long',year:'numeric'}); let html='S M T W T F S'.split(' ').map(x=>`<span>${x}</span>`).join(''); for(let i=0;i<d.getDay();i++) html+='<div></div>'; for(let i=1;i<=end.getDate();i++) html+=`<div style="padding:5px;cursor:pointer;border-radius:50%;${i===selectedDay?'background:#b84f91;color:white':''}" onclick="App.pickDay(${i},this)">${i}</div>`; document.getElementById('calGrid').innerHTML=html; document.getElementById('calendarModal').classList.add('show'); }
+  function pickDay(day, el){ selectedDay=day; document.querySelectorAll('#calGrid div').forEach(d=>{ d.style.background=''; d.style.color=''; }); el.style.background='#b84f91'; el.style.color='white'; }
+  function saveReminder(){ const t=document.getElementById('reminderInput').value.trim(); if(!t) return; reminders.push({day:selectedDay,text:t}); localStorage.setItem('chat_reminders', JSON.stringify(reminders)); document.getElementById('reminderCount').textContent=reminders.length; document.getElementById('calendarModal').classList.remove('show'); }
+  const loveLevels=[50,70,85,99]; let loveIdx=1; function changeLove(){ loveIdx=(loveIdx+1)%loveLevels.length; document.getElementById('loveLevel').textContent=loveLevels[loveIdx]+'%'; }
   function openAdmin(){
     document.getElementById('adminScreen').classList.add('open');
-    const usersBox = document.getElementById('adminUsers');
-    usersBox.innerHTML = Object.entries(S.users).map(([uid, u]) => `
-      <div style="padding:10px;background:white;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
-        <div><b>${u.name}</b><div style="font-size:11px;color:#888">${u.email||''} • ${u.role}</div></div>
-        <button onclick="App.banUser('${uid}')" style="padding:6px 10px;border-radius:10px;border:none;background:${u.banned?'#4ade80':'#ff6b6b'};color:white;font-weight:800;font-size:11px">${u.banned?'Unban':'Ban'}</button>
-      </div>
-    `).join('');
-    onValue(ref(window.FB.db, 'reports'), snap => {
-      const reports = snap.val() || {};
-      document.getElementById('adminReports').innerHTML = Object.entries(reports).map(([id, r]) =>
-        `<div style="padding:10px;background:#fff0f0;border-radius:14px;margin-bottom:8px;font-size:12px">
-          <b>${r.reporterName}</b> reported <b>${r.reportedName}</b>: ${r.reason}
-        </div>`
-      ).join('') || '<div style="color:#aaa;font-size:12px">No reports</div>';
-    });
+    const usersBox=document.getElementById('adminUsers'); usersBox.innerHTML=Object.entries(S.users).map(([uid,u])=>`<div style="padding:10px;background:white;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><div><b>${u.name}</b><div style="font-size:11px;color:#888">${u.email||''} • ${u.role}</div></div><button onclick="App.banUser('${uid}')" style="padding:6px 10px;border-radius:10px;border:none;background:${u.banned?'#4ade80':'#ff6b6b'};color:white;font-weight:800;font-size:11px">${u.banned?'Unban':'Ban'}</button></div>`).join('');
+    window.FB.onValue(window.FB.ref(window.FB.db, 'reports'), snap=>{ const reports=snap.val()||{}; document.getElementById('adminReports').innerHTML=Object.entries(reports).map(([id,r])=>`<div style="padding:10px;background:#fff0f0;border-radius:14px;margin-bottom:8px;font-size:12px"><b>${r.reporterName}</b> reported <b>${r.reportedName}</b>: ${r.reason}</div>`).join('')||'<div style="color:#aaa;font-size:12px">No reports</div>'; });
   }
-  async function banUser(uid){
-    const u = S.users[uid]; if(!u) return;
-    await update(ref(window.FB.db, 'users/'+uid), { banned: !u.banned });
-    alert(u.banned ? 'Unbanned' : 'Banned');
-  }
-
-  function openChatFromNotif(){}
-
-  updateReminderCount();
-  updateProfileUI();
-
-  return {
-    authSubmit, authToggle, googleLogin, logout, openProfile, saveProfile,
-    switchTab, openChat, closeChat, startChatWith, openNewChat,
-    searchUsers, sendMsg, toggleRecord, openTruth, sendTruth,
-    openCalendar, pickDay, saveReminder, changeLove,
-    openAdmin, banUser, startCall, openChatFromNotif,
-    cancelReply
-  };
+  async function banUser(uid){ const u=S.users[uid]; if(!u) return; await window.FB.update(window.FB.ref(window.FB.db, 'users/'+uid), {banned:!u.banned}); alert(u.banned?'Unbanned':'Banned'); }
+  document.getElementById('reminderCount').textContent=reminders.length;
+  return { authSubmit, authToggle, googleLogin, logout, openProfile, saveProfile, switchTab, openChat, closeChat, startChatWith, openNewChat, searchUsers, sendMsg, toggleRecord, openTruth, sendTruth, openCalendar, pickDay, saveReminder, changeLove, openAdmin, banUser, cancelReply, pickDay };
 })();
 window.App = App;
 </script>
 </body></html>
-  

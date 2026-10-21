@@ -1,3 +1,27 @@
+படத்துல பார்த்தேன். Google லோகோ (பிக்சர்) லோட் ஆகல, டச் பண்ணும்போது பேனல் ஓபன் ஆகல. இது ஏன் நடக்குது மற்றும் இதை எப்படி ஃபிக்ஸ் பண்றதுன்னு படிப்படியா பார்க்கலாம்.
+
+இந்த இரண்டு பிரச்சனைக்கும் இரண்டு வெவ்வேறு காரணங்கள் இருக்கு:
+
+1. பிக்சர் வரலை: நான் கொடுத்த லிங்க் (Wikipedia) சரியா லோட் ஆகல. இதை ஃபிக்ஸ் பண்ண நாம அந்த இமேஜ் லிங்க்கை மாத்தணும்.
+2. டச் பேனல் ஓபன் ஆகலை: நீங்க லாகின் பண்ண முயற்சிக்கும்போது, அந்த வெப்சைட் டொமைன் (உங்க GitHub Pages லிங்க்) Firebase-ல "Authorized domain" (அனுமதிக்கப்பட்ட டொமைன்) ஆக இருக்கணும். இல்லைன்னா Firebase பாப்-அப் விண்டோவை பிளாக் பண்ணிடும்.
+
+நாம இப்போ இதை ரெண்டையும் சரி பண்ணலாம்.
+
+🛠️ படி 1: Firebase-ல டொமைனை அனுமதிப்பது (மிக முக்கியம்)
+
+1. Firebase Console-க்கு போங்க.
+2. இடதுபுறம் Authentication கிளிக் பண்ணுங்க.
+3. மேலே Settings டேப்-க்கு போங்க.
+4. அங்க Authorized domains அப்படின்னு ஒரு பட்டியல் இருக்கும்.
+5. Add domain பட்டனை கிளிக் பண்ணி, உங்க GitHub Pages லிங்க்கை ஆட் பண்ணுங்க.
+   (உதாரணமா: morphas70-source.github.io அப்படின்னு மட்டும் கொடுங்க, https:// இல்லாம).
+6. Add பண்ணிடுங்க.
+
+🛠️ படி 2: புது கோட் (பிக்சர் ஃபிக்ஸ் செய்யப்பட்டது)
+
+இப்போ நான் Google லோகோவுக்கு ஒரு நல்ல லிங்க் கொடுத்திருக்கேன். உங்க GitHub-ல உள்ள index.html-ல இருக்கிற பழைய கோடை முழுசா டிலீட் பண்ணிட்டு, இந்தப் புது கோடை பேஸ்ட் பண்ணி Commit பண்ணுங்க.
+
+```html
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
@@ -128,7 +152,7 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
     <p id="authSub">Sign in with Google to start chatting</p>
     <div class="auth-err" id="authErr"></div>
     <button class="google-btn" onclick="App.googleLogin()">
-      <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
       Continue with Google
     </button>
   </div>
@@ -739,3 +763,4 @@ const App = (()=>{
 window.App = App;
 </script>
 </body></html>
+```

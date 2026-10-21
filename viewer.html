@@ -8,7 +8,8 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, update, onValue, onChildAdded, push, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+// signInWithRedirect and getRedirectResult ADDED HERE
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA105KJhAOQxigwc5iltil-aFnz7ykruwI",
@@ -297,14 +298,35 @@ const App = (()=>{
     }
   }
 
+  // FIXED GOOGLE LOGIN WITH REDIRECT FALLBACK
   async function googleLogin(){
+    const err = document.getElementById('authErr');
+    err.textContent = 'Opening Google...';
     const provider = new GoogleAuthProvider();
+    provider.addScope('profile');
+    provider.addScope('email');
     try {
       await signInWithPopup(window.FB.auth, provider);
-    } catch(e) {
-      document.getElementById('authErr').textContent = e.message;
+    } catch(e) { 
+      console.error(e);
+      if(e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request'){
+        err.textContent = 'Redirecting...';
+        try {
+          await signInWithRedirect(window.FB.auth, provider);
+        } catch(e2) {
+          err.textContent = e2.message;
+        }
+      } else {
+        err.textContent = e.message.replace('Firebase: ', '');
+      }
     }
   }
+
+  // Catch redirect result
+  getRedirectResult(window.FB.auth).catch((error) => {
+    document.getElementById('authErr').textContent = error.message;
+  });
+
   async function logout(){ await signOut(window.FB.auth); location.reload(); }
 
   // ---- ON LOGIN ----
@@ -787,6 +809,4 @@ const App = (()=>{
 window.App = App;
 </script>
 </body></html>
-
-
   

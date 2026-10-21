@@ -8,7 +8,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, update, onValue, onChildAdded, push, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA105KJhAOQxigwc5iltil-aFnz7ykruwI",
@@ -37,11 +37,15 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 .head-title { font-size:26px; font-weight:800; letter-spacing:-1px; }
 .auth-screen { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
 .auth-screen h2 { font-size:24px; font-weight:800; margin-bottom:10px; }
-.auth-screen p { font-size:13px; color:#666; margin-bottom:30px; font-weight:600; text-align:center; }
-.google-btn { width:100%; max-width:300px; padding:15px; border-radius:22px; border:3px solid white; background:white; color:#333; font-size:16px; font-weight:800; cursor:pointer; box-shadow:0 8px 0 #e0d4e7,0 14px 28px rgba(95,65,130,.15); transition:transform .15s ease; display:flex; align-items:center; justify-content:center; gap:10px; }
-.google-btn img { width:24px; height:24px; }
-.google-btn:active { transform:translateY(5px) scale(.97); box-shadow:0 3px 0 #e0d4e7; }
-.auth-err { color:#ff4d6d; font-size:13px; font-weight:700; margin-bottom:15px; text-align:center; }
+.auth-screen p { font-size:13px; color:#666; margin-bottom:15px; font-weight:600; text-align:center; }
+.auth-inp { width:100%; max-width:300px; padding:14px; border-radius:15px; border:2px solid white; background:#f8f1fb; outline:none; font-size:14px; font-weight:600; margin-bottom:10px; box-shadow:inset 0 2px 5px rgba(0,0,0,.05); }
+.auth-btn { width:100%; max-width:300px; padding:15px; border-radius:22px; border:3px solid white; background:linear-gradient(145deg,#a5aaff,#b68bff,#e5a6f7); color:white; font-size:15px; font-weight:800; cursor:pointer; box-shadow:0 8px 0 #9983d9,0 14px 28px rgba(95,65,130,.2); transition:transform .15s ease; margin-top:5px; margin-bottom:15px; }
+.auth-btn:active { transform:translateY(5px) scale(.97); box-shadow:0 3px 0 #9983d9; }
+.auth-link { margin-top:10px; font-size:13px; font-weight:700; color:#b84f91; cursor:pointer; text-decoration:underline; }
+.auth-err { color:#ff4d6d; font-size:12px; font-weight:700; margin-bottom:10px; min-height:15px; text-align:center; }
+.google-btn { width:100%; max-width:300px; padding:12px; border-radius:20px; border:2px solid #ddd; background:white; color:#333; font-size:14px; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 4px 0 #eee; margin-top:10px; }
+.google-btn img { width:20px; height:20px; }
+.google-btn:active { transform:translateY(3px); box-shadow:0 1px 0 #eee; }
 #mainHome { flex:1; overflow-y:auto; display:none; flex-direction:column; padding-bottom:10px; }
 .profile { margin:4px 15px; padding:16px 14px; gap:14px; background:linear-gradient(135deg,rgba(255,225,224,.95),rgba(255,238,232,.95),rgba(242,220,255,.9)); border:3px solid white; border-radius:24px; box-shadow:0 8px 0 #e9d0e5,0 16px 30px rgba(100,65,130,.15); display:flex; align-items:center; cursor:pointer; }
 .p-av { width:68px; height:68px; border:3px solid white; box-shadow:0 5px 0 #e7bdd6; border-radius:50%; overflow:hidden; flex-shrink:0; display:flex; justify-content:center; align-items:center; background:#ffe4d6; font-size:26px; position:relative; }
@@ -125,8 +129,18 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
   <!-- AUTH -->
   <div id="authScreen" class="auth-screen">
     <h2 id="authTitle">Welcome</h2>
-    <p id="authSub">Sign in with Google to start chatting</p>
+    <p id="authSub">Login or create an account</p>
     <div class="auth-err" id="authErr"></div>
+    
+    <input type="text" id="authName" class="auth-inp" placeholder="Your Name (For Sign up)" style="display:none">
+    <input type="email" id="authEmail" class="auth-inp" placeholder="Email">
+    <input type="password" id="authPass" class="auth-inp" placeholder="Password">
+    
+    <button class="auth-btn" id="authBtn" onclick="App.authSubmit()">Login</button>
+    <div class="auth-link" id="authToggle" onclick="App.authToggle()">Create a new account</div>
+
+    <div style="margin: 15px 0; color: #aaa; font-size: 12px;">-- OR --</div>
+
     <button class="google-btn" onclick="App.googleLogin()">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg">
       Continue with Google
@@ -233,7 +247,8 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 <input type="file" id="fileInp" accept="image/*,video/*" hidden>
 <input type="file" id="avatarInp" accept="image/*" hidden>
 
-<script>
+<!-- CHANGE: type="module" ADDED HERE -->
+<script type="module">
 const App = (()=>{
   const S = {
     user: null, profile: null, users: {}, chats: [],
@@ -248,7 +263,40 @@ const App = (()=>{
   const genId = () => crypto.randomUUID ? crypto.randomUUID() : 'm'+Date.now()+Math.random().toString(36).slice(2,8);
   const chatIdOf = (a,b) => [a,b].sort().join('_');
 
-  // ---- AUTH (Google) ----
+  // ---- AUTH (Email & Google) ----
+  function authToggle(){
+    S.authMode = S.authMode === 'login' ? 'signup' : 'login';
+    document.getElementById('authTitle').textContent = S.authMode === 'login' ? 'Welcome Back' : 'Create Account';
+    document.getElementById('authSub').textContent = S.authMode === 'login' ? 'Login to start chatting' : 'Sign up to join';
+    document.getElementById('authBtn').textContent = S.authMode === 'login' ? 'Login' : 'Sign Up';
+    document.getElementById('authToggle').textContent = S.authMode === 'login' ? 'Create a new account' : 'Already have an account? Login';
+    document.getElementById('authName').style.display = S.authMode === 'signup' ? 'block' : 'none';
+  }
+
+  async function authSubmit(){
+    const email = document.getElementById('authEmail').value.trim();
+    const pass = document.getElementById('authPass').value;
+    const name = document.getElementById('authName').value.trim();
+    const err = document.getElementById('authErr');
+    err.textContent = '';
+    if(!email || !pass) return err.textContent = 'Email and password required';
+    if(S.authMode === 'signup' && !name) return err.textContent = 'Name required';
+    
+    try{
+      if(S.authMode === 'signup'){
+        const cred = await createUserWithEmailAndPassword(window.FB.auth, email, pass);
+        await set(ref(window.FB.db, 'users/'+cred.user.uid), {
+          name: name, email: email, about: 'Hey! I am using Premium Chat',
+          avatar: '', role: 'user', ts: Date.now()
+        });
+      } else {
+        await signInWithEmailAndPassword(window.FB.auth, email, pass);
+      }
+    } catch(e){ 
+      err.textContent = e.message.replace('Firebase: ', ''); 
+    }
+  }
+
   async function googleLogin(){
     const provider = new GoogleAuthProvider();
     try {
@@ -266,7 +314,7 @@ const App = (()=>{
     const snap = await get(ref(window.FB.db, 'users/'+u.uid));
     if(!snap.exists()){ 
       await set(ref(window.FB.db, 'users/'+u.uid), { 
-        name: u.displayName || 'User', 
+        name: u.displayName || u.email.split('@')[0] || 'User', 
         email: u.email, 
         about: 'Hey! I am using Premium Chat',
         avatar: u.photoURL || '', 
@@ -728,7 +776,7 @@ const App = (()=>{
   updateProfileUI();
 
   return {
-    googleLogin, logout, openProfile, saveProfile,
+    authSubmit, authToggle, googleLogin, logout, openProfile, saveProfile,
     switchTab, openChat, closeChat, startChatWith, openNewChat,
     searchUsers, sendMsg, toggleRecord, openTruth, sendTruth,
     openCalendar, pickDay, saveReminder, changeLove,
@@ -739,3 +787,6 @@ const App = (()=>{
 window.App = App;
 </script>
 </body></html>
+
+
+  

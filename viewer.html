@@ -2,12 +2,12 @@
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="theme-color" content="#fffaf5">
-<title>Premium Chat - FINAL FIXED</title>
+<title>Premium Chat</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, update, onValue, onChildAdded, push, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA105KJhAOQxigwc5iltil-aFnz7ykruwI",
@@ -22,8 +22,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
-// FIX: Ella auth functions-um window.FB la expose panniten - ithu than main fix!
-window.FB = { db, ref, set, update, onValue, onChildAdded, push, remove, get, auth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut };
+window.FB = { db, ref, set, update, onValue, onChildAdded, push, remove, get, auth };
 window.dispatchEvent(new Event('fb-ready'));
 </script>
 <style>
@@ -263,20 +262,16 @@ const App = (()=>{
       await window.FB.signInWithPopup(window.FB.auth, provider);
       err.textContent = '';
     } catch(e) {
-      console.log('Popup error', e.code);
       if(e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request'){
         err.textContent = 'Redirecting to Google...';
         try { await window.FB.signInWithRedirect(window.FB.auth, provider); } catch(e2){ err.textContent = e2.message; }
-      } else if(e.code === 'auth/unauthorized-domain'){
-        err.textContent = 'Firebase > Auth > Settings > Authorized domains la s70-source.github.io add pannu da!';
-      } else {
-        err.textContent = e.message.replace('Firebase: ','');
-      }
+      } else { err.textContent = e.message.replace('Firebase: ',''); }
     }
   }
 
-  // Handle redirect login
-  window.FB.getRedirectResult(window.FB.auth).then(r=>{ if(r) console.log('Redirect success', r.user.email); }).catch(e=>{ document.getElementById('authErr').textContent = e.message; });
+  window.FB.getRedirectResult(window.FB.auth).catch((error) => {
+    document.getElementById('authErr').textContent = error.message;
+  });
 
   async function logout(){ await window.FB.signOut(window.FB.auth); location.reload(); }
 
@@ -373,7 +368,15 @@ const App = (()=>{
   }
   async function banUser(uid){ const u=S.users[uid]; if(!u) return; await window.FB.update(window.FB.ref(window.FB.db, 'users/'+uid), {banned:!u.banned}); alert(u.banned?'Unbanned':'Banned'); }
   document.getElementById('reminderCount').textContent=reminders.length;
-  return { authSubmit, authToggle, googleLogin, logout, openProfile, saveProfile, switchTab, openChat, closeChat, startChatWith, openNewChat, searchUsers, sendMsg, toggleRecord, openTruth, sendTruth, openCalendar, pickDay, saveReminder, changeLove, openAdmin, banUser, cancelReply, pickDay };
+  
+  // FIXED RETURN STATEMENT: Removed duplicate pickDay
+  return { 
+    authSubmit, authToggle, googleLogin, logout, openProfile, saveProfile, 
+    switchTab, openChat, closeChat, startChatWith, openNewChat, 
+    searchUsers, sendMsg, toggleRecord, openTruth, sendTruth, 
+    openCalendar, pickDay, saveReminder, changeLove, 
+    openAdmin, banUser, cancelReply 
+  };
 })();
 window.App = App;
 </script>

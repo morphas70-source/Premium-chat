@@ -7,7 +7,7 @@
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, update, onValue, onChildAdded, push, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { getAuth, GoogleAuthProvider, signInWithPopup, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyA105KJhAOQxigwc5iltil-aFnz7ykruwI",
@@ -22,8 +22,17 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const auth = getAuth(app);
-window.FB = { db, ref, set, update, onValue, onChildAdded, push, remove, get, auth };
-window.dispatchEvent(new Event('fb-ready'));
+
+// Handle Google Redirect Result
+getRedirectResult(auth).then((result) => {
+  if (result) {
+    console.log("Google Login Success:", result.user.email);
+  }
+}).catch((error) => {
+  console.error("Redirect Error:", error);
+  const errDiv = document.getElementById('authErr');
+  if(errDiv) errDiv.textContent = error.message;
+});
 </script>
 <style>
 :root { --pink:#ffb7d5; --purple:#b99aff; --blue:#92baff; --text:#201a35; }
@@ -246,46 +255,38 @@ const App = (()=>{
     if(S.authMode === 'signup' && !name) return err.textContent = 'Name required';
     try{
       if(S.authMode === 'signup'){
-        const cred = await window.FB.createUserWithEmailAndPassword(window.FB.auth, email, pass);
-        await window.FB.set(window.FB.ref(window.FB.db, 'users/'+cred.user.uid), { name, email, about:'Hey! I am using Premium Chat', avatar:'', role:'user', ts:Date.now() });
+        const cred = await createUserWithEmailAndPassword(auth, email, pass);
+        await set(ref(db, 'users/'+cred.user.uid), { name, email, about:'Hey! I am using Premium Chat', avatar:'', role:'user', ts:Date.now() });
       } else {
-        await window.FB.signInWithEmailAndPassword(window.FB.auth, email, pass);
+        await signInWithEmailAndPassword(auth, email, pass);
       }
     } catch(e){ err.textContent = e.message.replace('Firebase: ',''); }
   }
 
   async function googleLogin(){
     const err = document.getElementById('authErr');
-    err.textContent = 'Opening Google...';
-    const provider = new window.FB.GoogleAuthProvider();
+    err.textContent = 'Redirecting to Google...';
+    const provider = new GoogleAuthProvider();
     try {
-      await window.FB.signInWithPopup(window.FB.auth, provider);
-      err.textContent = '';
+      await signInWithRedirect(auth, provider);
     } catch(e) {
-      if(e.code === 'auth/popup-blocked' || e.code === 'auth/popup-closed-by-user' || e.code === 'auth/cancelled-popup-request'){
-        err.textContent = 'Redirecting to Google...';
-        try { await window.FB.signInWithRedirect(window.FB.auth, provider); } catch(e2){ err.textContent = e2.message; }
-      } else { err.textContent = e.message.replace('Firebase: ',''); }
+      err.textContent = e.message.replace('Firebase: ','');
     }
   }
 
-  window.FB.getRedirectResult(window.FB.auth).catch((error) => {
-    document.getElementById('authErr').textContent = error.message;
-  });
+  async function logout(){ await signOut(auth); location.reload(); }
 
-  async function logout(){ await window.FB.signOut(window.FB.auth); location.reload(); }
-
-  window.FB.onAuthStateChanged(window.FB.auth, async (u)=>{
+  onAuthStateChanged(auth, async (u)=>{
     if(!u){ showAuth(); return; }
     S.user = u;
-    const snap = await window.FB.get(window.FB.ref(window.FB.db, 'users/'+u.uid));
+    const snap = await get(ref(db, 'users/'+u.uid));
     if(!snap.exists()){
-      await window.FB.set(window.FB.ref(window.FB.db, 'users/'+u.uid), { name: u.displayName || u.email.split('@')[0], email:u.email, about:'Hey! I am using Premium Chat', avatar: u.photoURL||'', role:'user', ts:Date.now() });
+      await set(ref(db, 'users/'+u.uid), { name: u.displayName || u.email.split('@')[0], email:u.email, about:'Hey! I am using Premium Chat', avatar: u.photoURL||'', role:'user', ts:Date.now() });
     }
-    S.profile = (await window.FB.get(window.FB.ref(window.FB.db, 'users/'+u.uid))).val();
+    S.profile = (await get(ref(db, 'users/'+u.uid))).val();
     showMain();
     attachGlobalListeners();
-    window.FB.set(window.FB.ref(window.FB.db, 'presence/'+u.uid), { online:true, ts:Date.now() });
+    set(ref(db, 'presence/'+u.uid), { online:true, ts:Date.now() });
     if(S.profile.role === 'admin') document.getElementById('bAdmin').style.display = 'flex';
     updateProfileUI();
   });
@@ -300,9 +301,9 @@ const App = (()=>{
     av.innerHTML = S.profile.avatar ? `<img src="${S.profile.avatar}">` : (S.profile.name||'U').charAt(0).toUpperCase();
   }
   function attachGlobalListeners(){
-    window.FB.onValue(window.FB.ref(window.FB.db, 'users'), snap=>{ S.users=snap.val()||{}; renderChatList(); });
-    window.FB.onValue(window.FB.ref(window.FB.db, 'chats'), snap=>{ const all=snap.val()||{}; S.chats=Object.entries(all).filter(([id,c])=>c.participants && c.participants[S.user.uid]).map(([id,c])=>({id,...c})); renderChatList(); });
-    window.FB.onChildAdded(window.FB.ref(window.FB.db, 'truth_messages'), snap=>{ const m=snap.val(); if(m){ S.truthMsgs.push(m); renderTruth(); } });
+    onValue(ref(db, 'users'), snap=>{ S.users=snap.val()||{}; renderChatList(); });
+    onValue(ref(db, 'chats'), snap=>{ const all=snap.val()||{}; S.chats=Object.entries(all).filter(([id,c])=>c.participants && c.participants[S.user.uid]).map(([id,c])=>({id,...c})); renderChatList(); });
+    onChildAdded(ref(db, 'truth_messages'), snap=>{ const m=snap.val(); if(m){ S.truthMsgs.push(m); renderTruth(); } });
   }
   function switchTab(t){
     document.getElementById('mainHome').style.display=t==='home'?'flex':'none';
@@ -324,15 +325,15 @@ const App = (()=>{
   }
   function openNewChat(){ document.getElementById('newChatModal').classList.add('show'); }
   function openProfile(){ document.getElementById('inputName').value=S.profile.name||''; document.getElementById('inputAbout').value=S.profile.about||''; document.getElementById('profilePreview').src=S.profile.avatar||''; document.getElementById('profileModal').classList.add('show'); }
-  async function saveProfile(){ const name=document.getElementById('inputName').value.trim()||'User'; const about=document.getElementById('inputAbout').value.trim()||'Hey!'; await window.FB.update(window.FB.ref(window.FB.db, 'users/'+S.user.uid), {name, about}); S.profile.name=name; S.profile.about=about; updateProfileUI(); document.getElementById('profileModal').classList.remove('show'); }
-  document.getElementById('avatarInp').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=async()=>{ const dataUrl=r.result; await window.FB.update(window.FB.ref(window.FB.db, 'users/'+S.user.uid), {avatar:dataUrl}); S.profile.avatar=dataUrl; updateProfileUI(); document.getElementById('profilePreview').src=dataUrl; }; r.readAsDataURL(f); };
-  async function startChatWith(uid){ const cid=chatIdOf(S.user.uid, uid); const snap=await window.FB.get(window.FB.ref(window.FB.db, 'chats/'+cid)); if(!snap.exists()){ await window.FB.set(window.FB.ref(window.FB.db, 'chats/'+cid), {participants:{[S.user.uid]:true,[uid]:true}, lastMsg:'', lastTs:Date.now()}); } openChat(uid); }
+  async function saveProfile(){ const name=document.getElementById('inputName').value.trim()||'User'; const about=document.getElementById('inputAbout').value.trim()||'Hey!'; await update(ref(db, 'users/'+S.user.uid), {name, about}); S.profile.name=name; S.profile.about=about; updateProfileUI(); document.getElementById('profileModal').classList.remove('show'); }
+  document.getElementById('avatarInp').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=async()=>{ const dataUrl=r.result; await update(ref(db, 'users/'+S.user.uid), {avatar:dataUrl}); S.profile.avatar=dataUrl; updateProfileUI(); document.getElementById('profilePreview').src=dataUrl; }; r.readAsDataURL(f); };
+  async function startChatWith(uid){ const cid=chatIdOf(S.user.uid, uid); const snap=await get(ref(db, 'chats/'+cid)); if(!snap.exists()){ await set(ref(db, 'chats/'+cid), {participants:{[S.user.uid]:true,[uid]:true}, lastMsg:'', lastTs:Date.now()}); } openChat(uid); }
   let msgsListener=null, typingListener=null;
   function openChat(peerUid){
     S.peer=peerUid; S.currentChat=chatIdOf(S.user.uid, peerUid); const peer=S.users[peerUid]||{name:'User'}; document.getElementById('peerName').textContent=peer.name; const av=document.getElementById('peerAvatar'); if(peer.avatar){ av.src=peer.avatar; av.style.display='block'; document.getElementById('peerAvFallback').style.display='none'; } else { av.style.display='none'; document.getElementById('peerAvFallback').style.display='block'; }
     document.getElementById('chatScreen').classList.add('open'); S.msgs=[]; document.getElementById('msgsBox').innerHTML='';
-    if(msgsListener) msgsListener(); msgsListener=window.FB.onChildAdded(window.FB.ref(window.FB.db, 'chats/'+S.currentChat+'/messages'), snap=>{ const m=snap.val(); if(!m) return; if(S.msgs.some(x=>x.id===m.id)) return; S.msgs.push(m); renderMsgs(); if(m.from!==S.user.uid){ window.FB.update(window.FB.ref(window.FB.db, 'chats/'+S.currentChat+'/messages/'+m.id+'/seenBy'), {[S.user.uid]:true}); } });
-    if(typingListener) typingListener(); typingListener=window.FB.onValue(window.FB.ref(window.FB.db, 'typing/'+S.currentChat+'/'+peerUid), s=>{ const ind=document.getElementById('typingIndicator'); if(s.val()){ ind.textContent='typing...'; ind.style.color='#b99aff'; } else { window.FB.get(window.FB.ref(window.FB.db, 'presence/'+peerUid)).then(ps=>{ const online=ps.val()?.online; ind.textContent=online?'Online':'Offline'; ind.style.color=online?'#4ade80':'#aaa'; }); } });
+    if(msgsListener) msgsListener(); msgsListener=onChildAdded(ref(db, 'chats/'+S.currentChat+'/messages'), snap=>{ const m=snap.val(); if(!m) return; if(S.msgs.some(x=>x.id===m.id)) return; S.msgs.push(m); renderMsgs(); if(m.from!==S.user.uid){ update(ref(db, 'chats/'+S.currentChat+'/messages/'+m.id+'/seenBy'), {[S.user.uid]:true}); } });
+    if(typingListener) typingListener(); typingListener=onValue(ref(db, 'typing/'+S.currentChat+'/'+peerUid), s=>{ const ind=document.getElementById('typingIndicator'); if(s.val()){ ind.textContent='typing...'; ind.style.color='#b99aff'; } else { get(ref(db, 'presence/'+peerUid)).then(ps=>{ const online=ps.val()?.online; ind.textContent=online?'Online':'Offline'; ind.style.color=online?'#4ade80':'#aaa'; }); } });
   }
   function closeChat(){ document.getElementById('chatScreen').classList.remove('open'); if(msgsListener) msgsListener(); if(typingListener) typingListener(); S.currentChat=null; S.peer=null; S.msgs=[]; cancelReply(); }
   function renderMsgs(){
@@ -341,20 +342,20 @@ const App = (()=>{
   }
   function showMsgMenu(ev,m){
     ev.stopPropagation(); document.querySelectorAll('.msg-menu').forEach(x=>x.remove()); const menu=document.createElement('div'); menu.className='msg-menu'; menu.innerHTML=`<button data-a="react-❤️">❤️</button><button data-a="react-😂">😂</button><button data-a="react-👍">👍</button><button data-a="reply" style="font-size:14px">↪</button><button data-a="delete" style="font-size:14px">🗑</button>`; menu.style.left=Math.min(ev.clientX, window.innerWidth-240)+'px'; menu.style.top=ev.clientY+'px'; document.body.appendChild(menu);
-    menu.addEventListener('click', async e=>{ const a=e.target.dataset.a; if(!a) return; menu.remove(); if(a==='reply'){ setReply(m); return; } if(a==='delete'){ if(m.from===S.user.uid){ if(confirm('Delete for everyone?')) await window.FB.update(window.FB.ref(window.FB.db, 'chats/'+S.currentChat+'/messages/'+m.id), {deleted:true,text:'',url:''}); } else alert('You can only delete your own messages'); return; } if(a.startsWith('react-')){ const emoji=a.split('-')[1]; await window.FB.update(window.FB.ref(window.FB.db, 'chats/'+S.currentChat+'/messages/'+m.id+'/reactions'), {[emoji]:{[S.user.uid]:true}}); } }); setTimeout(()=>document.addEventListener('click', ()=>menu.remove(), {once:true}),50);
+    menu.addEventListener('click', async e=>{ const a=e.target.dataset.a; if(!a) return; menu.remove(); if(a==='reply'){ setReply(m); return; } if(a==='delete'){ if(m.from===S.user.uid){ if(confirm('Delete for everyone?')) await update(ref(db, 'chats/'+S.currentChat+'/messages/'+m.id), {deleted:true,text:'',url:''}); } else alert('You can only delete your own messages'); return; } if(a.startsWith('react-')){ const emoji=a.split('-')[1]; await update(ref(db, 'chats/'+S.currentChat+'/messages/'+m.id+'/reactions'), {[emoji]:{[S.user.uid]:true}}); } }); setTimeout(()=>document.addEventListener('click', ()=>menu.remove(), {once:true}),50);
   }
   function setReply(m){ S.replyTo=m.id; document.getElementById('replyBar').classList.add('show'); document.getElementById('replyPreview').textContent=(m.text||'[media]').slice(0,40); document.getElementById('msgInput').focus(); }
   function cancelReply(){ S.replyTo=null; document.getElementById('replyBar').classList.remove('show'); }
   async function sendMsg(){ const inp=document.getElementById('msgInput'); const text=inp.value.trim(); if(!text) return; await pushMsg({text, type:'text'}); inp.value=''; setTyping(false); }
-  async function pushMsg(extra){ const id=genId(); const msg={id, from:S.user.uid, ts:Date.now(), seenBy:{}, ...extra}; if(S.replyTo) msg.replyTo=S.replyTo; await window.FB.set(window.FB.ref(window.FB.db, 'chats/'+S.currentChat+'/messages/'+id), msg); await window.FB.update(window.FB.ref(window.FB.db, 'chats/'+S.currentChat), {lastMsg:msg.text||(msg.type==='image'?'📷 Photo':msg.type==='voice'?'🎤 Voice':''), lastTs:msg.ts, lastFrom:S.user.uid}); cancelReply(); }
+  async function pushMsg(extra){ const id=genId(); const msg={id, from:S.user.uid, ts:Date.now(), seenBy:{}, ...extra}; if(S.replyTo) msg.replyTo=S.replyTo; await set(ref(db, 'chats/'+S.currentChat+'/messages/'+id), msg); await update(ref(db, 'chats/'+S.currentChat), {lastMsg:msg.text||(msg.type==='image'?'📷 Photo':msg.type==='voice'?'🎤 Voice':''), lastTs:msg.ts, lastFrom:S.user.uid}); cancelReply(); }
   let typingTimeout; document.getElementById('msgInput').addEventListener('input', ()=>{ if(!S.currentChat) return; setTyping(true); clearTimeout(typingTimeout); typingTimeout=setTimeout(()=>setTyping(false),1500); const inp=document.getElementById('msgInput'); const rec=document.getElementById('recBtn'); const send=document.getElementById('sendBtn'); if(inp.value.trim()){ rec.style.display='none'; send.style.display='flex'; } else { rec.style.display='flex'; send.style.display='none'; } });
-  function setTyping(on){ if(!S.currentChat) return; window.FB.set(window.FB.ref(window.FB.db, 'typing/'+S.currentChat+'/'+S.user.uid), on); }
+  function setTyping(on){ if(!S.currentChat) return; set(ref(db, 'typing/'+S.currentChat+'/'+S.user.uid), on); }
   document.getElementById('fileInp').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=async()=>{ const type=f.type.startsWith('image/')?'image':'file'; await pushMsg({url:r.result, type, text:''}); }; r.readAsDataURL(f); e.target.value=''; };
   async function toggleRecord(){
     if(!S.recording){ try{ const stream=await navigator.mediaDevices.getUserMedia({audio:true}); S.recorder=new MediaRecorder(stream); S.chunks=[]; S.recorder.ondataavailable=e=>S.chunks.push(e.data); S.recorder.onstop=async()=>{ const blob=new Blob(S.chunks,{type:'audio/webm'}); const r=new FileReader(); r.onload=async()=>{ await pushMsg({url:r.result, type:'voice', text:''}); }; r.readAsDataURL(blob); stream.getTracks().forEach(t=>t.stop()); }; S.recorder.start(); S.recording=true; document.getElementById('recBtn').textContent='⏹'; } catch(e){ alert('Mic permission denied'); } } else { S.recorder.stop(); S.recording=false; document.getElementById('recBtn').textContent='🎤'; }
   }
   function openTruth(){ document.getElementById('truthScreen').classList.add('open'); renderTruth(); }
-  async function sendTruth(){ const inp=document.getElementById('truthInput'); const text=inp.value.trim(); if(!text) return; const id=genId(); await window.FB.set(window.FB.ref(window.FB.db, 'truth_messages/'+id), {id, from:S.user.uid, sender:S.profile.name, text, ts:Date.now()}); inp.value=''; }
+  async function sendTruth(){ const inp=document.getElementById('truthInput'); const text=inp.value.trim(); if(!text) return; const id=genId(); await set(ref(db, 'truth_messages/'+id), {id, from:S.user.uid, sender:S.profile.name, text, ts:Date.now()}); inp.value=''; }
   function renderTruth(){ const box=document.getElementById('truthBox'); box.innerHTML=S.truthMsgs.length?'':`<div style="text-align:center;color:#aaa;font-size:12px;margin-top:40px">No passages yet 📖</div>`; S.truthMsgs.slice().sort((a,b)=>a.ts-b.ts).forEach(m=>{ const d=document.createElement('div'); d.className='bub '+(m.from===S.user.uid?'me':'other'); const lbl=document.createElement('b'); lbl.style.cssText='color:#b84f91;font-size:11px;display:block;margin-bottom:4px'; lbl.textContent='📖 '+(m.sender||'User'); d.appendChild(lbl); d.appendChild(document.createTextNode(m.text)); box.appendChild(d); }); box.scrollTop=box.scrollHeight; }
   let selectedDate=new Date(), selectedDay=selectedDate.getDate(); let reminders=JSON.parse(localStorage.getItem('chat_reminders')||'[]');
   function openCalendar(){ const d=new Date(selectedDate.getFullYear(), selectedDate.getMonth(),1); const end=new Date(selectedDate.getFullYear(), selectedDate.getMonth()+1,0); document.getElementById('calMonthYear').textContent=d.toLocaleString('default',{month:'long',year:'numeric'}); let html='S M T W T F S'.split(' ').map(x=>`<span>${x}</span>`).join(''); for(let i=0;i<d.getDay();i++) html+='<div></div>'; for(let i=1;i<=end.getDate();i++) html+=`<div style="padding:5px;cursor:pointer;border-radius:50%;${i===selectedDay?'background:#b84f91;color:white':''}" onclick="App.pickDay(${i},this)">${i}</div>`; document.getElementById('calGrid').innerHTML=html; document.getElementById('calendarModal').classList.add('show'); }
@@ -364,12 +365,11 @@ const App = (()=>{
   function openAdmin(){
     document.getElementById('adminScreen').classList.add('open');
     const usersBox=document.getElementById('adminUsers'); usersBox.innerHTML=Object.entries(S.users).map(([uid,u])=>`<div style="padding:10px;background:white;border-radius:14px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center"><div><b>${u.name}</b><div style="font-size:11px;color:#888">${u.email||''} • ${u.role}</div></div><button onclick="App.banUser('${uid}')" style="padding:6px 10px;border-radius:10px;border:none;background:${u.banned?'#4ade80':'#ff6b6b'};color:white;font-weight:800;font-size:11px">${u.banned?'Unban':'Ban'}</button></div>`).join('');
-    window.FB.onValue(window.FB.ref(window.FB.db, 'reports'), snap=>{ const reports=snap.val()||{}; document.getElementById('adminReports').innerHTML=Object.entries(reports).map(([id,r])=>`<div style="padding:10px;background:#fff0f0;border-radius:14px;margin-bottom:8px;font-size:12px"><b>${r.reporterName}</b> reported <b>${r.reportedName}</b>: ${r.reason}</div>`).join('')||'<div style="color:#aaa;font-size:12px">No reports</div>'; });
+    onValue(ref(db, 'reports'), snap=>{ const reports=snap.val()||{}; document.getElementById('adminReports').innerHTML=Object.entries(reports).map(([id,r])=>`<div style="padding:10px;background:#fff0f0;border-radius:14px;margin-bottom:8px;font-size:12px"><b>${r.reporterName}</b> reported <b>${r.reportedName}</b>: ${r.reason}</div>`).join('')||'<div style="color:#aaa;font-size:12px">No reports</div>'; });
   }
-  async function banUser(uid){ const u=S.users[uid]; if(!u) return; await window.FB.update(window.FB.ref(window.FB.db, 'users/'+uid), {banned:!u.banned}); alert(u.banned?'Unbanned':'Banned'); }
+  async function banUser(uid){ const u=S.users[uid]; if(!u) return; await update(ref(db, 'users/'+uid), {banned:!u.banned}); alert(u.banned?'Unbanned':'Banned'); }
   document.getElementById('reminderCount').textContent=reminders.length;
   
-  // FIXED RETURN STATEMENT: Removed duplicate pickDay
   return { 
     authSubmit, authToggle, googleLogin, logout, openProfile, saveProfile, 
     switchTab, openChat, closeChat, startChatWith, openNewChat, 

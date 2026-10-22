@@ -1,20 +1,14 @@
 {
   "name": "Premium Chat",
-  "short_name": "PremiumChat",
-  "start_url": "./index.html",
+  "short_name": "Premium Chat",
+  "description": "Private premium chat app",
+  "start_url": "./admin.html",
   "display": "standalone",
   "background_color": "#fffaf5",
   "theme_color": "#fffaf5",
+  "orientation": "portrait",
   "icons": [
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/1041/1041916.png",
-      "sizes": "192x192",
-      "type": "image/png"
-    },
-    {
-      "src": "https://cdn-icons-png.flaticon.com/512/1041/1041916.png",
-      "sizes": "512x512",
-      "type": "image/png"
-    }
+    { "src": "https://cdn-icons-png.flaticon.com/512/1041/1041916.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" },
+    { "src": "https://cdn-icons-png.flaticon.com/192/1041/1041916.png", "sizes": "192x192", "type": "image/png" }
   ]
 }

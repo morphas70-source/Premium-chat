@@ -108,13 +108,15 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 <div class="phone">
   <div class="head"><div class="app-ic"></div><div class="head-title">Premium Chat</div></div>
 
-  <!-- SIMPLE LOGIN -->
   <div id="authScreen" class="auth-screen">
     <h2>Welcome</h2>
     <p>Enter your name to start</p>
     <div class="auth-err" id="authErr"></div>
-    <input type="text" id="loginName" class="auth-inp" placeholder="Your Name...">
-    <button type="button" class="auth-btn" onclick="App.login()">Enter</button>
+    
+    <!-- Added onkeydown for Enter key -->
+    <input type="text" id="loginName" class="auth-inp" placeholder="Your Name..." onkeydown="if(event.key==='Enter') App.login()">
+    
+    <button type="button" class="auth-btn" id="enterBtn" onclick="App.login()">Enter</button>
   </div>
 
   <div id="mainHome">
@@ -210,18 +212,34 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 <input type="file" id="avatarInp" accept="image/*" hidden>
 
 <script type="module">
+// Global Error Catcher to show errors on screen
+window.onerror = function(msg, url, line, col, error) {
+    const errDiv = document.getElementById('authErr');
+    if(errDiv) {
+        errDiv.textContent = "Error: " + msg;
+        errDiv.style.display = 'block';
+    }
+    return false;
+};
+
 const App = (()=>{
   const S = { user:null, profile:null, users:{}, chats:[], currentChat:null, peer:null, msgs:[], truthMsgs:[], replyTo:null, recorder:null, chunks:[], recording:false };
   const genId = () => crypto.randomUUID ? crypto.randomUUID() : 'm'+Date.now()+Math.random().toString(36).slice(2,8);
   const chatIdOf = (a,b) => [a,b].sort().join('_');
+  
+  // Flag to prevent race condition on initial login
+  let isLoggingIn = false; 
 
-  // ---- SIMPLE LOGIN LOGIC (FIXED RACE CONDITION) ----
+  // ---- SIMPLE LOGIN LOGIC ----
   async function login(){
     const name = document.getElementById('loginName').value.trim();
     const err = document.getElementById('authErr');
+    
     if(!name) return err.textContent = 'Please enter your name';
     
     err.textContent = 'Connecting...';
+    document.getElementById('enterBtn').textContent = 'Wait...';
+    isLoggingIn = true;
     
     try {
       // 1. Anonymous Login
@@ -238,17 +256,22 @@ const App = (()=>{
       };
       await set(ref(db, 'users/'+cred.user.uid), userData);
       
-      // 3. Manually trigger UI change (Fixes the timing bug)
+      // 3. Manually trigger UI change
       S.user = cred.user;
       S.profile = userData;
       showMain();
       attachGlobalListeners();
       set(ref(db, 'presence/'+cred.user.uid), { online:true, ts:Date.now() });
       updateProfileUI();
+      
       err.textContent = '';
+      document.getElementById('enterBtn').textContent = 'Enter';
+      isLoggingIn = false;
       
     } catch(e) {
       err.textContent = e.message;
+      document.getElementById('enterBtn').textContent = 'Enter';
+      isLoggingIn = false;
     }
   }
 
@@ -259,6 +282,8 @@ const App = (()=>{
 
   // ---- ON REFRESH ----
   onAuthStateChanged(auth, async (u)=>{
+    if(isLoggingIn) return; // Ignore if we are manually logging in
+    
     if(!u){ showAuth(); return; }
     
     const snap = await get(ref(db, 'users/'+u.uid));
@@ -389,4 +414,4 @@ const App = (()=>{
 })();
 window.App = App;
 </script>
-</body></html>
+</body></html>y

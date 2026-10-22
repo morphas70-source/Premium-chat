@@ -9,7 +9,7 @@
 <meta property="og:description" content="Join me on Premium Chat">
 <meta property="og:image" content="https://cdn-icons-png.flaticon.com/512/1041/1041916.png">
 <meta property="og:url" content="https://morphas70-source.github.io/Premium-chat/">
-<title>ADMIN - Ultra Premium Chat</title>
+<title>VIEWER - Ultra Premium Chat</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -91,8 +91,8 @@ body { min-height: 100dvh; display: flex; justify-content: center; align-items: 
 .bt.active { background: linear-gradient(145deg,#ffe4ed,#ffc8df,#e5c5ff); color: #b84f91; border: 2px solid white; box-shadow: 0 5px 0 #e6b7d6, 0 8px 15px rgba(150,80,145,.13), inset 0 2px 3px white; }
 .bt:not(.active) { background: linear-gradient(145deg,#fff,#f0e8fa); color: #897694; border: 2px solid white; box-shadow: 0 5px 0 #e4d8eb, inset 0 2px 3px white; }
 .bt .ico { font-size: 23px; }
-.chat-screen, .truth-screen, .admin-screen { position: absolute; inset: 0; z-index: 10; display: none; flex-direction: column; background: radial-gradient(ellipse at top right,#f3e5ff,transparent 45%), linear-gradient(145deg,#fffafc,#fff5ee); border-radius: 31px; backdrop-filter: blur(22px); }
-.chat-screen.open, .truth-screen.open, .admin-screen.open { display: flex; }
+.chat-screen, .truth-screen { position: absolute; inset: 0; z-index: 10; display: none; flex-direction: column; background: radial-gradient(ellipse at top right,#f3e5ff,transparent 45%), linear-gradient(145deg,#fffafc,#fff5ee); border-radius: 31px; backdrop-filter: blur(22px); }
+.chat-screen.open, .truth-screen.open { display: flex; }
 .cv-head { padding: 17px 15px; gap: 11px; background: rgba(255,255,255,.85); border-bottom: 2px solid #f0e2f4; box-shadow: 0 5px 20px rgba(100,65,130,.07); display: flex; align-items: center; }
 .back { flex-shrink: 0; width: 40px; height: 40px; background: linear-gradient(145deg,#fff,#f0dfff); box-shadow: 0 4px 0 #e0cce9; border: 2px solid white; border-radius: 50%; display: flex; justify-content: center; align-items: center; cursor: pointer; font-weight: 800; }
 .msgs { flex: 1; overflow-y: auto; display: flex; flex-direction: column; padding: 16px 12px; gap: 13px; background-color: #fff9fc; background-image: radial-gradient(rgba(205,170,230,.25) 1px, transparent 1px); background-size: 20px 20px; position: relative; }
@@ -136,9 +136,9 @@ body { min-height: 100dvh; display: flex; justify-content: center; align-items: 
 </style></head><body>
 
 <div id="notifyBanner" onclick="openChat()">
-  <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200" id="notifyAv">
+  <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200" id="notifyAv">
   <div>
-    <b id="notifyName">Mia</b>
+    <b id="notifyName">Admin</b>
     <p id="notifyMsg">New message...</p>
   </div>
 </div>
@@ -195,14 +195,13 @@ body { min-height: 100dvh; display: flex; justify-content: center; align-items: 
   <div class="bottom" id="bottomNav">
     <div class="bt active" id="bHome" onclick="switchTab('home')"><span class="ico">🏠</span>HOME</div>
     <div class="bt" id="bMsg" onclick="switchTab('msg')"><span class="ico">💬</span>MESSAGES</div>
-    <div class="bt" id="bAdmin" onclick="openAdmin()" style="display:none"><span class="ico">⚙️</span>TOOLS</div>
   </div>
 
   <div class="chat-screen" id="chatScreen">
     <div class="cv-head">
       <div class="back" onclick="chatScreen.classList.remove('open')">←</div>
-      <div style="width:40px;height:40px;border-radius:50%;overflow:hidden"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200" id="peerAvatar"></div>
-      <div><b id="peerName">Mia Williams</b><div id="typingIndicator" style="font-size:11px;color:#4ade80">Online</div></div>
+      <div style="width:40px;height:40px;border-radius:50%;overflow:hidden"><img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200" id="peerAvatar"></div>
+      <div><b id="peerName">Admin</b><div id="typingIndicator" style="font-size:11px;color:#4ade80">Online</div></div>
     </div>
     <div class="msgs" id="msgsBox"></div>
     <div class="input"><input id="msgInput" placeholder="Type..." onkeydown="if(event.key==='Enter')sendMsg()" oninput="onTyping()"><div class="send" onclick="sendMsg()">➤</div></div>
@@ -211,21 +210,11 @@ body { min-height: 100dvh; display: flex; justify-content: center; align-items: 
   <div class="truth-screen" id="truthScreen">
     <div class="cv-head">
       <div class="back" onclick="truthScreen.classList.remove('open')">←</div>
-      <div style="width:40px;height:40px;border-radius:50%;overflow:hidden"><img id="truthPeerAv" src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200" style="width:100%;height:100%;object-fit:cover"></div>
-      <div><b id="truthPeerName">Mia</b><div id="truthTypingStatus" style="font-size:11px;color:#4ade80">Online</div></div>
+      <div style="width:40px;height:40px;border-radius:50%;overflow:hidden"><img id="truthPeerAv" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200" style="width:100%;height:100%;object-fit:cover"></div>
+      <div><b id="truthPeerName">Admin</b><div id="truthTypingStatus" style="font-size:11px;color:#4ade80">Online</div></div>
     </div>
     <div class="msgs" id="truthBox" style="background-image: radial-gradient(rgba(255,205,170,.25) 1px, transparent 1px);"></div>
     <div class="input"><textarea id="truthInput" rows="2" placeholder="Write a passage..." oninput="onTruthTyping()" onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();sendTruth();}"></textarea><div class="send" onclick="sendTruth()">➤</div></div>
-  </div>
-
-  <div class="admin-screen" id="adminScreen">
-    <div class="cv-head"><div class="back" onclick="adminScreen.classList.remove('open')">←</div><div><b>Admin Tools ⚙️</b><div style="font-size:11px;color:#a5aaff">Exclusive Access</div></div></div>
-    <div style="padding:20px; display:grid; grid-template-columns:1fr 1fr; gap:15px;">
-      <div onclick="alert('Broadcast feature!')" style="padding:25px; border-radius:22px; border:3px solid white; background:#ffd6a5; font-weight:800; cursor:pointer;"><span style="font-size:30px">📢</span><br>Broadcast</div>
-      <div onclick="clearChat()" style="padding:25px; border-radius:22px; border:3px solid white; background:#a0e0b0; font-weight:800; cursor:pointer;"><span style="font-size:30px">🗑️</span><br>Clear Chat</div>
-      <div onclick="alert('Auto-Reply is ON')" style="padding:25px; border-radius:22px; border:3px solid white; background:#8ab0ff; color:white; font-weight:800; cursor:pointer;"><span style="font-size:30px">🤖</span><br>Auto Reply</div>
-      <div onclick="alert('Stats Loaded')" style="padding:25px; border-radius:22px; border:3px solid white; background:#ff9a9e; font-weight:800; cursor:pointer;"><span style="font-size:30px">📊</span><br>View Stats</div>
-    </div>
   </div>
 </div>
 
@@ -260,8 +249,8 @@ body { min-height: 100dvh; display: flex; justify-content: center; align-items: 
 <script>
 if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').catch(e=>{}); }
 
-const ROLE = 'admin';
-const PEER = 'viewer';
+const ROLE = 'viewer';
+const PEER = 'admin';
 const $ = id => document.getElementById(id);
 const LS_KEY   = 'premium_exact_v13_' + ROLE;
 const LS_TRUTH = 'chat_truth_' + ROLE;
@@ -281,8 +270,8 @@ const ICE = { iceServers: [{ urls: 'stun:stun.l.google.com:19302' }] };
 let currentUser  = localStorage.getItem('chat_username') || '';
 let currentAbout = localStorage.getItem('chat_about') || 'Available';
 let currentAvatar = localStorage.getItem('chat_user_avatar') || '';
-let peerName   = 'Mia';
-let peerAvatar = 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=200';
+let peerName   = 'Admin';
+let peerAvatar = 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=200';
 
 const peerState = { online: false, typing: false, truthTyping: false };
 function paintStatus() {
@@ -315,7 +304,6 @@ function checkLogin() {
     $('loginScreen').style.display = 'none';
     $('mainHome').style.display = 'flex';
     $('bottomNav').style.display = 'flex';
-    $('bAdmin').style.display = 'flex';
     $('myNameDisplay').textContent = currentUser;
     $('myAboutDisplay').textContent = currentAbout;
     if (currentAvatar) $('userAvatar').innerHTML = `<img src="${currentAvatar}">`;
@@ -745,19 +733,6 @@ function cleanup() {
   $('remoteV').srcObject = null;
   pendingCandidates = [];
 }
-
-window.openAdmin = () => {
-  if (ROLE !== 'admin') return;
-  const el = $('adminScreen');
-  if (el) el.classList.add('open');
-};
-window.clearChat = async () => {
-  if (ROLE !== 'admin') return;
-  if (!confirm('Delete all messages for everyone?')) return;
-  msgs = []; save(); render(); renderList();
-  if (window.FB) { try { await window.FB.remove(window.FB.ref(window.FB.db, 'messages')); } catch(e){} }
-  if (bc) bc.postMessage({ type: 'cleared' });
-};
 
 load(); loadTruth(); render(); renderTruth(); renderList(); checkLogin();
 </script></body></html>

@@ -2,27 +2,8 @@
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="theme-color" content="#fffaf5">
-<title>Premium Chat - DEBUG</title>
+<title>Premium Chat</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import { getDatabase, ref, set, update, onValue, onChildAdded, push, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
-import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyA105KJhAOQxigwc5iltil-aFnz7ykruwI",
-  authDomain: "love-space-3e574.firebaseapp.com",
-  databaseURL: "https://love-space-3e574-default-rtdb.firebaseio.com",
-  projectId: "love-space-3e574",
-  storageBucket: "love-space-3e574.firebasestorage.app",
-  messagingSenderId: "9834363623",
-  appId: "1:9834363623:web:829d60de594b3e7c850042"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const auth = getAuth(app);
-</script>
 <style>
 :root { --pink:#ffb7d5; --purple:#b99aff; --blue:#92baff; --text:#201a35; }
 * { box-sizing:border-box; -webkit-tap-highlight-color:transparent; font-family:Inter,sans-serif; margin:0; padding:0; }
@@ -34,7 +15,7 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 .head-title { font-size:26px; font-weight:800; letter-spacing:-1px; }
 .auth-screen { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:20px; }
 .auth-screen h2 { font-size:24px; font-weight:800; margin-bottom:10px; }
-.auth-screen p { font-size:13px; color:#666; margin-bottom:30px; font-weight:600; text-align:center; }
+.auth-screen p { font-size:13px; color:#666; margin-bottom:20px; font-weight:600; text-align:center; }
 .auth-inp { width:100%; max-width:300px; padding:16px; border-radius:20px; border:3px solid white; background:rgba(255,255,255,.7); outline:none; font-size:15px; font-weight:700; box-shadow:inset 0 2px 8px rgba(100,65,130,.05),0 8px 0 #e8dbe9; margin-bottom:20px; transition:.2s; }
 .auth-inp:focus { background:white; box-shadow:inset 0 2px 8px rgba(100,65,130,.05),0 8px 0 #d2b9e9; }
 .auth-btn { width:100%; max-width:300px; padding:16px; border-radius:20px; border:3px solid white; background:linear-gradient(145deg,#a5aaff,#b68bff,#e5a6f7); color:white; font-size:16px; font-weight:800; cursor:pointer; box-shadow:0 8px 0 #9983d9,0 14px 28px rgba(95,65,130,.2); transition:transform .15s ease; }
@@ -111,7 +92,6 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
   <div id="authScreen" class="auth-screen">
     <h2>Welcome</h2>
     <p>Enter your name to start</p>
-    <!-- DEBUGGING TEXT AREA -->
     <div class="auth-err" id="authErr"></div>
     
     <input type="text" id="loginName" class="auth-inp" placeholder="Your Name..." onkeydown="if(event.key==='Enter') App.login()">
@@ -212,6 +192,24 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 <input type="file" id="avatarInp" accept="image/*" hidden>
 
 <script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getDatabase, ref, set, update, onValue, onChildAdded, push, remove, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA105KJhAOQxigwc5iltil-aFnz7ykruwI",
+  authDomain: "love-space-3e574.firebaseapp.com",
+  databaseURL: "https://love-space-3e574-default-rtdb.firebaseio.com",
+  projectId: "love-space-3e574",
+  storageBucket: "love-space-3e574.firebasestorage.app",
+  messagingSenderId: "9834363623",
+  appId: "1:9834363623:web:829d60de594b3e7c850042"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const auth = getAuth(app);
+
 // Global Error Catcher
 window.onerror = function(msg, url, line, col, error) {
     const errDiv = document.getElementById('authErr');
@@ -230,8 +228,6 @@ const App = (()=>{
   let isLoggingIn = false; 
 
   async function login(){
-    alert("1. Login Button Clicked!"); // DEBUG POPUP
-    
     const name = document.getElementById('loginName').value.trim();
     const err = document.getElementById('authErr');
     
@@ -266,7 +262,7 @@ const App = (()=>{
       isLoggingIn = false;
       
     } catch(e) {
-      alert("ERROR OCCURRED: " + e.message); // DEBUG POPUP
+      alert("ERROR OCCURRED: " + e.message); 
       err.textContent = "ERROR: " + e.message;
       document.getElementById('enterBtn').textContent = 'Enter';
       isLoggingIn = false;

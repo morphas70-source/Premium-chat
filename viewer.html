@@ -113,9 +113,7 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
     <h2>Welcome</h2>
     <p>Enter your name to start</p>
     <div class="auth-err" id="authErr"></div>
-    
     <input type="text" id="loginName" class="auth-inp" placeholder="Your Name...">
-    
     <button type="button" class="auth-btn" onclick="App.login()">Enter</button>
   </div>
 
@@ -217,7 +215,7 @@ const App = (()=>{
   const genId = () => crypto.randomUUID ? crypto.randomUUID() : 'm'+Date.now()+Math.random().toString(36).slice(2,8);
   const chatIdOf = (a,b) => [a,b].sort().join('_');
 
-  // ---- SIMPLE LOGIN LOGIC ----
+  // ---- SIMPLE LOGIN LOGIC (FIXED RACE CONDITION) ----
   async function login(){
     const name = document.getElementById('loginName').value.trim();
     const err = document.getElementById('authErr');
@@ -226,20 +224,29 @@ const App = (()=>{
     err.textContent = 'Connecting...';
     
     try {
-      // 1. Anonymous Login (No email/pass needed, keeps database secure)
+      // 1. Anonymous Login
       const cred = await signInAnonymously(auth);
       
       // 2. Save Name to Database
-      await set(ref(db, 'users/'+cred.user.uid), { 
+      const userData = { 
         name: name, 
         email: 'user@premiumchat.com', 
         about: 'Hey! I am using Premium Chat', 
         avatar: '', 
         role: 'user', 
         ts: Date.now() 
-      });
+      };
+      await set(ref(db, 'users/'+cred.user.uid), userData);
       
-      // Auth listener will automatically take over
+      // 3. Manually trigger UI change (Fixes the timing bug)
+      S.user = cred.user;
+      S.profile = userData;
+      showMain();
+      attachGlobalListeners();
+      set(ref(db, 'presence/'+cred.user.uid), { online:true, ts:Date.now() });
+      updateProfileUI();
+      err.textContent = '';
+      
     } catch(e) {
       err.textContent = e.message;
     }
@@ -247,18 +254,16 @@ const App = (()=>{
 
   async function logout(){ 
     await signOut(auth); 
-    localStorage.removeItem('chat_username');
     location.reload(); 
   }
 
-  // ---- ON LOGIN SUCCESS ----
+  // ---- ON REFRESH ----
   onAuthStateChanged(auth, async (u)=>{
     if(!u){ showAuth(); return; }
     
-    // Check if profile exists in DB
     const snap = await get(ref(db, 'users/'+u.uid));
     if(!snap.exists()){
-      // If they refreshed and lost DB data, just show login screen
+      await signOut(auth);
       showAuth();
       return;
     }
@@ -267,10 +272,7 @@ const App = (()=>{
     S.profile = snap.val();
     showMain();
     attachGlobalListeners();
-    
-    // Set Online
     set(ref(db, 'presence/'+u.uid), { online:true, ts:Date.now() });
-    
     if(S.profile.role === 'admin') document.getElementById('bAdmin').style.display = 'flex';
     updateProfileUI();
   });

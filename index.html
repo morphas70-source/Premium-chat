@@ -2,7 +2,7 @@
 <html lang="en"><head><meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
 <meta name="theme-color" content="#fffaf5">
-<title>Premium Chat</title>
+<title>Premium Chat - DEBUG</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@600;700;800;900&display=swap" rel="stylesheet">
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
@@ -39,7 +39,7 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 .auth-inp:focus { background:white; box-shadow:inset 0 2px 8px rgba(100,65,130,.05),0 8px 0 #d2b9e9; }
 .auth-btn { width:100%; max-width:300px; padding:16px; border-radius:20px; border:3px solid white; background:linear-gradient(145deg,#a5aaff,#b68bff,#e5a6f7); color:white; font-size:16px; font-weight:800; cursor:pointer; box-shadow:0 8px 0 #9983d9,0 14px 28px rgba(95,65,130,.2); transition:transform .15s ease; }
 .auth-btn:active { transform:translateY(5px) scale(.97); box-shadow:0 3px 0 #9983d9; }
-.auth-err { color:#ff4d6d; font-size:12px; font-weight:700; margin-bottom:10px; min-height:15px; text-align:center; }
+.auth-err { color:#ff4d6d; font-size:12px; font-weight:700; margin-bottom:10px; min-height:15px; text-align:center; background: #fff0f0; padding: 5px; border-radius: 8px; width: 100%; max-width: 300px; word-break: break-all;}
 #mainHome { flex:1; overflow-y:auto; display:none; flex-direction:column; padding-bottom:10px; }
 .profile { margin:4px 15px; padding:16px 14px; gap:14px; background:linear-gradient(135deg,rgba(255,225,224,.95),rgba(255,238,232,.95),rgba(242,220,255,.9)); border:3px solid white; border-radius:24px; box-shadow:0 8px 0 #e9d0e5,0 16px 30px rgba(100,65,130,.15); display:flex; align-items:center; cursor:pointer; }
 .p-av { width:68px; height:68px; border:3px solid white; box-shadow:0 5px 0 #e7bdd6; border-radius:50%; overflow:hidden; flex-shrink:0; display:flex; justify-content:center; align-items:center; background:#ffe4d6; font-size:26px; position:relative; }
@@ -111,9 +111,9 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
   <div id="authScreen" class="auth-screen">
     <h2>Welcome</h2>
     <p>Enter your name to start</p>
+    <!-- DEBUGGING TEXT AREA -->
     <div class="auth-err" id="authErr"></div>
     
-    <!-- Added onkeydown for Enter key -->
     <input type="text" id="loginName" class="auth-inp" placeholder="Your Name..." onkeydown="if(event.key==='Enter') App.login()">
     
     <button type="button" class="auth-btn" id="enterBtn" onclick="App.login()">Enter</button>
@@ -212,11 +212,11 @@ body { min-height:100dvh; display:flex; justify-content:center; align-items:cent
 <input type="file" id="avatarInp" accept="image/*" hidden>
 
 <script type="module">
-// Global Error Catcher to show errors on screen
+// Global Error Catcher
 window.onerror = function(msg, url, line, col, error) {
     const errDiv = document.getElementById('authErr');
     if(errDiv) {
-        errDiv.textContent = "Error: " + msg;
+        errDiv.textContent = "CRITICAL ERROR: " + msg;
         errDiv.style.display = 'block';
     }
     return false;
@@ -227,36 +227,34 @@ const App = (()=>{
   const genId = () => crypto.randomUUID ? crypto.randomUUID() : 'm'+Date.now()+Math.random().toString(36).slice(2,8);
   const chatIdOf = (a,b) => [a,b].sort().join('_');
   
-  // Flag to prevent race condition on initial login
   let isLoggingIn = false; 
 
-  // ---- SIMPLE LOGIN LOGIC ----
   async function login(){
+    alert("1. Login Button Clicked!"); // DEBUG POPUP
+    
     const name = document.getElementById('loginName').value.trim();
     const err = document.getElementById('authErr');
     
     if(!name) return err.textContent = 'Please enter your name';
     
-    err.textContent = 'Connecting...';
-    document.getElementById('enterBtn').textContent = 'Wait...';
+    err.textContent = 'Step 1: Connecting to Firebase Auth...';
+    document.getElementById('enterBtn').textContent = 'Please wait...';
     isLoggingIn = true;
     
     try {
       // 1. Anonymous Login
       const cred = await signInAnonymously(auth);
+      err.textContent = 'Step 2: Auth Success. Saving to Database...';
       
       // 2. Save Name to Database
       const userData = { 
-        name: name, 
-        email: 'user@premiumchat.com', 
-        about: 'Hey! I am using Premium Chat', 
-        avatar: '', 
-        role: 'user', 
-        ts: Date.now() 
+        name: name, email: 'user@premiumchat.com', about: 'Hey! I am using Premium Chat', avatar: '', role: 'user', ts: Date.now() 
       };
       await set(ref(db, 'users/'+cred.user.uid), userData);
       
-      // 3. Manually trigger UI change
+      err.textContent = 'Step 3: Database Saved. Opening App...';
+      
+      // 3. Open App
       S.user = cred.user;
       S.profile = userData;
       showMain();
@@ -265,25 +263,20 @@ const App = (()=>{
       updateProfileUI();
       
       err.textContent = '';
-      document.getElementById('enterBtn').textContent = 'Enter';
       isLoggingIn = false;
       
     } catch(e) {
-      err.textContent = e.message;
+      alert("ERROR OCCURRED: " + e.message); // DEBUG POPUP
+      err.textContent = "ERROR: " + e.message;
       document.getElementById('enterBtn').textContent = 'Enter';
       isLoggingIn = false;
     }
   }
 
-  async function logout(){ 
-    await signOut(auth); 
-    location.reload(); 
-  }
+  async function logout(){ await signOut(auth); location.reload(); }
 
-  // ---- ON REFRESH ----
   onAuthStateChanged(auth, async (u)=>{
-    if(isLoggingIn) return; // Ignore if we are manually logging in
-    
+    if(isLoggingIn) return; 
     if(!u){ showAuth(); return; }
     
     const snap = await get(ref(db, 'users/'+u.uid));
@@ -342,11 +335,9 @@ const App = (()=>{
 
   function openNewChat(){ document.getElementById('newChatModal').classList.add('show'); }
   function openProfile(){ document.getElementById('inputName').value=S.profile.name||''; document.getElementById('inputAbout').value=S.profile.about||''; document.getElementById('profilePreview').src=S.profile.avatar||''; document.getElementById('profileModal').classList.add('show'); }
-  
   async function saveProfile(){ const name=document.getElementById('inputName').value.trim()||'User'; const about=document.getElementById('inputAbout').value.trim()||'Hey!'; await update(ref(db, 'users/'+S.user.uid), {name, about}); S.profile.name=name; S.profile.about=about; updateProfileUI(); document.getElementById('profileModal').classList.remove('show'); }
   
   document.getElementById('avatarInp').onchange=e=>{ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=async()=>{ const dataUrl=r.result; await update(ref(db, 'users/'+S.user.uid), {avatar:dataUrl}); S.profile.avatar=dataUrl; updateProfileUI(); document.getElementById('profilePreview').src=dataUrl; }; r.readAsDataURL(f); };
-  
   async function startChatWith(uid){ const cid=chatIdOf(S.user.uid, uid); const snap=await get(ref(db, 'chats/'+cid)); if(!snap.exists()){ await set(ref(db, 'chats/'+cid), {participants:{[S.user.uid]:true,[uid]:true}, lastMsg:'', lastTs:Date.now()}); } openChat(uid); }
   
   let msgsListener=null, typingListener=null;
@@ -414,4 +405,4 @@ const App = (()=>{
 })();
 window.App = App;
 </script>
-</body></html>y
+</body></html>

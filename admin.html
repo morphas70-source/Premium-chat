@@ -70,29 +70,18 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .cv-head{padding:17px 15px;gap:11px;background:var(--navy);color:#fff;border-bottom:1px solid rgba(255,255,255,0.1);display:flex;align-items:center;z-index:10;}
 .cv-head svg{stroke:#fff;}
 .back-btn { font-size: 24px; font-weight: 900; padding-right: 10px; cursor: pointer; }
-.msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;padding:16px 12px;gap:13px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch; user-select:none; -webkit-user-select:none; background: transparent;}
+.msgs{flex:1;overflow-y:auto;display:flex;flex-direction:column;padding:16px 12px;gap:13px;scroll-behavior:smooth;-webkit-overflow-scrolling:touch; user-select:none; -webkit-user-select:none; background: transparent; position:relative;}
 .bub{padding:12px 15px 8px;font-size:15px;line-height:1.5;border-radius:19px;max-width:85%;font-weight:500;word-break:break-word; white-space:pre-wrap; cursor:pointer;position:relative;transition:transform 0.15s ease, background 0.2s; user-select:none; -webkit-user-select:none; -webkit-touch-callout: none;}
-.bub:active{transform:scale(0.94);}
 .me{align-self:flex-end;background:linear-gradient(135deg,#ffd1dc,#e5a6f7);border-bottom-right-radius:5px;color:#201a35;box-shadow:0 4px 12px rgba(229, 166, 247, 0.25);border:1px solid rgba(255,255,255,0.6);}
 .other{align-self:flex-start;background:rgba(255,255,255,0.85);backdrop-filter:blur(10px);border-bottom-left-radius:5px;color:#333;box-shadow:0 4px 12px rgba(0, 0, 0, 0.04);border:1px solid rgba(255,255,255,0.9);}
 .seen-tick{display:inline-flex;align-items:center;justify-content:center;transition:color 0.3s ease;}
 .seen-tick svg{width:16px;height:16px;stroke-width:2.5;}
 .msg-time{font-size:10px;opacity:0.55;margin-top:4px;display:block;text-align:right;font-weight:600;}
-
-/* Message Text Formatting */
 .bub code { background: rgba(0,0,0,0.1); padding: 2px 4px; border-radius: 4px; font-family: monospace; font-size: 14px; }
 .bub b, .bub strong { font-weight: 800; }
 .bub i, .bub em { font-style: italic; }
 .bub s, .bub del { text-decoration: line-through; opacity: 0.7; }
-
-/* Document Attachment */
-.doc-card { display:flex; align-items:center; gap:10px; padding:10px; background:rgba(255,255,255,0.5); border-radius:10px; margin-top:6px; border:1px solid rgba(255,255,255,0.8); text-decoration:none; color:inherit; }
-.doc-icon { width:36px; height:36px; background:#ff4d4d; color:white; display:flex; align-items:center; justify-content:center; border-radius:8px; font-weight:900; font-size:18px; flex-shrink:0; }
-.doc-info { flex:1; overflow:hidden; }
-.doc-name { font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.doc-size { font-size:10px; color:#666; }
-
-/* ⭐ PREMIUM CALL HISTORY CARD */
+.reply-swipe-icon { position: absolute; left: -35px; top: 50%; transform: translateY(-50%); width: 24px; height: 24px; stroke: #a5aaff; fill: none; opacity: 0; transition: opacity 0.2s; }
 .call-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:linear-gradient(135deg,#1c1c1e,#2c2c2e);border-radius:18px;min-width:250px;box-shadow:0 6px 18px rgba(0,0,0,0.25);position:relative;overflow:hidden;}
 .call-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(to bottom,#22c55e,#16a34a);}
 .call-card.missed::before{background:linear-gradient(to bottom,#ef4444,#dc2626);}
@@ -103,8 +92,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .call-meta-text{font-size:11px;color:#98989d;margin-top:3px;font-weight:600;display:flex;gap:6px;align-items:center;}
 .call-callback-btn{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,#a5aaff,#e5a6f7);border:none;color:white;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 4px 10px rgba(165,170,255,0.4);transition:transform 0.15s ease;}
 .call-callback-btn:active{transform:scale(0.9);}
-
-/* ⭐ Input area */
 .ig-input-area{display:flex;align-items:flex-end;gap:8px;padding:8px 12px;padding-bottom:max(12px, env(safe-area-inset-bottom));background:var(--navy);z-index:10; margin: 10px; border-radius: 30px; box-shadow: 0 8px 20px rgba(22,33,62,0.3);}
 .ig-middle{flex:1;display:flex;align-items:center;background:rgba(255,255,255,0.1);border-radius:24px;padding:4px 10px;transition:all 0.2s; min-height: 44px;}
 .ig-middle textarea{flex:1;border:none;background:transparent;outline:none;padding:10px 5px;font-size:15px;font-weight:500;color:#fff;resize:none;max-height:100px;line-height:1.4;font-family:inherit; overflow-y:hidden;}
@@ -115,47 +102,16 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .ig-send-btn{background:linear-gradient(135deg,#a5aaff,#e5a6f7);border:none;color:white;width:44px;height:44px;border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(165,170,255,0.4);transition:transform 0.2s;flex-shrink: 0;}
 .ig-send-btn svg{width:20px;height:20px;stroke:white;fill:none;margin-left:-2px;stroke-width:2.5;}
 .ig-send-btn:active{transform:scale(0.9);}
-
-/* ⭐ PREMIUM ADMIN TOOL BUTTONS */
 .admin-space { padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
-.admin-tool-btn {
-    padding: 18px 20px; border-radius: 24px;
-    border: 2px solid rgba(255,255,255,0.9);
-    background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,235,250,0.8) 100%);
-    font-weight: 800; color: #201a35; text-align: left;
-    display: flex; align-items: center; gap: 16px;
-    cursor: pointer;
-    box-shadow: 0 10px 25px rgba(165,170,255,0.15), inset 0 2px 5px rgba(255,255,255,0.9);
-    transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275);
-    position: relative; overflow: hidden; backdrop-filter: blur(10px);
-}
-.admin-tool-btn::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px;
-    background: linear-gradient(to bottom, #a5aaff, #e5a6f7); border-radius: 24px 0 0 24px;
-}
-.admin-tool-btn::after {
-    content: ''; position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
-    width: 30px; height: 30px; background: linear-gradient(135deg, rgba(165,170,255,0.1), rgba(229,166,247,0.15));
-    border-radius: 50%; pointer-events: none;
-}
-.admin-tool-btn:hover, .admin-tool-btn:active {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 15px 30px rgba(165,170,255,0.3), inset 0 2px 5px rgba(255,255,255,1);
-}
-.admin-tool-btn .icon {
-    font-size: 24px;
-    background: linear-gradient(135deg, #a5aaff, #e5a6f7);
-    width: 56px; height: 56px;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 16px;
-    box-shadow: 0 6px 15px rgba(165,170,255,0.4);
-    z-index: 1; flex-shrink: 0;
-}
+.admin-tool-btn { padding: 18px 20px; border-radius: 24px; border: 2px solid rgba(255,255,255,0.9); background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,235,250,0.8) 100%); font-weight: 800; color: #201a35; text-align: left; display: flex; align-items: center; gap: 16px; cursor: pointer; box-shadow: 0 10px 25px rgba(165,170,255,0.15), inset 0 2px 5px rgba(255,255,255,0.9); transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; backdrop-filter: blur(10px); }
+.admin-tool-btn::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: linear-gradient(to bottom, #a5aaff, #e5a6f7); border-radius: 24px 0 0 24px; }
+.admin-tool-btn::after { content: ''; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, rgba(165,170,255,0.1), rgba(229,166,247,0.15)); border-radius: 50%; pointer-events: none; }
+.admin-tool-btn:active { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 30px rgba(165,170,255,0.3), inset 0 2px 5px rgba(255,255,255,1); }
+.admin-tool-btn .icon { font-size: 24px; background: linear-gradient(135deg, #a5aaff, #e5a6f7); width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; border-radius: 16px; box-shadow: 0 6px 15px rgba(165,170,255,0.4); z-index: 1; flex-shrink: 0; }
 .admin-tool-btn .icon svg { width: 28px; height: 28px; stroke: white; stroke-width: 2.5; fill: none; }
 .admin-tool-btn .text-content { display: flex; flex-direction: column; z-index: 1; }
 .admin-tool-btn .title { font-size: 16px; color: #1a1a2a; letter-spacing: -0.3px; }
 .admin-tool-btn .subtitle { font-size: 11px; color: #777; font-weight: 600; margin-top: 4px; }
-
 .love-screen { background: linear-gradient(135deg, #1A1A2E, #16213E); color: white; align-items: center; justify-content: center; padding: 30px; text-align: center; }
 .quote-box { background: rgba(255,255,255,0.05); padding: 30px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: fadeIn 0.5s ease; width: 100%;}
 .quote-text { font-size: 20px; font-weight: 600; line-height: 1.6; margin-bottom: 20px; color: #ffe4ed; }
@@ -183,15 +139,11 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .calendar-grid div.active { background: linear-gradient(135deg,#ff9a9e,#fecfef); color: white; box-shadow: 0 4px 10px rgba(255,154,158,.4); }
 .calendar-grid div.sunday { color: #7AD9F5; } 
 .calendar-grid div.active.sunday { color: white; }
-
-/* ⭐ FULL SCREEN PREMIUM CALL OVERLAY */
-#callOverlay{background:linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0f0f1e 100%);position:fixed;inset:0;z-index:9998;display:none;flex-direction:column;align-items:center;justify-content:flex-start;padding:40px 20px 30px;overflow:hidden;}
-#callOverlay::before{content:'';position:absolute;top:-100px;left:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(165,170,255,0.15),transparent 70%);border-radius:50%;pointer-events:none;}
-#callOverlay::after{content:'';position:absolute;bottom:-100px;right:-100px;width:300px;height:300px;background:radial-gradient(circle,rgba(229,166,247,0.15),transparent 70%);border-radius:50%;pointer-events:none;}
-.call-avatar{width:130px;height:130px;border-radius:50%;background:linear-gradient(135deg,#a5aaff,#e5a6f7);display:flex;align-items:center;justify-content:center;font-size:52px;font-weight:900;color:white;margin-top:50px;box-shadow:0 20px 50px rgba(165,170,255,0.4);animation:callPulse 2s infinite;position:relative;z-index:1;}
+#callOverlay{background:linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0f0f1e 100%);position:fixed;inset:0;z-index:9998;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:12px;}
+.call-avatar{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#a5aaff,#e5a6f7);display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:900;color:white;margin-top:20px;box-shadow:0 20px 50px rgba(165,170,255,0.4);animation:callPulse 2s infinite;position:relative;z-index:1;}
 @keyframes callPulse{0%,100%{box-shadow:0 0 0 0 rgba(165,170,255,0.5),0 20px 50px rgba(165,170,255,0.4);}50%{box-shadow:0 0 0 25px rgba(165,170,255,0),0 20px 50px rgba(165,170,255,0.4);}}
-.call-name-display{font-size:26px;font-weight:800;color:white;margin-top:25px;z-index:1;letter-spacing:-0.5px;}
-.call-status-text{color:#aaa;font-size:14px;margin-top:10px;letter-spacing:1.5px;font-weight:600;text-transform:uppercase;z-index:1;transition:color 0.3s;}
+.call-name-display{font-size:24px;font-weight:800;color:white;margin-top:15px;z-index:1;}
+.call-status-text{color:#aaa;font-size:14px;margin-top:8px;letter-spacing:1.5px;font-weight:600;text-transform:uppercase;z-index:1;}
 .call-status-text.connected{color:#22c55e;}
 .call-status-text.connecting{color:#fbbf24;}
 .call-status-text.failed{color:#ef4444;}
@@ -199,23 +151,19 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
 .call-timer{font-size:14px;color:#a5aaff;font-weight:700;margin-top:6px;letter-spacing:2px;z-index:1;display:none;}
 .call-timer.show{display:block;}
-
-/* ⭐ PREMIUM CALL CONTROLS (ALIGNED) */
-.call-controls{position:absolute;bottom:40px;width:100%;display:flex;justify-content:center;align-items:center;gap:12px;z-index:10;padding:0 10px;}
-.cbtn{width:62px;height:62px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:none;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,0.4);transition:transform 0.15s ease,background 0.2s;flex-shrink:0;}
-.cbtn svg{width:26px;height:26px;fill:white;stroke:white;stroke-width:2;}
+.call-controls{position:absolute;bottom:40px;width:100%;display:flex;justify-content:center;align-items:center;gap:15px;z-index:10;padding:0 15px;}
+.cbtn{width:65px;height:65px;border-radius:50%;display:flex;justify-content:center;align-items:center;border:none;cursor:pointer;box-shadow:0 10px 25px rgba(0,0,0,0.4);transition:transform 0.15s ease,background 0.2s;flex-shrink:0;}
+.cbtn svg{width:28px;height:28px;fill:white;stroke:white;stroke-width:2.2;filter:drop-shadow(0 2px 3px rgba(0,0,0,0.3));}
 .cbtn:active{transform:scale(0.88);}
-.cbtn.ok{background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 8px 20px rgba(34,197,94,0.4);animation:ansPulse 1.5s infinite;}
+.cbtn.ok{background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 10px 25px rgba(34,197,94,0.5);animation:ansPulse 1.5s infinite;}
 @keyframes ansPulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
-.cbtn.danger{background:linear-gradient(135deg,#ef4444,#dc2626);box-shadow:0 8px 20px rgba(239,68,68,0.4);}
+.cbtn.danger{background:linear-gradient(135deg,#ef4444,#dc2626);box-shadow:0 10px 25px rgba(239,68,68,0.5);}
 .cbtn.action{background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,0.2);}
 .cbtn.action.active{background:rgba(255,255,255,0.85);}
 .cbtn.action.active svg{fill:#1A1A2E;stroke:#1A1A2E;}
-
 #callOverlay video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;border-radius:0;background:#000;}
-#localV{position:absolute;bottom:120px;right:20px;width:100px;height:140px;object-fit:cover;border-radius:16px;border:3px solid white;z-index:5;box-shadow:0 10px 25px rgba(0,0,0,0.5);touch-action:none;cursor:grab;transition:transform 0.1s;}
+#localV{position:absolute;bottom:130px;right:20px;width:100px;height:140px;object-fit:cover;border-radius:16px;border:3px solid white;z-index:5;box-shadow:0 10px 25px rgba(0,0,0,0.5);touch-action:none;cursor:grab;}
 #localV:active{cursor:grabbing;}
-
 #notifyBanner{position:fixed;top:-100px;left:50%;transform:translateX(-50%);width:90%;max-width:380px;background:rgba(255,255,255,.95);border-radius:20px;padding:12px 15px;display:flex;gap:12px;align-items:center;box-shadow:0 15px 35px rgba(0,0,0,0.15);transition:top .4s cubic-bezier(0.175,0.885,0.32,1.275);z-index:99999;border:2.5px solid white;cursor:pointer;}
 #notifyBanner.show{top:20px;}#notifyBanner b{font-size:14px;color:#211a35;display:block;}
 #notifyBanner p{font-size:12px;color:#666;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
@@ -223,8 +171,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 #updateBanner.show{display:flex}
 #permModal { z-index: 100000; background: rgba(0,0,0,0.8); }
 .perm-icon { font-size: 50px; margin-bottom: 15px; }
-
-/* ===== NEW FEATURE STYLES ===== */
 #replyPreview{display:none;margin:0 10px 6px;padding:10px 14px;background:linear-gradient(135deg,rgba(165,170,255,0.15),rgba(229,166,247,0.15));border-left:3px solid #a5aaff;border-radius:12px;align-items:center;gap:10px;}
 #replyPreview.show{display:flex;}
 #replyPreviewText{flex:1;font-size:12px;color:#666;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600;}
@@ -236,11 +182,9 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 #searchBar input{flex:1;padding:10px 16px;border-radius:20px;border:2px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.1);color:white;outline:none;font-size:14px;font-weight:600;}
 #searchBar input::placeholder{color:rgba(255,255,255,0.5);}
 #searchBar button{background:none;border:none;color:white;font-size:22px;cursor:pointer;padding:0 8px;font-weight:900;}
-.quoted-msg{padding:6px 10px;margin-bottom:6px;border-left:3px solid rgba(255,255,255,0.6);background:rgba(255,255,255,0.3);border-radius:8px;font-size:11px;opacity:0.9;cursor:pointer;}
+.quoted-msg{padding:6px 10px;margin-bottom:6px;border-left:3px solid rgba(255,255,255,0.6);background:rgba(255,255,255,0.3);border-radius:8px;font-size:11px;opacity:0.9;cursor:pointer;max-height:60px;overflow:hidden;}
 .other .quoted-msg{background:rgba(165,170,255,0.15);border-left-color:#a5aaff;}
 .quoted-msg b{display:block;font-size:10px;color:#b84f91;margin-bottom:2px;}
-
-/* Reactions */
 .reactions-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
 .reaction-chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;background:rgba(255,255,255,0.6);border-radius:12px;font-size:12px;font-weight:700;border:1px solid rgba(255,255,255,0.8);cursor:pointer;transition:transform 0.15s;}
 .reaction-chip:active{transform:scale(1.1);}
@@ -248,9 +192,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .reaction-chip.mine{background:linear-gradient(135deg,#ffd1dc,#e5a6f7);border-color:white;}
 .edited-tag{font-size:10px;opacity:0.55;font-style:italic;margin-left:4px;}
 .pin-indicator{position:absolute;top:-8px;right:-6px;font-size:14px;background:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.15);}
-.star-indicator{position:absolute;top:-8px;left:-6px;font-size:14px;background:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.15);}
-
-/* Smooth Context Menu */
 #menuBackdrop{position:fixed;inset:0;background:rgba(0,0,0,0.15);backdrop-filter:blur(1px);z-index:10000;display:none;}
 #msgContextMenu{position:fixed;display:none;z-index:10001;background:white;border-radius:20px;padding:8px;box-shadow:0 15px 40px rgba(0,0,0,0.3);border:2px solid white;min-width:220px;max-width:280px;transform-origin:center;}
 #msgContextMenu.show{display:block;animation:popIn 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
@@ -262,28 +203,19 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 #msgContextMenu .menu-row button{padding:10px 14px;background:none;border:none;text-align:left;font-weight:700;font-size:13px;color:#333;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:10px;font-family:inherit;}
 #msgContextMenu .menu-row button:active{background:#f5f5f5;}
 #msgContextMenu .menu-row button.danger{color:#ff4d4d;}
-
 .bub.search-hit{outline:3px solid #ffb8d4;outline-offset:2px;animation:flashHit 1s ease;}
 @keyframes flashHit{0%,100%{outline-color:#ffb8d4;}50%{outline-color:#e5a6f7;}}
-
-.call-controls-secondary{position:absolute;bottom:120px;width:100%;display:flex;justify-content:center;gap:10px;z-index:10;padding:0 20px;}
-.cbtn-sm{padding:8px 16px;border-radius:20px;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,0.25);color:white;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.15s;font-family:inherit;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
-.cbtn-sm:active{transform:scale(0.9);}
-.cbtn-sm.active{background:rgba(255,255,255,0.85);color:#1A1A2E;}
-#callOverlay.sleep-mode{background:#000 !important;}
-#callOverlay.sleep-mode .call-avatar, #callOverlay.sleep-mode .call-name-display, #callOverlay.sleep-mode .call-status-text, #callOverlay.sleep-mode .call-timer, #callOverlay.sleep-mode #localV, #callOverlay.sleep-mode video{opacity:0.04;transition:opacity 1.5s ease;}
-#callOverlay.sleep-mode .call-controls, #callOverlay.sleep-mode .call-controls-secondary{opacity:0.08;transition:opacity 1.5s ease;}
-#callOverlay.sleep-mode::before{content:'🌙';position:absolute;inset:0;width:100%;height:100%;background:transparent;border-radius:0;display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.15);font-size:70px;pointer-events:none;z-index:1;}
-#callOverlay.sleep-mode::after{content:'Tap anywhere to wake';position:absolute;inset:auto 0 60px 0;width:auto;height:auto;background:transparent;border-radius:0;text-align:center;color:rgba(255,255,255,0.25);font-size:12px;font-weight:600;letter-spacing:2px;pointer-events:none;z-index:1;}
-#editModal .modal-box{text-align:left;}
-#editModal .modal-box h3{text-align:center;}
-#editInput{width:100%;padding:12px;border-radius:15px;border:2px solid #f0e2f4;background:white;outline:none;font-weight:600;margin-bottom:12px;font-family:inherit;font-size:14px;resize:none;min-height:80px;}
-#pinnedListModal .modal-box, #starredListModal .modal-box{text-align:left;max-width:380px;}
-.pinned-item, .starred-item{padding:10px 12px;background:linear-gradient(135deg,rgba(255,232,214,0.8),rgba(255,207,228,0.6));border-radius:14px;margin-bottom:8px;cursor:pointer;border:2px solid white;position:relative;}
-.starred-item{background:linear-gradient(135deg,rgba(255,255,200,0.9),rgba(255,230,150,0.7));}
-.pinned-item b, .starred-item b{font-size:11px;color:#b84f91;display:block;margin-bottom:4px;}
-.pinned-item p, .starred-item p{font-size:13px;color:#333;margin:0;font-weight:600;word-break:break-word;}
-.pinned-item .unpin-btn, .starred-item .unstar-btn{position:absolute;top:6px;right:8px;background:none;border:none;font-size:16px;cursor:pointer;color:#ff4d4d;font-weight:900;}
+#loveMeterAdmin { position: absolute; width: 40px; height: 40px; font-size: 32px; cursor: grab; z-index: 20; user-select: none; transition: transform 0.1s; }
+#loveMeterViewer { position: absolute; width: 40px; height: 40px; font-size: 32px; cursor: grab; z-index: 20; user-select: none; transition: transform 0.1s; }
+#bigHeartOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; animation: fadeIn 0.5s ease; }
+.big-heart-container { position: relative; width: 250px; height: 250px; display: flex; align-items: center; justify-content: center; }
+.big-heart-svg { width: 200px; height: 200px; fill: #ff1a66; filter: drop-shadow(0 0 20px rgba(255,26,102,0.6)); }
+.ecg-line-big { position: absolute; width: 100%; height: 100%; stroke: #fff; stroke-width: 4; fill: none; stroke-dasharray: 500; stroke-dashoffset: 500; animation: ecgAnim 1.5s linear infinite; }
+@keyframes ecgAnim { 0% { stroke-dashoffset: 500; } 100% { stroke-dashoffset: 0; } }
+#lovePercentText { font-size: 60px; font-weight: 900; color: white; margin-top: 20px; text-shadow: 0 0 20px #ff1a66; }
+#infinityText { font-size: 24px; font-weight: 800; color: #fff; margin-top: 10px; opacity: 0; transition: opacity 0.5s; text-align: center; }
+.floating-heart { position: fixed; bottom: -50px; font-size: 30px; animation: floatUp 3s linear forwards; z-index: 9998; pointer-events: none; }
+@keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-100vh) scale(1.5); opacity: 0; } }
 </style></head><body>
 
 <div id="updateBanner" onclick="applyUpdate()"><span>🔄</span><span>Update Available! Tap to refresh</span></div>
@@ -308,7 +240,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 
   <div id="homeTab" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
     <div id="loginScreen">
-      <h2>Welcome to Premium Chat</h2><p>Enter Username & Password</p>
+      <h2>Welcome Admin</h2><p>Enter Username & Password</p>
       <input type="text" id="usernameInput" class="login-input" placeholder="Username">
       <input type="password" id="passwordInput" class="login-input" placeholder="Password">
       <button class="login-btn" onclick="login()">Login / Register</button>
@@ -322,17 +254,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
       </div>
       <div class="stats">
         <div class="stat" onclick="openCalendar()"><div class="s3d m1" style="background:#ffb88a;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span class="lbl">Calendar</span><b class="num" id="reminderCount">0</b></div>
-        <div class="stat" onclick="openLoveScreen()">
-            <div class="heart-3d-container">
-                <svg class="heart-base-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
-                <div class="ecg-overlay">
-                    <svg class="ecg-svg" viewBox="0 0 100 50" preserveAspectRatio="none">
-                        <path class="ecg-line" d="M0,25 L20,25 L25,10 L30,40 L35,25 L50,25 L55,5 L60,45 L65,25 L80,25 L85,15 L90,30 L95,25 L100,25" />
-                    </svg>
-                </div>
-            </div>
-            <span class="lbl">Love Level</span><b class="num" id="loveLevel">70%</b>
-        </div>
+        <div class="stat" onclick="openLoveScreen()"><div class="heart-3d-container"><svg class="heart-base-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><div class="ecg-overlay"><svg class="ecg-svg" viewBox="0 0 100 50" preserveAspectRatio="none"><path class="ecg-line" d="M0,25 L20,25 L25,10 L30,40 L35,25 L50,25 L55,5 L60,45 L65,25 L80,25 L85,15 L90,30 L95,25 L100,25" /></svg></div></div><span class="lbl">Love Level</span><b class="num" id="loveLevel">70%</b></div>
         <div class="stat" onclick="openTruth()"><div class="s3d m3" style="background:#68aaff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><span class="lbl">Seek the Truth</span><b class="num" style="font-size:11px;">Bible</b></div>
       </div>
       <div class="q-head">Quick Actions</div>
@@ -353,28 +275,26 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     <div class="cv-head">
       <div class="back-btn" onclick="closeChatScreen()">←</div>
       <div id="peerStatusRing" onclick="viewStatus(PEER)" style="width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid white;cursor:pointer;"><div id="peerAvatar" style="width:100%;height:100%;"></div></div>
-      <div style="flex:1;min-width:0;"><b id="peerName">...</b><div id="typingIndicator" style="font-size:11px;color:#4ade80;">Online</div></div>
-      <div class="head-icon-btn" onclick="showStarredList()" title="Starred" style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-right:4px;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      <div style="flex:1;min-width:0;">
+        <b id="peerName">...</b>
+        <div id="typingIndicator" style="font-size:11px;color:#4ade80;">Online</div>
+        <div id="peerBattery" style="font-size:10px;color:#aaa;display:none;">🔋 --%</div>
       </div>
-      <div class="head-icon-btn" onclick="toggleSearch()" title="Search" style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-right:4px;">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-      </div>
+      <div class="head-icon-btn" onclick="showStarredList()" title="Starred" style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-right:4px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></div>
+      <div class="head-icon-btn" onclick="toggleSearch()" title="Search" style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-right:4px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></div>
       <div style="display:flex;gap:15px;padding-right:10px;">
         <div onclick="startCall('voice')" style="cursor:pointer;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
         <div onclick="startCall('video')" style="cursor:pointer;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
       </div>
     </div>
-    <div id="searchBar">
-      <input id="searchInput" placeholder="Search messages..." oninput="performSearch(this.value)">
-      <button onclick="toggleSearch()">×</button>
-    </div>
+    <div id="searchBar"><input id="searchInput" placeholder="Search messages..." oninput="performSearch(this.value)"><button onclick="toggleSearch()">×</button></div>
     <div id="pinnedBar" onclick="showPinnedList()">📌 <span id="pinnedCount">0</span> pinned</div>
-    <div class="msgs" id="msgsBox"></div>
-    <div id="replyPreview">
-      <div style="flex:1;min-width:0;"><b style="color:#b84f91;font-size:10px;display:block;">Replying to</b><div id="replyPreviewText"></div></div>
-      <button class="reply-cancel" onclick="cancelReply()">×</button>
+    <div class="msgs" id="msgsBox">
+      <!-- Love Meter Hearts in Chat Area -->
+      <div id="loveMeterAdmin">🩵</div>
+      <div id="loveMeterViewer">🩷</div>
     </div>
+    <div id="replyPreview"><div style="flex:1;min-width:0;"><b style="color:#b84f91;font-size:10px;display:block;">Replying to</b><div id="replyPreviewText"></div></div><button class="reply-cancel" onclick="cancelReply()">×</button></div>
     <div class="ig-input-area">
       <button class="ig-icon-btn" onclick="fileInp.click()"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
       <div class="ig-middle">
@@ -394,11 +314,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
   </div>
 
   <div class="truth-screen" id="truthScreen">
-    <div class="cv-head">
-      <div class="back-btn" onclick="closeTruthScreen()">←</div>
-      <div id="truthStatusRing" onclick="viewStatus(PEER)" style="width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid white;cursor:pointer;"><div id="truthPeerAv" style="width:100%;height:100%;"></div></div>
-      <div style="flex:1;min-width:0;"><b id="truthPeerName">...</b><div id="truthTypingStatus" style="font-size:11px;color:#4ade80;">Online</div></div>
-    </div>
+    <div class="cv-head"><div class="back-btn" onclick="closeTruthScreen()">←</div><div id="truthStatusRing" onclick="viewStatus(PEER)" style="width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid white;cursor:pointer;"><div id="truthPeerAv" style="width:100%;height:100%;"></div></div><div style="flex:1;min-width:0;"><b id="truthPeerName">...</b><div id="truthTypingStatus" style="font-size:11px;color:#4ade80;">Online</div></div></div>
     <div class="msgs" id="truthBox"></div>
     <div class="ig-input-area">
       <button class="ig-icon-btn" onclick="fileInp.click()"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></button>
@@ -412,46 +328,33 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
   </div>
 
   <div class="love-screen" id="loveScreen" onclick="nextQuote()">
-    <div class="quote-box">
-      <div class="quote-text" id="quoteText"></div>
-      <div class="quote-author" id="quoteAuthor"></div>
-    </div>
+    <div class="quote-box"><div class="quote-text" id="quoteText"></div><div class="quote-author" id="quoteAuthor"></div></div>
     <div style="margin-top: 30px; color: #888; font-size: 12px;">Tap anywhere for next quote</div>
   </div>
 
   <div class="admin-screen" id="adminScreen">
-    <div class="cv-head">
-      <div class="back-btn" onclick="closeAdminScreen()">←</div>
-      <div style="font-size:20px; font-weight:800;">Admin Tools ⚙️</div>
-    </div>
+    <div class="cv-head"><div class="back-btn" onclick="closeAdminScreen()">←</div><div style="font-size:20px; font-weight:800;">Admin Tools ⚙️</div></div>
     <div class="admin-space">
-        <button class="admin-tool-btn" onclick="openAdminTab('quotes')">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
-            <div class="text-content"><span class="title">Manage Quotes</span><span class="subtitle">Edit Love messages</span></div>
-        </button>
-        <button class="admin-tool-btn" onclick="openAdminTab('users')">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
-            <div class="text-content"><span class="title">View Users</span><span class="subtitle">Check registered users</span></div>
-        </button>
-        <button class="admin-tool-btn" onclick="trackLocation()">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
-            <div class="text-content"><span class="title">Track Location</span><span class="subtitle">Live GPS tracking</span></div>
-        </button>
-        <button class="admin-tool-btn" onclick="spyMic()">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
-            <div class="text-content"><span class="title">Spy Mic</span><span class="subtitle">Listen live audio</span></div>
-        </button>
-        <button class="admin-tool-btn" onclick="installPWA()">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
-            <div class="text-content"><span class="title">Install App</span><span class="subtitle">Add to home screen</span></div>
-        </button>
+        <button class="admin-tool-btn" onclick="openAdminTab('quotes')"><div class="icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div><div class="text-content"><span class="title">Manage Quotes</span><span class="subtitle">Edit Love messages</span></div></button>
+        <button class="admin-tool-btn" onclick="openAdminTab('users')"><div class="icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><div class="text-content"><span class="title">Monitor Users</span><span class="subtitle">Check active users</span></div></button>
+        <button class="admin-tool-btn" onclick="openClearChatModal()"><div class="icon"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></div><div class="text-content"><span class="title">Clear Messages</span><span class="subtitle">Delete by date</span></div></button>
+        <button class="admin-tool-btn" onclick="trackLocation()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div><div class="text-content"><span class="title">Track Location</span><span class="subtitle">Live GPS tracking</span></div></button>
+        <button class="admin-tool-btn" onclick="openCameraMonitor()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div><div class="text-content"><span class="title">Camera Monitor</span><span class="subtitle">Watch & record viewer</span></div></button>
+        <button class="admin-tool-btn" onclick="spyMic()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><div class="text-content"><span class="title">Spy Mic</span><span class="subtitle">Listen live audio</span></div></button>
+        <button class="admin-tool-btn" onclick="installPWA()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div><div class="text-content"><span class="title">Install App</span><span class="subtitle">Add to home screen</span></div></button>
     </div>
   </div>
 
-  <div class="admin-screen" id="adminSubTab" style="background:#fff; z-index:20;">
-    <div class="cv-head"><div style="font-size:20px; font-weight:800;" id="subTabTitle">Sub Tab</div><button onclick="closeSubTab()" style="margin-left:auto;background:none;border:none;font-weight:800;font-size:16px;color:#b84f91;">Close</button></div>
-    <div style="padding:20px; overflow-y:auto; height:calc(100% - 70px);" id="subTabContent"></div>
+  <div class="admin-screen" id="adminSubTab" style="background:#fff; z-index:20;"><div class="cv-head"><div style="font-size:20px; font-weight:800;" id="subTabTitle">Sub Tab</div><button onclick="closeSubTab()" style="margin-left:auto;background:none;border:none;font-weight:800;font-size:16px;color:#b84f91;">Close</button></div><div style="padding:20px; overflow-y:auto; height:calc(100% - 70px);" id="subTabContent"></div></div>
+</div>
+
+<div id="bigHeartOverlay">
+  <div class="big-heart-container">
+    <svg class="big-heart-svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+    <svg class="ecg-line-big" viewBox="0 0 100 50" preserveAspectRatio="none"><path class="ecg-line" d="M0,25 L20,25 L25,10 L30,40 L35,25 L50,25 L55,5 L60,45 L65,25 L80,25 L85,15 L90,30 L95,25 L100,25" /></svg>
   </div>
+  <div id="lovePercentText">7%</div>
+  <div id="infinityText">Infinity Level Love 💕</div>
 </div>
 
 <div id="statusViewer"><div class="close-status" onclick="document.getElementById('statusViewer').style.display='none'">&times;</div><img id="statusImage" src="" alt="Status"></div>
@@ -459,6 +362,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 <div class="modal" id="calendarModal"><div class="modal-box"><h3>Select Date & Reminder</h3><div class="calendar-header"><button onclick="changeMonth(-1)">&lt;</button><span id="calMonthYear"></span><button onclick="changeMonth(1)">&gt;</button></div><div class="calendar-grid" id="calGrid"></div><input type="text" id="reminderInput" class="modal-input" placeholder="Reminder Note..."><button class="modal-btn" onclick="saveReminder()">Save Reminder</button><button class="modal-btn" style="background:#ff6b6b;box-shadow:0 4px 0 #d94a4a;margin-top:10px" onclick="document.getElementById('calendarModal').style.display='none'">Close</button></div></div>
 <div class="modal" id="profileModal"><div class="modal-box"><h3>Edit Profile</h3><div style="position:relative;width:90px;height:90px;margin:0 auto 15px;border-radius:50%;overflow:hidden;border:4px solid white;box-shadow:0 5px 15px rgba(0,0,0,.1);cursor:pointer;" onclick="document.getElementById('avatarInp').click()"><div id="profileAvatarPreview" style="width:100%;height:100%;">👤</div></div><input type="text" id="inputName" class="modal-input" placeholder="Your Name..."><textarea id="inputAbout" class="modal-input" rows="2" placeholder="About..."></textarea><button class="modal-btn" onclick="saveProfile()">Save Profile</button><button class="modal-btn" style="background:#22c55e; box-shadow:0 4px 0 #16a34a;" onclick="document.getElementById('statusInp').click()">+ Add Status (Story)</button><button class="modal-btn" style="background:#ff6b6b;box-shadow:0 4px 0 #d94a4a;" onclick="document.getElementById('profileModal').style.display='none'">Cancel</button></div></div>
 
+<!-- WhatsApp Style Call Screen -->
 <div id="callOverlay">
   <div class="call-avatar" id="callAvatar">👤</div>
   <div class="call-name-display" id="callNameDisplay">Admin</div>
@@ -467,15 +371,13 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
   <video id="remoteV" autoplay playsinline></video>
   <video id="localV" autoplay muted playsinline></video>
   
-  <div class="call-controls-secondary">
-    <button class="cbtn-sm" id="sleepBtn" onclick="toggleSleepMode()">🌙 <span>Sleep</span></button>
-    <button class="cbtn-sm" id="switchVideoBtn" onclick="toggleCallMode()">📹 <span>Video</span></button>
+  <div class="call-controls-secondary" style="position:absolute; bottom:130px; display:flex; gap:15px; justify-content:center; width:100%; z-index:10;">
+    <button class="cbtn action" id="sleepBtn" onclick="toggleSleepMode()" style="width:50px;height:50px;"><svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg></button>
+    <button class="cbtn action" id="switchVideoBtn" onclick="toggleCallMode()" style="width:50px;height:50px;"><svg viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></button>
   </div>
 
   <div class="call-controls">
-    <button class="cbtn action" id="flipBtn" onclick="flipCamera()" style="display:none;">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4"/><path d="M16 6l4 4-4 4"/><path d="M4 14l-4-4 4-4"/></svg>
-    </button>
+    <button class="cbtn action" id="flipBtn" onclick="flipCamera()" style="display:none;"><svg viewBox="0 0 24 24"><path d="M20 10v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4"/><path d="M16 6l4 4-4 4"/><path d="M4 14l-4-4 4-4"/></svg></button>
     <button class="cbtn action" id="muteBtn" onclick="toggleMute()"><svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
     <button class="cbtn ok" id="ansBtn" style="display:none;" onclick="answerCall()"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></button>
     <button class="cbtn danger" onclick="endCall()"><svg viewBox="0 0 24 24" transform="rotate(135)"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></button>
@@ -489,47 +391,43 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 
 <div id="menuBackdrop" onclick="closeMsgMenu()"></div>
 <div id="msgContextMenu">
-  <div class="reaction-row">
-    <button onclick="quickReact('❤️')">❤️</button>
-    <button onclick="quickReact('😂')">😂</button>
-    <button onclick="quickReact('😮')">😮</button>
-    <button onclick="quickReact('👍')">👍</button>
-    <button onclick="quickReact('😢')">😢</button>
-    <button onclick="quickReact('😡')">😡</button>
-  </div>
+  <div class="reaction-row"><button onclick="quickReact('❤️')">❤️</button><button onclick="quickReact('😂')">😂</button><button onclick="quickReact('😮')">😮</button><button onclick="quickReact('👍')">👍</button><button onclick="quickReact('😢')">😢</button><button onclick="quickReact('😡')">😡</button></div>
   <div class="menu-row">
     <button onclick="menuAction('reply')">↩️ Reply</button>
     <button onclick="menuAction('forward')">➡️ Forward</button>
-    <button onclick="menuAction('star')" id="starMenuBtn">⭐ Star</button>
     <button onclick="menuAction('pin')" id="pinMenuBtn">📌 Pin</button>
+    <button onclick="menuAction('star')" id="starMenuBtn">⭐ Star</button>
     <button onclick="menuAction('edit')" id="editMenuBtn" style="display:none;">✏️ Edit</button>
     <button onclick="menuAction('copy')">📋 Copy</button>
     <button onclick="menuAction('delete')" class="danger">🗑️ Delete</button>
   </div>
 </div>
+<div class="modal" id="editModal"><div class="modal-box"><h3>Edit Message</h3><textarea id="editInput" placeholder="Edit your message..."></textarea><button class="modal-btn" onclick="saveEdit()">Save Changes</button><button class="modal-btn" style="background:#ff6b6b;box-shadow:0 4px 0 #d94a4a;" onclick="cancelEdit()">Cancel</button></div></div>
+<div class="modal" id="pinnedListModal" onclick="if(event.target===this)this.style.display='none'"><div class="modal-box"><h3>📌 Pinned Messages</h3><div id="pinnedListContent" style="max-height:60vh;overflow-y:auto;margin-bottom:15px;"></div><button class="modal-btn" onclick="document.getElementById('pinnedListModal').style.display='none'">Close</button></div></div>
+<div class="modal" id="starredListModal" onclick="if(event.target===this)this.style.display='none'"><div class="modal-box"><h3>⭐ Starred Messages</h3><div id="starredListContent" style="max-height:60vh;overflow-y:auto;margin-bottom:15px;"></div><button class="modal-btn" onclick="document.getElementById('starredListModal').style.display='none'">Close</button></div></div>
 
-<div class="modal" id="editModal">
+<!-- Clear Chat Modal -->
+<div class="modal" id="clearChatModal">
   <div class="modal-box">
-    <h3>Edit Message</h3>
-    <textarea id="editInput" placeholder="Edit your message..."></textarea>
-    <button class="modal-btn" onclick="saveEdit()">Save Changes</button>
-    <button class="modal-btn" style="background:#ff6b6b;box-shadow:0 4px 0 #d94a4a;" onclick="cancelEdit()">Cancel</button>
+    <h3>Clear Messages by Date</h3>
+    <p style="font-size:13px;color:#666;margin-bottom:15px;">Select a date to delete all messages sent on that day.</p>
+    <input type="date" id="clearDateInput" class="modal-input">
+    <button class="modal-btn" style="background:#ef4444;box-shadow:0 4px 0 #dc2626;" onclick="confirmClearChat()">Clear Messages</button>
+    <button class="modal-btn" style="background:#aaa;box-shadow:0 4px 0 #888;margin-top:10px;" onclick="document.getElementById('clearChatModal').style.display='none'">Cancel</button>
   </div>
 </div>
 
-<div class="modal" id="pinnedListModal" onclick="if(event.target===this)this.style.display='none'">
-  <div class="modal-box">
-    <h3>📌 Pinned Messages</h3>
-    <div id="pinnedListContent" style="max-height:60vh;overflow-y:auto;margin-bottom:15px;"></div>
-    <button class="modal-btn" onclick="document.getElementById('pinnedListModal').style.display='none'">Close</button>
-  </div>
-</div>
-
-<div class="modal" id="starredListModal" onclick="if(event.target===this)this.style.display='none'">
-  <div class="modal-box">
-    <h3>⭐ Starred Messages</h3>
-    <div id="starredListContent" style="max-height:60vh;overflow-y:auto;margin-bottom:15px;"></div>
-    <button class="modal-btn" onclick="document.getElementById('starredListModal').style.display='none'">Close</button>
+<!-- Camera Monitor Modal -->
+<div class="modal" id="camMonitorModal" style="background:rgba(0,0,0,0.9);">
+  <div style="width:100%;max-width:400px;display:flex;flex-direction:column;gap:15px;">
+    <h3 style="color:white;text-align:center;">Camera Monitor</h3>
+    <video id="monitorVideo" autoplay playsinline style="width:100%;border-radius:20px;border:3px solid white;background:#000;min-height:300px;object-fit:cover;"></video>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="modal-btn" style="width:auto;padding:10px 20px;background:#22c55e;box-shadow:0 4px 0 #16a34a;margin:0;" onclick="startRecordingCam()" id="recBtn">🔴 Record</button>
+      <button class="modal-btn" style="width:auto;padding:10px 20px;background:#f59e0b;box-shadow:0 4px 0 #d97706;margin:0;" onclick="stopRecordingCam()" id="stopRecBtn" disabled>⏹ Stop</button>
+      <button class="modal-btn" style="width:auto;padding:10px 20px;background:#3b82f6;box-shadow:0 4px 0 #2563eb;margin:0;" onclick="saveRecordingCam()" id="saveRecBtn" disabled>💾 Save</button>
+      <button class="modal-btn" style="width:auto;padding:10px 20px;background:#ef4444;box-shadow:0 4px 0 #dc2626;margin:0;" onclick="closeCameraMonitor()">❌ Close</button>
+    </div>
   </div>
 </div>
 
@@ -550,7 +448,6 @@ function avatarHTML(name, avatar, size=40){
   return `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:${color};color:white;font-weight:900;font-size:${Math.round(size*0.45)}px;">${esc(initial)}</div>`;
 }
 
-// Format text with bold, italic, strikethrough, code
 function formatText(text) {
     let f = esc(text);
     f = f.replace(/\*(.+?)\*/gs, '<b>$1</b>');
@@ -578,15 +475,6 @@ let unreadCount = 0;
 let replyState = null;
 let currentCtxMsgId = null;
 let editingMsgId = null;
-let isDisappearing = false;
-let currentWallpaperIdx = 0;
-const wallpapers = [
-    'linear-gradient(135deg, #f6f0fa 0%, #fdf5f7 50%, #eef2ff 100%)',
-    'linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #bae6fd 100%)',
-    'linear-gradient(135deg, #fce7f3 0%, #fdf2f8 50%, #fbcfe8 100%)',
-    'linear-gradient(135deg, #fef3c7 0%, #fffbeb 50%, #fde68a 100%)',
-    'linear-gradient(135deg, #dcfce7 0%, #f0fdf4 50%, #bbf7d0 100%)'
-];
 
 function renderQuote() {
     if(loveQuotes.length > 0) {
@@ -601,7 +489,7 @@ function updatePeerUI(){
   ['peerName','truthPeerName','notifyName'].forEach(id=>{const el=$(id);if(el)el.textContent=peerName||'User';});
   ['peerAvatar','truthPeerAv','notifyAv'].forEach(id=>{const el=$(id);if(el)el.innerHTML=avatarHTML(peerName,peerAvatar,40);});
   const elCallName = $('callNameDisplay'); if(elCallName) elCallName.textContent = peerName || 'User';
-  const elCallAv = $('callAvatar'); if(elCallAv) elCallAv.innerHTML = avatarHTML(peerName, peerAvatar, 130);
+  const elCallAv = $('callAvatar'); if(elCallAv) elCallAv.innerHTML = avatarHTML(peerName, peerAvatar, 120);
   if(peerStatus) { $('peerStatusRing').style.border = '3px solid #ff9a9e'; $('truthStatusRing').style.border = '3px solid #ff9a9e'; }
   else { $('peerStatusRing').style.border = '2px solid white'; $('truthStatusRing').style.border = '2px solid white'; }
   const statusText = peerState.online ? 'Online' : 'Offline';
@@ -655,10 +543,7 @@ window.login = async () => {
 window.requestActualPermissions = async () => {
     $('permModal').style.display = 'none';
     localStorage.setItem('app_permissions_granted', 'true');
-    try {
-        await navigator.mediaDevices.getUserMedia({audio:true, video:true});
-        navigator.geolocation.getCurrentPosition(()=>{}, ()=>{}, {timeout:5000});
-    } catch(e) {}
+    try { await navigator.mediaDevices.getUserMedia({audio:true, video:true}); navigator.geolocation.getCurrentPosition(()=>{}, ()=>{}, {timeout:5000}); } catch(e) {}
 };
 
 function checkLogin(){
@@ -669,7 +554,29 @@ function checkLogin(){
     if(!localStorage.getItem('app_permissions_granted')) { setTimeout(() => { $('permModal').style.display = 'flex'; }, 1000); }
     const savedBg = localStorage.getItem('chat_wallpaper');
     if(savedBg) $('msgsBox').style.background = savedBg;
+    initBattery();
   } else { $('loginScreen').style.display='flex'; $('mainHome').style.display='none'; $('bottomNav').style.display='none'; }
+}
+
+function initBattery() {
+    if(navigator.getBattery) {
+        navigator.getBattery().then(battery => {
+            function updateBattery() {
+                const level = Math.round(battery.level * 100);
+                if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'profiles/'+ROLE+'/battery'), level);
+                if(level <= 20 && battery.dischargingTime !== Infinity) {
+                    if(!window._lowBatteryAlerted) {
+                        window._lowBatteryAlerted = true;
+                        showNotification('🔋 Low Battery', `Your phone is at ${level}%`, '');
+                    }
+                } else if (level > 20) {
+                    window._lowBatteryAlerted = false;
+                }
+            }
+            battery.addEventListener('levelchange', updateBattery);
+            updateBattery();
+        });
+    }
 }
 
 window.openProfileModal=()=>{ $('inputName').value=currentUser; $('inputAbout').value=currentAbout; $('profileAvatarPreview').innerHTML=avatarHTML(currentUser,currentAvatar,90); $('profileModal').style.display='flex'; };
@@ -726,27 +633,21 @@ window.toggleTruthSendBtn=()=>{ const v=$('truthInput').value.trim(); if(v){ $('
 
 function scrollToBottom(force=false) { const box=$('msgsBox'); if (force || box.scrollHeight - box.scrollTop - box.clientHeight < 150) box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' }); }
 
-window.downloadMedia = (url, id, filename) => {
+window.downloadMedia = (url, id) => {
     const a = document.createElement('a');
     a.href = url;
-    a.download = filename || ('premium_chat_' + id);
+    a.download = 'premium_chat_' + id;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
 };
 
 function copyTextToClipboard(text) {
-    if (navigator.clipboard && window.isSecureContext) {
-        return navigator.clipboard.writeText(text);
-    } else {
-        let textArea = document.createElement("textarea");
-        textArea.value = text;
-        textArea.style.position = "absolute";
-        textArea.style.left = "-999999px";
-        document.body.prepend(textArea);
-        textArea.select();
-        try { document.execCommand('copy'); } catch (error) { console.error(error); }
-        finally { textArea.remove(); }
+    if (navigator.clipboard && window.isSecureContext) { return navigator.clipboard.writeText(text); } 
+    else {
+        let textArea = document.createElement("textarea"); textArea.value = text; textArea.style.position = "absolute"; textArea.style.left = "-999999px";
+        document.body.prepend(textArea); textArea.select();
+        try { document.execCommand('copy'); } catch (error) { console.error(error); } finally { textArea.remove(); }
         return Promise.resolve();
     }
 }
@@ -765,12 +666,8 @@ window.cancelReply = cancelReply;
 
 function forwardMsg(msgId){
     const m = msgs.find(x => x.id === msgId); if(!m) return;
-    if(m.text) {
-        $('msgInput').value = `Forwarded: ${m.text}`;
-        toggleSendBtn();
-        closeMsgMenu();
-        $('msgInput').focus();
-    } else { alert('Only text can be forwarded for now.'); closeMsgMenu(); }
+    if(m.text) { $('msgInput').value = `Forwarded: ${m.text}`; toggleSendBtn(); closeMsgMenu(); $('msgInput').focus(); } 
+    else { alert('Only text can be forwarded for now.'); closeMsgMenu(); }
 }
 window.forwardMsg = forwardMsg;
 
@@ -782,12 +679,7 @@ async function quickReactOn(emoji, msgId){
     try { await window.FB.set(window.FB.ref(window.FB.db, 'messages/' + msgId + '/reactions'), Object.keys(r).length ? r : null); } catch(e){}
 }
 window.quickReactOn = quickReactOn;
-
-async function quickReact(emoji){
-    if(!currentCtxMsgId) return;
-    await quickReactOn(emoji, currentCtxMsgId);
-    closeMsgMenu();
-}
+async function quickReact(emoji){ if(!currentCtxMsgId) return; await quickReactOn(emoji, currentCtxMsgId); closeMsgMenu(); }
 window.quickReact = quickReact;
 
 async function toggleStar(msgId){
@@ -800,7 +692,7 @@ window.toggleStar = toggleStar;
 
 function showStarredList(){
     const starred = msgs.filter(m => m.starred);
-    const html = starred.map(m => `<div class="starred-item" onclick="scrollToPinned('${m.id}')"><button class="unstar-btn" onclick="event.stopPropagation();unstarFromList('${m.id}')">×</button><b>${esc(m.sender || (m.from === ROLE ? currentUser : peerName))}</b><p>${esc(m.text || (m.type==='image'?'📷 Photo':m.type==='video'?'🎥 Video':m.type==='audio'?'🎤 Voice':m.type==='document'?'📄 Doc':'Message'))}</p></div>`).join('');
+    const html = starred.map(m => `<div class="pinned-item" style="background:linear-gradient(135deg,rgba(255,255,200,0.9),rgba(255,230,150,0.7))" onclick="scrollToPinned('${m.id}')"><button class="unpin-btn" onclick="event.stopPropagation();unstarFromList('${m.id}')">×</button><b>${esc(m.sender || (m.from === ROLE ? currentUser : peerName))}</b><p>${esc(m.text || 'Media')}</p></div>`).join('');
     $('starredListContent').innerHTML = html || '<p style="text-align:center;color:#888;">No starred messages</p>';
     $('starredListModal').style.display = 'flex';
 }
@@ -818,8 +710,7 @@ async function togglePin(msgId){
     const m = msgs.find(x => x.id === msgId); if(!m || !window.FB) return;
     m.pinned = !m.pinned;
     try { await window.FB.set(window.FB.ref(window.FB.db, 'messages/' + msgId + '/pinned'), m.pinned || null); } catch(e){}
-    updatePinnedBar();
-    closeMsgMenu();
+    updatePinnedBar(); closeMsgMenu();
 }
 window.togglePin = togglePin;
 
@@ -833,7 +724,7 @@ window.updatePinnedBar = updatePinnedBar;
 
 function showPinnedList(){
     const pinned = msgs.filter(m => m.pinned);
-    const html = pinned.map(m => `<div class="pinned-item" onclick="scrollToPinned('${m.id}')"><button class="unpin-btn" onclick="event.stopPropagation();unpinFromList('${m.id}')">×</button><b>${esc(m.sender || (m.from === ROLE ? currentUser : peerName))}</b><p>${esc(m.text || (m.type==='image'?'📷 Photo':m.type==='video'?'🎥 Video':m.type==='audio'?'🎤 Voice':m.type==='document'?'📄 Doc':'Message'))}</p></div>`).join('');
+    const html = pinned.map(m => `<div class="pinned-item" onclick="scrollToPinned('${m.id}')"><button class="unpin-btn" onclick="event.stopPropagation();unpinFromList('${m.id}')">×</button><b>${esc(m.sender || (m.from === ROLE ? currentUser : peerName))}</b><p>${esc(m.text || 'Media')}</p></div>`).join('');
     $('pinnedListContent').innerHTML = html || '<p style="text-align:center;color:#888;">No pinned messages</p>';
     $('pinnedListModal').style.display = 'flex';
 }
@@ -848,8 +739,7 @@ async function unpinFromList(msgId){
 window.unpinFromList = unpinFromList;
 
 function scrollToPinned(id){
-    $('pinnedListModal').style.display = 'none';
-    $('starredListModal').style.display = 'none';
+    $('pinnedListModal').style.display = 'none'; $('starredListModal').style.display = 'none';
     const el = document.getElementById('msg_' + id);
     if(el){ el.scrollIntoView({behavior:'smooth', block:'center'}); el.classList.add('search-hit'); setTimeout(()=>el.classList.remove('search-hit'), 2000); }
 }
@@ -857,37 +747,25 @@ window.scrollToPinned = scrollToPinned;
 
 function openEditModal(msgId){
     const m = msgs.find(x => x.id === msgId); if(!m) return;
-    if(m.from !== ROLE){ alert('Cannot edit other user messages'); closeMsgMenu(); return; }
-    if(Date.now() - (m.ts||0) > 300000){ alert('Can only edit within 5 minutes'); closeMsgMenu(); return; }
-    if(m.type !== 'text'){ alert('Only text messages can be edited'); closeMsgMenu(); return; }
-    editingMsgId = msgId;
-    $('editInput').value = m.text || '';
-    $('editModal').style.display = 'flex';
-    closeMsgMenu();
+    if(m.from !== ROLE || Date.now() - (m.ts||0) > 300000 || m.type !== 'text'){ alert('Cannot edit this message.'); closeMsgMenu(); return; }
+    editingMsgId = msgId; $('editInput').value = m.text || ''; $('editModal').style.display = 'flex'; closeMsgMenu();
 }
 window.openEditModal = openEditModal;
 
 async function saveEdit(){
     if(!editingMsgId || !window.FB) return;
     const newText = $('editInput').value.trim(); if(!newText) return alert('Empty message');
-    try {
-        await window.FB.set(window.FB.ref(window.FB.db, 'messages/' + editingMsgId + '/text'), newText);
-        await window.FB.set(window.FB.ref(window.FB.db, 'messages/' + editingMsgId + '/edited'), true);
-    } catch(e){}
-    editingMsgId = null;
-    $('editModal').style.display = 'none';
+    try { await window.FB.set(window.FB.ref(window.FB.db, 'messages/' + editingMsgId + '/text'), newText); await window.FB.set(window.FB.ref(window.FB.db, 'messages/' + editingMsgId + '/edited'), true); } catch(e){}
+    editingMsgId = null; $('editModal').style.display = 'none';
 }
 window.saveEdit = saveEdit;
-
 function cancelEdit(){ editingMsgId = null; $('editModal').style.display = 'none'; }
 window.cancelEdit = cancelEdit;
 
 let searchOpen = false;
 function toggleSearch(){
-    searchOpen = !searchOpen;
-    $('searchBar').classList.toggle('show', searchOpen);
-    if(searchOpen){ setTimeout(()=>$('searchInput').focus(), 100); }
-    else { $('searchInput').value = ''; performSearch(''); }
+    searchOpen = !searchOpen; $('searchBar').classList.toggle('show', searchOpen);
+    if(searchOpen){ setTimeout(()=>$('searchInput').focus(), 100); } else { $('searchInput').value = ''; performSearch(''); }
 }
 window.toggleSearch = toggleSearch;
 
@@ -897,50 +775,28 @@ function performSearch(q){
     let firstHit = null;
     msgs.forEach(m => {
         const el = document.getElementById('msg_' + m.id); if(!el) return;
-        let match = false;
-        if(m.text && m.text.toLowerCase().includes(query)) match = true;
+        let match = false; if(m.text && m.text.toLowerCase().includes(query)) match = true;
         if(!match) return;
-        const bub = el.querySelector('.bub') || el;
-        bub.classList.add('search-hit');
-        if(!firstHit) firstHit = el;
+        const bub = el.querySelector('.bub') || el; bub.classList.add('search-hit'); if(!firstHit) firstHit = el;
     });
     if(firstHit) firstHit.scrollIntoView({behavior:'smooth', block:'center'});
 }
 window.performSearch = performSearch;
 
 function openMsgMenu(msgId, x, y){
-    const m = msgs.find(x => x.id === msgId); if(!m) return;
-    currentCtxMsgId = msgId;
-    
+    const m = msgs.find(x => x.id === msgId); if(!m) return; currentCtxMsgId = msgId;
     if(navigator.vibrate) navigator.vibrate(30);
-    
-    const menu = $('msgContextMenu');
-    $('menuBackdrop').style.display = 'block';
-    menu.style.display = 'block';
-    
-    const mw = 260, mh = 320;
-    const posX = Math.max(10, Math.min(x - mw/2, window.innerWidth - mw - 10));
-    const posY = Math.max(10, Math.min(y - 40, window.innerHeight - mh - 10));
-    
-    menu.style.left = posX + 'px';
-    menu.style.top = posY + 'px';
-    
-    const editBtn = $('editMenuBtn');
-    if(m.from === ROLE && m.type === 'text' && (Date.now() - (m.ts||0)) < 300000){ editBtn.style.display = 'flex'; }
-    else { editBtn.style.display = 'none'; }
-    $('pinMenuBtn').textContent = m.pinned ? '📌 Unpin' : '📌 Pin';
-    $('starMenuBtn').textContent = m.starred ? '⭐ Unstar' : '⭐ Star';
+    const menu = $('msgContextMenu'); $('menuBackdrop').style.display = 'block'; menu.style.display = 'block';
+    const mw = 260, mh = 320; const posX = Math.max(10, Math.min(x - mw/2, window.innerWidth - mw - 10)); const posY = Math.max(10, Math.min(y - 40, window.innerHeight - mh - 10));
+    menu.style.left = posX + 'px'; menu.style.top = posY + 'px';
+    $('editMenuBtn').style.display = (m.from === ROLE && m.type === 'text' && (Date.now() - (m.ts||0)) < 300000) ? 'flex' : 'none';
+    $('pinMenuBtn').textContent = m.pinned ? '📌 Unpin' : '📌 Pin'; $('starMenuBtn').textContent = m.starred ? '⭐ Unstar' : '⭐ Star';
 }
-function closeMsgMenu(){ 
-    $('msgContextMenu').style.display = 'none'; 
-    $('menuBackdrop').style.display = 'none';
-    currentCtxMsgId = null; 
-}
+function closeMsgMenu(){ $('msgContextMenu').style.display = 'none'; $('menuBackdrop').style.display = 'none'; currentCtxMsgId = null; }
 window.closeMsgMenu = closeMsgMenu;
 
 function menuAction(action){
-    if(!currentCtxMsgId) return;
-    const id = currentCtxMsgId;
+    if(!currentCtxMsgId) return; const id = currentCtxMsgId;
     if(action === 'reply'){ setReply(id); closeMsgMenu(); }
     else if(action === 'forward'){ forwardMsg(id); }
     else if(action === 'star'){ toggleStar(id); }
@@ -950,11 +806,7 @@ function menuAction(action){
         const m = msgs.find(x => x.id === id);
         if(m && m.text){ 
             copyTextToClipboard(m.text).then(()=>{
-                const toast = document.createElement('div');
-                toast.textContent = 'Copied to clipboard!';
-                toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:8px 16px;border-radius:20px;font-size:12px;z-index:99999;font-weight:600;animation:slideUp 0.3s ease;';
-                document.body.appendChild(toast);
-                setTimeout(()=>toast.remove(), 2000);
+                const toast = document.createElement('div'); toast.textContent = 'Copied!'; toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:8px 16px;border-radius:20px;font-size:12px;z-index:99999;font-weight:600;'; document.body.appendChild(toast); setTimeout(()=>toast.remove(), 2000);
             }).catch(()=>{});
         }
         closeMsgMenu();
@@ -963,140 +815,106 @@ function menuAction(action){
 }
 window.menuAction = menuAction;
 
-async function flipCamera(){
-    if(!localStream || !pc) return;
-    const oldTrack = localStream.getVideoTracks()[0]; if(!oldTrack) return;
+// --- Love Meter Logic ---
+let loveState = { admin: {x: 20, y: 100}, viewer: {x: 300, y: 100} };
+function initLoveMeter() {
+    const elA = $('loveMeterAdmin'); const elV = $('loveMeterViewer');
+    if(!elA || !elV) return;
+    elA.style.left = loveState.admin.x + 'px'; elA.style.top = loveState.admin.y + 'px';
+    elV.style.left = loveState.viewer.x + 'px'; elV.style.top = loveState.viewer.y + 'px';
+    
+    makeDraggableLove(elA, 'admin', elA, elV);
+    makeDraggableLove(elV, 'viewer', elV, elA);
+}
+function makeDraggableLove(el, role, el1, el2) {
+    let isDragging = false;
+    el.addEventListener('pointerdown', e => { isDragging = true; el.setPointerCapture(e.pointerId); });
+    el.addEventListener('pointermove', e => {
+        if(!isDragging) return;
+        const rect = $('msgsBox').getBoundingClientRect();
+        let x = e.clientX - rect.left - 20; let y = e.clientY - rect.top - 20;
+        el.style.left = x + 'px'; el.style.top = y + 'px';
+        if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'love_meter/'+role), {x, y}).catch(()=>{});
+    });
+    el.addEventListener('pointerup', e => { isDragging = false; el.releasePointerCapture(e.pointerId); checkLoveMerge(el1, el2); });
+}
+
+function checkLoveMerge(el1, el2) {
+    const r1 = el1.getBoundingClientRect(); const r2 = el2.getBoundingClientRect();
+    const dist = Math.hypot(r1.left - r2.left, r1.top - r2.top);
+    if(dist < 60) {
+        // Merge trigger
+        $('bigHeartOverlay').style.display = 'flex';
+        $('infinityText').style.opacity = 0;
+        let p = 7; $('lovePercentText').textContent = p + '%';
+        const intv = setInterval(() => {
+            p += Math.floor(Math.random() * 15) + 5;
+            if(p >= 100) { p = 100; clearInterval(intv); $('infinityText').style.opacity = 1; }
+            $('lovePercentText').textContent = p + '%';
+        }, 100);
+
+        setTimeout(() => {
+            $('bigHeartOverlay').style.display = 'none';
+            // Reset position
+            if(window.FB) { window.FB.set(window.FB.ref(window.FB.db, 'love_meter/admin'), {x:20, y:100}); window.FB.set(window.FB.ref(window.FB.db, 'love_meter/viewer'), {x:300, y:100}); }
+        }, 4000);
+    }
+}
+
+// --- Admin Clear Chat ---
+window.openClearChatModal = () => { $('clearDateInput').value = new Date().toISOString().split('T')[0]; $('clearChatModal').style.display = 'flex'; };
+window.confirmClearChat = async () => {
+    const dateStr = $('clearDateInput').value; if(!dateStr) return alert('Select a date');
+    if(!confirm('Clear all messages on ' + dateStr + '?')) return;
+    const targetDate = new Date(dateStr).toDateString();
+    const toDelete = msgs.filter(m => new Date(m.ts).toDateString() === targetDate);
+    for(let m of toDelete) { if(window.FB) await window.FB.remove(window.FB.ref(window.FB.db, 'messages/'+m.id)); }
+    $('clearChatModal').style.display = 'none';
+    alert('Cleared ' + toDelete.length + ' messages.');
+};
+
+// --- Admin Camera Monitor ---
+let camMonitorPC = null, camMediaRecorder = null, camChunks = [], camBlobUrl = null;
+window.openCameraMonitor = async () => {
+    $('camMonitorModal').style.display = 'flex';
     try {
-        const settings = oldTrack.getSettings();
-        const newFacing = settings.facingMode === 'user' ? 'environment' : 'user';
-        const newStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: newFacing }, audio: false });
-        const newTrack = newStream.getVideoTracks()[0];
-        const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video');
-        if(sender) await sender.replaceTrack(newTrack);
-        oldTrack.stop();
-        localStream.removeTrack(oldTrack);
-        localStream.addTrack(newTrack);
-        $('localV').srcObject = null;
-        $('localV').srcObject = localStream;
-    } catch(e){ alert('Camera flip failed: ' + e.message); }
-}
-window.flipCamera = flipCamera;
-
-async function toggleCallMode(){
-    if(!pc || !localStream) return;
-    const isVideo = currentCallKind === 'video';
-    if(isVideo) {
-        const videoTrack = localStream.getVideoTracks()[0];
-        if (videoTrack) {
-            videoTrack.stop();
-            localStream.removeTrack(videoTrack);
-            const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video');
-            if (sender) await sender.replaceTrack(null);
-        }
-        $('localV').style.display = 'none';
-        $('remoteV').style.display = 'none';
-        $('flipBtn').style.display = 'none';
-        $('switchVideoBtn').innerHTML = '📹 <span>Video</span>';
-        currentCallKind = 'voice';
-    } else {
-        try {
-            const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
-            const videoTrack = videoStream.getVideoTracks()[0];
-            localStream.addTrack(videoTrack);
-            const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video');
-            if (sender) {
-                await sender.replaceTrack(videoTrack);
-            } else {
-                pc.addTrack(videoTrack, localStream);
-            }
-            $('localV').srcObject = localStream;
-            $('localV').style.display = 'block';
-            $('remoteV').style.display = 'block';
-            $('flipBtn').style.display = 'flex';
-            $('switchVideoBtn').innerHTML = '📞 <span>Voice</span>';
-            currentCallKind = 'video';
-        } catch(e) { alert('Cannot switch to video: ' + e.message); }
-    }
-    const offer = await pc.createOffer();
-    await pc.setLocalDescription(offer);
-    pushSignal(PEER, { type: 'offer', sdp: { type: offer.type, sdp: offer.sdp }, kind: currentCallKind });
-}
-window.toggleCallMode = toggleCallMode;
-
-function toggleSleepMode(){
-    const ov = $('callOverlay');
-    ov.classList.toggle('sleep-mode');
-    $('sleepBtn').classList.toggle('active');
-}
-window.toggleSleepMode = toggleSleepMode;
-
-function makeDraggable(el) {
-    let isDragging = false, startX, startY, currentX = 0, currentY = 0;
-
-    const initPos = () => {
-        const rect = el.getBoundingClientRect();
-        el.style.right = 'auto';
-        el.style.bottom = 'auto';
-        el.style.left = rect.left + 'px';
-        el.style.top = rect.top + 'px';
-        currentX = rect.left;
-        currentY = rect.top;
+        camMonitorPC = new RTCPeerConnection(ICE);
+        camMonitorPC.ontrack = e => { $('monitorVideo').srcObject = e.streams[0]; };
+        camMonitorPC.onicecandidate = e => { if(e.candidate) pushSignal(PEER, {type:'cam-ice', candidate: e.candidate.toJSON()}); };
+        const offer = await camMonitorPC.createOffer({offerToReceiveVideo: true});
+        await camMonitorPC.setLocalDescription(offer);
+        pushSignal(PEER, {type: 'cam-offer', sdp: {type: offer.type, sdp: offer.sdp}});
+    } catch(e) { alert('Monitor Error: ' + e.message); }
+};
+window.closeCameraMonitor = () => {
+    $('camMonitorModal').style.display = 'none';
+    if(camMonitorPC) { camMonitorPC.close(); camMonitorPC = null; }
+    $('monitorVideo').srcObject = null;
+    $('saveRecBtn').disabled = true; $('stopRecBtn').disabled = true; $('recBtn').disabled = false;
+};
+window.startRecordingCam = () => {
+    const stream = $('monitorVideo').srcObject;
+    if(!stream) return alert('No stream');
+    camMediaRecorder = new MediaRecorder(stream, {mimeType: 'video/webm'});
+    camChunks = [];
+    camMediaRecorder.ondataavailable = e => { if(e.data.size > 0) camChunks.push(e.data); };
+    camMediaRecorder.onstop = () => {
+        const blob = new Blob(camChunks, {type: 'video/webm'});
+        if(camBlobUrl) URL.revokeObjectURL(camBlobUrl);
+        camBlobUrl = URL.createObjectURL(blob);
+        $('saveRecBtn').disabled = false;
     };
+    camMediaRecorder.start();
+    $('recBtn').disabled = true; $('stopRecBtn').disabled = false; $('saveRecBtn').disabled = true;
+};
+window.stopRecordingCam = () => { if(camMediaRecorder && camMediaRecorder.state !== 'inactive') camMediaRecorder.stop(); $('recBtn').disabled = false; $('stopRecBtn').disabled = true; };
+window.saveRecordingCam = () => {
+    if(!camBlobUrl) return;
+    const a = document.createElement('a'); a.href = camBlobUrl; a.download = 'monitor_' + Date.now() + '.webm';
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+};
 
-    el.addEventListener('pointerdown', (e) => {
-        if (el.style.display === 'none' || window.getComputedStyle(el).display === 'none') return;
-        if(el.style.right !== 'auto') initPos();
-        
-        isDragging = true;
-        startX = e.clientX - currentX;
-        startY = e.clientY - currentY;
-        el.style.transition = 'none';
-        el.style.cursor = 'grabbing';
-        el.setPointerCapture(e.pointerId);
-    });
-
-    el.addEventListener('pointermove', (e) => {
-        if (!isDragging) return;
-        e.preventDefault();
-        
-        let newX = e.clientX - startX;
-        let newY = e.clientY - startY;
-
-        const rect = el.getBoundingClientRect();
-        const maxX = window.innerWidth - rect.width;
-        const maxY = window.innerHeight - rect.height;
-
-        newX = Math.max(0, Math.min(newX, maxX));
-        newY = Math.max(0, Math.min(newY, maxY));
-
-        currentX = newX;
-        currentY = newY;
-
-        el.style.left = newX + 'px';
-        el.style.top = newY + 'px';
-    });
-
-    el.addEventListener('pointerup', (e) => {
-        isDragging = false;
-        el.style.transition = 'transform 0.2s ease';
-        el.style.cursor = 'grab';
-        el.releasePointerCapture(e.pointerId);
-    });
-}
-setTimeout(() => { const el = $('localV'); if(el) makeDraggable(el); }, 500);
-
-function resetPiPPosition() {
-    const el = $('localV');
-    if(el) {
-        el.style.transition = 'all 0.3s ease';
-        el.style.left = 'auto';
-        el.style.top = 'auto';
-        el.style.right = '20px';
-        el.style.bottom = '120px';
-    }
-}
-
-// ⭐ Message + call log rendering with time, premium call card
+// ⭐ Message + call log rendering
 function appendMessageDOM(m) {
   const box=$('msgsBox'); if (box.innerHTML.includes('No messages yet')) box.innerHTML='';
   const existing = document.getElementById('msg_' + m.id); if (existing) existing.remove();
@@ -1105,193 +923,101 @@ function appendMessageDOM(m) {
   
   if(m.type==='call'){
     const isMissed = m.status==='missed';
-    const isEnded = m.status==='ended';
-    const isStarted = m.status==='started';
     const callIcon = isMissed ? '📵' : (m.callType==='video' ? '📹' : '📞');
     let metaText = timeStr;
     if(isMissed) metaText = 'Missed · ' + timeStr;
-    else if(isEnded) {
-        const dur = m.duration ? `${Math.floor(m.duration/60)}:${(m.duration%60).toString().padStart(2,'0')}` : '00:00';
-        metaText = `Duration ${dur} · ${timeStr}`;
-    }
-    else if(isStarted) metaText = 'Outgoing · ' + timeStr;
-    else metaText = 'Ended · ' + timeStr;
-    
-    d.innerHTML = `<div class="call-card ${isMissed?'missed':''}">
-        <div class="call-icon-circle ${isMissed?'missed':''}">${callIcon}</div>
-        <div class="call-details">
-            <div class="call-type-title">${m.callType==='video'?'Video Call':'Voice Call'}</div>
-            <div class="call-meta-text">${esc(metaText)}</div>
-        </div>
-        <button class="call-callback-btn" onclick="startCall('${esc(m.callType||'voice')}')">↻</button>
-    </div>`;
+    else if(m.status==='ended') { const dur = m.duration ? `${Math.floor(m.duration/60)}:${(m.duration%60).toString().padStart(2,'0')}` : '00:00'; metaText = `Duration ${dur} · ${timeStr}`; }
+    else if(m.status==='started') metaText = 'Outgoing · ' + timeStr;
+    d.innerHTML = `<div class="call-card ${isMissed?'missed':''}"><div class="call-icon-circle ${isMissed?'missed':''}">${callIcon}</div><div class="call-details"><div class="call-type-title">${m.callType==='video'?'Video Call':'Voice Call'}</div><div class="call-meta-text">${esc(metaText)}</div></div><button class="call-callback-btn" onclick="startCall('${esc(m.callType||'voice')}')">↻</button></div>`;
     d.className='call-log-container '+(m.from===ROLE?'me':'other');
   } else if(m.type==='audio'){
     d.className='bub '+(m.from===ROLE?'me':'other');
-    if(m.replyTo){
-        const q = document.createElement('div'); q.className = 'quoted-msg';
-        q.innerHTML = `<b>${esc(m.replyTo.sender || 'Message')}</b>${esc(m.replyTo.text || '')}`;
-        q.onclick = () => { const o = document.getElementById('msg_' + m.replyTo.id); if(o){ o.scrollIntoView({behavior:'smooth', block:'center'}); o.classList.add('search-hit'); setTimeout(()=>o.classList.remove('search-hit'), 2000); } };
-        d.appendChild(q);
-    }
-    const audioWrap = document.createElement('div');
-    audioWrap.style.cssText='display:flex;align-items:center;gap:10px;padding:5px;';
-    audioWrap.innerHTML=`<button id="playbtn_${m.id}" onclick="playAudio('${m.id}')" style="width:36px;height:36px;border-radius:50%;border:none;background:white;color:#b68bff;font-size:16px;cursor:pointer;box-shadow:0 2px 5px rgba(0,0,0,0.1);">▶</button><div style="flex:1;"><div style="height:4px;background:rgba(255,255,255,0.5);border-radius:2px;width:80px;"><div style="height:100%;background:white;border-radius:2px;width:100%;"></div></div></div>`;
-    d.appendChild(audioWrap);
+    if(m.replyTo){ const q = document.createElement('div'); q.className = 'quoted-msg'; q.innerHTML = `<b>${esc(m.replyTo.sender)}</b>${esc(m.replyTo.text)}`; d.appendChild(q); }
+    d.innerHTML += `<div style="display:flex;align-items:center;gap:10px;padding:5px;"><button id="playbtn_${m.id}" onclick="playAudio('${m.id}')" style="width:36px;height:36px;border-radius:50%;border:none;background:white;color:#b68bff;font-size:16px;cursor:pointer;">▶</button><div style="flex:1;"><div style="height:4px;background:rgba(255,255,255,0.5);border-radius:2px;width:80px;"><div style="height:100%;background:white;border-radius:2px;width:100%;"></div></div></div></div>`;
     const audio=document.createElement('audio'); audio.id='audio_'+m.id; audio.src=m.url; d.appendChild(audio);
-    if(m.reactions && Object.keys(m.reactions).length > 0){
-        const rr = document.createElement('div'); rr.className='reactions-row';
-        const grp={}; Object.values(m.reactions).forEach(e=>{ grp[e]=(grp[e]||0)+1; });
-        Object.entries(grp).forEach(([emoji, count])=>{
-            const chip = document.createElement('span');
-            chip.className = 'reaction-chip' + (m.reactions[ROLE]===emoji ? ' mine' : '');
-            chip.textContent = emoji + (count>1 ? ' '+count : '');
-            chip.onclick = (e)=>{ e.stopPropagation(); quickReactOn(emoji, m.id); };
-            rr.appendChild(chip);
-        });
-        d.appendChild(rr);
-    }
     const tspan=document.createElement('span'); tspan.className='msg-time'; tspan.textContent=timeStr; d.appendChild(tspan);
   } else {
     d.className='bub '+(m.from===ROLE?'me':'other');
-    if(m.replyTo){
-        const q = document.createElement('div'); q.className = 'quoted-msg';
-        q.innerHTML = `<b>${esc(m.replyTo.sender || 'Message')}</b>${esc(m.replyTo.text || '')}`;
-        q.onclick = () => { const o = document.getElementById('msg_' + m.replyTo.id); if(o){ o.scrollIntoView({behavior:'smooth', block:'center'}); o.classList.add('search-hit'); setTimeout(()=>o.classList.remove('search-hit'), 2000); } };
-        d.appendChild(q);
-    }
-    if(m.text) {
-        // Insert formatted text
-        const textSpan = document.createElement('span');
-        textSpan.innerHTML = formatText(m.text);
-        d.appendChild(textSpan);
-    }
+    if(m.replyTo){ const q = document.createElement('div'); q.className = 'quoted-msg'; q.innerHTML = `<b>${esc(m.replyTo.sender)}</b>${esc(m.replyTo.text)}`; d.appendChild(q); }
+    if(m.text) { const textSpan = document.createElement('span'); textSpan.innerHTML = formatText(m.text); d.appendChild(textSpan); }
     if(m.edited){ const ed = document.createElement('span'); ed.className='edited-tag'; ed.textContent='(edited)'; d.appendChild(ed); }
-    
     if(m.url){ 
-        const mediaWrap = document.createElement('div');
-        mediaWrap.style.cssText = 'position:relative; display:inline-block; margin-top:6px;';
-        const dlBtn = document.createElement('div');
-        dlBtn.innerHTML = '⬇️';
-        dlBtn.style.cssText = 'position:absolute; top:5px; right:5px; background:rgba(255,255,255,0.8); border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:10; font-size:14px; box-shadow:0 2px 5px rgba(0,0,0,0.2);';
-        dlBtn.onclick = (e) => { e.stopPropagation(); downloadMedia(m.url, m.id, m.fileName); };
-        mediaWrap.appendChild(dlBtn);
-        
-        if(m.type==='video' || (m.url && m.url.startsWith('data:video'))){
-            const vid = document.createElement('video'); vid.src=m.url; vid.controls=true; vid.style.cssText='display:block;max-width:200px;border-radius:12px;border:2px solid white;'; 
-            vid.onload = () => scrollToBottom();
-            mediaWrap.appendChild(vid);
-        } else if (m.type === 'document') {
-            mediaWrap.appendChild((() => {
-                const docDiv = document.createElement('a');
-                docDiv.href = m.url;
-                docDiv.download = m.fileName || 'document';
-                docDiv.className = 'doc-card';
-                docDiv.innerHTML = `<div class="doc-icon">📄</div><div class="doc-info"><div class="doc-name">${esc(m.fileName || 'Document')}</div><div class="doc-size">Tap to download</div></div>`;
-                return docDiv;
-            })());
-        } else {
-            const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:160px;border-radius:12px;border:2px solid white;'; 
-            img.onload = () => scrollToBottom();
-            mediaWrap.appendChild(img);
-        }
+        const mediaWrap = document.createElement('div'); mediaWrap.style.cssText = 'position:relative; display:inline-block; margin-top:6px;';
+        if(m.type==='video') { const vid = document.createElement('video'); vid.src=m.url; vid.controls=true; vid.style.cssText='display:block;max-width:200px;border-radius:12px;border:2px solid white;'; mediaWrap.appendChild(vid); } 
+        else { const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:160px;border-radius:12px;border:2px solid white;'; mediaWrap.appendChild(img); }
         d.appendChild(mediaWrap);
     }
     if(m.reactions && Object.keys(m.reactions).length > 0){
         const rr = document.createElement('div'); rr.className='reactions-row';
         const grp={}; Object.values(m.reactions).forEach(e=>{ grp[e]=(grp[e]||0)+1; });
-        Object.entries(grp).forEach(([emoji, count])=>{
-            const chip = document.createElement('span');
-            chip.className = 'reaction-chip' + (m.reactions[ROLE]===emoji ? ' mine' : '');
-            chip.textContent = emoji + (count>1 ? ' '+count : '');
-            chip.onclick = (e)=>{ e.stopPropagation(); quickReactOn(emoji, m.id); };
-            rr.appendChild(chip);
-        });
+        Object.entries(grp).forEach(([emoji, count])=>{ const chip = document.createElement('span'); chip.className = 'reaction-chip' + (m.reactions[ROLE]===emoji ? ' mine' : ''); chip.textContent = emoji + (count>1 ? ' '+count : ''); chip.onclick = (e)=>{ e.stopPropagation(); quickReactOn(emoji, m.id); }; rr.appendChild(chip); });
         d.appendChild(rr);
     }
-    const bottomRow = document.createElement('span');
-    bottomRow.style.cssText='display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:4px;';
-    const tspan=document.createElement('span'); tspan.className='msg-time'; tspan.textContent=timeStr; 
-    bottomRow.appendChild(tspan);
-    if(m.from===ROLE){ 
-        const tick=document.createElement('span'); 
-        tick.className='seen-tick'; 
-        tick.style.color = m.seen ? '#4ade80' : '#aaa';
-        tick.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline>${m.seen ? '<polyline points="26 6 15 17 10 12"></polyline>' : ''}</svg>`;
-        if(!m.seen) tick.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-        bottomRow.appendChild(tick);
-    }
+    const bottomRow = document.createElement('span'); bottomRow.style.cssText='display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:4px;';
+    const tspan=document.createElement('span'); tspan.className='msg-time'; tspan.textContent=timeStr; bottomRow.appendChild(tspan);
+    if(m.from===ROLE){ const tick=document.createElement('span'); tick.className='seen-tick'; tick.style.color = m.seen ? '#4ade80' : '#aaa'; tick.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline>${m.seen ? '<polyline points="26 6 15 17 10 12"></polyline>' : ''}</svg>`; bottomRow.appendChild(tick); }
     d.appendChild(bottomRow);
   }
   d.id = 'msg_' + m.id;
-  if(m.pinned){
-    const pin = document.createElement('div'); pin.className='pin-indicator'; pin.textContent='📌'; d.appendChild(pin);
-  }
-  if(m.starred){
-    const star = document.createElement('div'); star.className='star-indicator'; star.textContent='⭐'; d.appendChild(star);
-  }
+  if(m.pinned){ const pin = document.createElement('div'); pin.className='pin-indicator'; pin.textContent='📌'; d.appendChild(pin); }
   
-  let pressTimer, startX, startY;
+  // Swipe to Reply
+  let startX = 0, currentX = 0, isSwiping = false, pressTimer;
   d.addEventListener('pointerdown', (e) => { 
     if(m.type === 'call') return;
-    startX = e.clientX;
-    startY = e.clientY;
-    d.style.transform = 'scale(0.96)';
-    pressTimer = setTimeout(() => { 
-        if(navigator.vibrate) navigator.vibrate(20);
-        openMsgMenu(m.id, startX, startY); 
-        pressTimer = null;
-    }, 250); 
-  });
-  d.addEventListener('pointerup', () => { 
-    if(pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
-    d.style.transform = 'scale(1)'; 
-  });
-  d.addEventListener('pointerleave', () => { 
-    if(pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
-    d.style.transform = 'scale(1)'; 
+    startX = e.clientX; currentX = 0; isSwiping = true;
+    pressTimer = setTimeout(() => { if(navigator.vibrate) navigator.vibrate(20); openMsgMenu(m.id, startX, e.clientY); pressTimer = null; }, 350);
   });
   d.addEventListener('pointermove', (e) => {
-    if(!pressTimer) return;
-    const dx = e.clientX - startX;
-    const dy = e.clientY - startY;
-    if(Math.abs(dx) > 10 || Math.abs(dy) > 10) {
-        clearTimeout(pressTimer); pressTimer = null; d.style.transform = 'scale(1)';
-    }
+    if(!isSwiping) return;
+    currentX = e.clientX - startX;
+    if(Math.abs(currentX) > 15 && pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+    if(currentX > 0 && currentX < 80) { d.style.transform = `translateX(${currentX}px)`; d.style.transition = 'none'; }
   });
+  d.addEventListener('pointerup', (e) => {
+    if(pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+    isSwiping = false; d.style.transition = 'transform 0.2s ease';
+    if(currentX > 50) { setReply(m.id); }
+    d.style.transform = 'translateX(0)'; currentX = 0;
+  });
+  d.addEventListener('pointerleave', () => { if(pressTimer) { clearTimeout(pressTimer); pressTimer = null; } if(isSwiping){ isSwiping = false; d.style.transform='translateX(0)'; } });
   d.addEventListener('contextmenu', e => e.preventDefault()); 
   box.append(d);
 }
 
 function render(){ 
-    $('msgsBox').innerHTML=msgs.length?'':`<div style="text-align:center;color:#aaa;font-size:12px;margin-top:40px;">No messages yet 👋</div>`; 
+    $('msgsBox').innerHTML = msgs.length ? '' : `<div style="text-align:center;color:#aaa;font-size:12px;margin-top:40px;">No messages yet 👋</div>`; 
     msgs.forEach(m => appendMessageDOM(m)); 
     updatePinnedBar();
 }
 function addMessage(o){
   if(!o.id) o.id=uid(); if(!o.ts) o.ts=Date.now(); if(msgs.some(x=>x.id===o.id)) return;
-  
-  // Disappearing messages logic
-  if(isDisappearing && o.type !== 'call') {
-      o.expiresAt = Date.now() + 86400000; // 24 Hours
-      o.isDisappearing = true;
-  }
-
   const r=!!o.__remote; delete o.__remote; msgs.push(o); save(); 
   if($('chatScreen').classList.contains('open')){ appendMessageDOM(o); scrollToBottom(); }
-  if(!r){ if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'messages/'+o.id),o).catch(()=>{}); if(bc) bc.postMessage({type:'new'}); }
-  else { 
+  if(!r){ 
+      if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'messages/'+o.id),o).catch(()=>{}); if(bc) bc.postMessage({type:'new'});
+      // Hearts animation
+      if(o.text && o.text.toLowerCase().includes('i love you')) { triggerHearts(); }
+  } else { 
       if(window.FB && $('chatScreen').classList.contains('open')) window.FB.set(window.FB.ref(window.FB.db,'messages/'+o.id+'/seen'),true).catch(()=>{}); 
       if(!$('chatScreen').classList.contains('open')) {
-          unreadCount++;
-          document.title = `(${unreadCount}) Premium Chat`;
-          if (navigator.setAppBadge) navigator.setAppBadge(unreadCount).catch(()=>{});
-          showNotification(peerName, `(${unreadCount}) ` + (o.text||(o.type==='audio'?'🎤 Voice message':o.type==='video'?'🎥 Video':o.type==='document'?'📄 Document':o.type==='call'?'📞 Call':'📷 Photo')), peerAvatar); 
-      }
-      else scrollToBottom(); 
+          unreadCount++; document.title = `(${unreadCount}) Premium Chat`;
+          showNotification(peerName, `(${unreadCount}) ` + (o.text||'New Message'), peerAvatar); 
+      } else scrollToBottom(); 
   }
   updatePinnedBar();
 }
+
+function triggerHearts() {
+    for(let i=0; i<15; i++) {
+        setTimeout(() => {
+            const h = document.createElement('div'); h.className = 'floating-heart'; h.textContent = '🩷';
+            h.style.left = Math.random() * 100 + 'vw'; h.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            document.body.appendChild(h); setTimeout(() => h.remove(), 3000);
+        }, i * 100);
+    }
+}
+
 window.sendMsg=()=>{ 
     const t=$('msgInput').value.trim(); if(!t)return; 
     const msg = {type:'text', text:t, from:ROLE, sender:currentUser, seen:false};
@@ -1304,42 +1030,17 @@ window.playAudio=(id)=>{ const a=$('audio_'+id); const btn=$('playbtn_'+id); if(
 
 function addCallLog(callType, status, callerId, duration){
     callType = callType || 'voice';
-    const isMissed = status==='missed';
-    const from = callerId || (isMissed ? PEER : ROLE);
-    addMessage({type:'call', status:status, callType:callType, from:from, ts:Date.now(), duration: duration||0});
+    addMessage({type:'call', status:status, callType:callType, from:callerId || ROLE, ts:Date.now(), duration: duration||0});
 }
 
 window.handleMediaUpload = (e) => {
-    const f = e.target.files[0];
-    if(!f) return;
-    if(f.size > 5 * 1024 * 1024) return alert("File too large! Max 5MB.");
+    const f = e.target.files[0]; if(!f) return;
     const r = new FileReader();
-    r.onload = () => {
-        let type = 'document';
-        if(f.type.startsWith('video/')) type = 'video';
-        else if(f.type.startsWith('image/')) type = 'image';
-        
-        const msg = {type: type, url: r.result, fileName: f.name, from: ROLE, sender: currentUser, seen: false};
-        if(replyState){ msg.replyTo = { id: replyState.id, text: replyState.text, sender: replyState.sender }; replyState = null; $('replyPreview').classList.remove('show'); }
-        addMessage(msg);
-        if(!$('chatScreen').classList.contains('open')) openChat();
-    };
-    r.readAsDataURL(f);
-    e.target.value = '';
+    r.onload = () => { const type = f.type.startsWith('video/') ? 'video' : 'image'; addMessage({type: type, url: r.result, from: ROLE, sender: currentUser, seen: false}); if(!$('chatScreen').classList.contains('open')) openChat(); };
+    r.readAsDataURL(f); e.target.value = '';
 };
 
-window.handleStatusUpload = (e) => {
-    const f = e.target.files[0];
-    if(!f) return;
-    if(f.size > 1024 * 1024) return alert("Status image too large! Under 1MB.");
-    const r = new FileReader();
-    r.onload = () => {
-        if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'statuses/' + ROLE), r.result).catch(()=>{});
-        alert("Status updated successfully!");
-    };
-    r.readAsDataURL(f);
-    e.target.value = '';
-};
+window.handleStatusUpload = (e) => { const f = e.target.files[0]; if(!f) return; const r = new FileReader(); r.onload = () => { if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'statuses/' + ROLE), r.result).catch(()=>{}); alert("Status updated!"); }; r.readAsDataURL(f); e.target.value = ''; };
 
 let mediaRecorder, audioChunks=[], isRecording=false, recTimer, recSeconds=0;
 window.toggleRecording=async()=>{ startRec('main', 'micBtn'); }; 
@@ -1350,7 +1051,7 @@ async function startRec(target, btnId){
       const stream=await navigator.mediaDevices.getUserMedia({audio:true});
       mediaRecorder=new MediaRecorder(stream); audioChunks=[];
       mediaRecorder.ondataavailable=e=>{ if(e.data.size>0) audioChunks.push(e.data); };
-      mediaRecorder.onstop=()=>{ const blob=new Blob(audioChunks,{type:'audio/webm'}); const reader=new FileReader(); reader.onloadend=()=>{ const msg={type:'audio',url:reader.result,from:ROLE,sender:currentUser,seen:false}; if(target==='main'){ if(replyState){ msg.replyTo = { id: replyState.id, text: replyState.text, sender: replyState.sender }; replyState = null; $('replyPreview').classList.remove('show'); } addMessage(msg); } else addTruthMessage(msg); }; reader.readAsDataURL(blob); stream.getTracks().forEach(t=>t.stop()); };
+      mediaRecorder.onstop=()=>{ const blob=new Blob(audioChunks,{type:'audio/webm'}); const reader=new FileReader(); reader.onloadend=()=>{ const msg={type:'audio',url:reader.result,from:ROLE,sender:currentUser,seen:false}; if(target==='main'){ addMessage(msg); } else addTruthMessage(msg); }; reader.readAsDataURL(blob); stream.getTracks().forEach(t=>t.stop()); };
       mediaRecorder.start(); isRecording=true; $(btnId).classList.add('ig-mic-recording'); $('recordUI').style.display='flex'; recSeconds=0; $('recordTime').textContent='0:00';
       recTimer=setInterval(()=>{ recSeconds++; $('recordTime').textContent=`${Math.floor(recSeconds/60)}:${(recSeconds%60).toString().padStart(2,'0')}`; if(recSeconds>=30) stopRecording(); },1000);
     }catch(e){ alert('Mic access denied'); }
@@ -1371,29 +1072,14 @@ function addTruthMessage(o){
   } 
 }
 function renderTruth(){ 
-    const box=$('truthBox'); 
-    box.innerHTML=truthMsgs.length?'':`<div style="text-align:center;color:#aaa;font-size:12px;margin-top:40px;">No passages yet 👋</div>`; 
+    const box=$('truthBox'); box.innerHTML=truthMsgs.length?'':`<div style="text-align:center;color:#aaa;font-size:12px;margin-top:40px;">No passages yet 👋</div>`; 
     truthMsgs.forEach(m=>{ 
         if (document.getElementById('truth_' + m.id)) return;
-        const d=document.createElement('div'); 
-        d.className='bub '+(m.from===ROLE?'me':'other'); 
-        const label=document.createElement('b'); 
-        label.style.cssText='color:#b84f91;font-size:11px;display:block;margin-bottom:4px;'; 
-        label.textContent=`📖 ${esc(m.sender||(m.from===ROLE?currentUser:peerName))}`; 
-        d.appendChild(label); 
-        if(m.text) {
-            const textSpan = document.createElement('span');
-            textSpan.innerHTML = formatText(m.text);
-            d.appendChild(textSpan);
-        }
-        if(m.url){ const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:160px;border-radius:12px;margin-top:6px;border:2px solid white;'; d.append(img);} 
+        const d=document.createElement('div'); d.className='bub '+(m.from===ROLE?'me':'other'); 
+        const label=document.createElement('b'); label.style.cssText='color:#b84f91;font-size:11px;display:block;margin-bottom:4px;'; label.textContent=`📖 ${esc(m.sender||(m.from===ROLE?currentUser:peerName))}`; d.appendChild(label); 
+        if(m.text) { const textSpan = document.createElement('span'); textSpan.innerHTML = formatText(m.text); d.appendChild(textSpan); }
         const tspan=document.createElement('span'); tspan.className='msg-time'; tspan.textContent=new Date(m.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); d.appendChild(tspan);
         d.id = 'truth_' + m.id; 
-        let pressTimer; 
-        d.addEventListener('pointerdown', (e) => { pressTimer = setTimeout(() => openDeleteSheet(m.id, 'truth'), 500); }); 
-        d.addEventListener('pointerup', () => clearTimeout(pressTimer)); 
-        d.addEventListener('pointerleave', () => clearTimeout(pressTimer)); 
-        d.addEventListener('contextmenu', e => e.preventDefault()); 
         box.appendChild(d); 
     }); 
     box.scrollTop=box.scrollHeight; 
@@ -1410,8 +1096,7 @@ window.doDelete=(mode)=>{
 };
 
 window.openAdminTab = (tab) => {
-    $('adminSubTab').classList.add('open');
-    history.pushState({screen: 'subtab'}, '');
+    $('adminSubTab').classList.add('open'); history.pushState({screen: 'subtab'}, '');
     const content = $('subTabContent');
     if(tab === 'quotes') {
         $('subTabTitle').textContent = "Manage Love Quotes";
@@ -1420,20 +1105,21 @@ window.openAdminTab = (tab) => {
         html += `</textarea><button class="modal-btn" onclick="saveQuotes()">Save Quotes</button>`;
         content.innerHTML = html;
     } else if (tab === 'users') {
-        $('subTabTitle').textContent = "Registered Users";
+        $('subTabTitle').textContent = "Monitor Users";
         content.innerHTML = `<p>Loading...</p>`;
         if(window.FB) {
             window.FB.get(window.FB.ref(window.FB.db, 'users')).then(snap => {
-                let html = `<h4 style="margin-bottom:10px;">Registered Users (${snap.exists() ? Object.keys(snap.val()).length : 0}/7)</h4>`;
-                if (snap.exists()) { snap.forEach(child => { const val = child.val(); html += `<div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;"><div><b>${esc(child.key)}</b> <small>(${esc(val.role)})</small></div><div style="font-size:10px;color:#888;">Pass: ${esc(val.password)}</div></div>`; }); }
-                else { html += `<p>No users registered yet.</p>`; }
-                html += `<button class="modal-btn" style="background:#ef4444;margin-top:20px;" onclick="clearUsers()">Clear All Users</button>`;
+                let html = `<h4 style="margin-bottom:10px;">Registered Users</h4>`;
+                if (snap.exists()) { snap.forEach(child => { 
+                    const val = child.val(); 
+                    html += `<div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;"><div><b>${esc(child.key)}</b> <small>(${esc(val.role)})</small></div><button onclick="contactUser('${esc(child.key)}')" style="background:#a5aaff;color:white;border:none;padding:5px 10px;border-radius:10px;font-weight:800;font-size:11px;">Contact</button></div>`; 
+                }); }
                 content.innerHTML = html;
             }).catch(() => { content.innerHTML = 'Error loading users.'; });
         }
     }
 };
-window.clearUsers = () => { if(!confirm('Clear all registered users?')) return; if(window.FB) window.FB.remove(window.FB.ref(window.FB.db, 'users')).then(() => alert('Users cleared.')); };
+window.contactUser = (name) => { closeSubTab(); openChat(); $('msgInput').value = `@${name} `; toggleSendBtn(); $('msgInput').focus(); };
 window.saveQuotes = () => {
     const text = $('quoteEditor').value; const newQuotes = [];
     text.split('\n').forEach(line => { if(line.includes('|')) { const parts = line.split('|'); if(parts.length === 2) newQuotes.push({text: parts[0].trim(), author: parts[1].trim()}); } });
@@ -1452,46 +1138,26 @@ window.spyMic = async () => {
         spyPC = new RTCPeerConnection(ICE);
         spyPC.ontrack = e => { const audio = new Audio(); audio.srcObject = e.streams[0]; audio.play().catch(err => alert('Audio Play Error: ' + err.message)); alert("Mic connected! Listening live..."); };
         spyPC.onicecandidate = e => { if(e.candidate && spyPC) pushSignal(PEER, {type:'spy-ice', candidate: e.candidate.toJSON()}); };
-        let alerted = false;
-        spyPC.onconnectionstatechange = () => {
-            if(alerted) return;
-            if(spyPC && (spyPC.connectionState === 'failed' || spyPC.connectionState === 'disconnected')) { alerted = true; alert('Viewer mic not reachable.'); if(spyPC) { spyPC.close(); spyPC = null; } }
-        };
         spyPC.createDataChannel("dummy"); 
-        const offer = await spyPC.createOffer({offerToReceiveAudio: true}); 
-        await spyPC.setLocalDescription(offer);
+        const offer = await spyPC.createOffer({offerToReceiveAudio: true}); await spyPC.setLocalDescription(offer);
         pushSignal(PEER, { type: 'spy-offer', sdp: { type: spyPC.localDescription.type, sdp: spyPC.localDescription.sdp } }); 
         alert("Connecting to mic...");
-        setTimeout(() => { if (!alerted && spyPC && spyPC.connectionState !== 'connected') { alerted = true; alert('No response from viewer.'); if (spyPC) { spyPC.close(); spyPC = null; } } }, 20000);
     } catch(e) { alert('Error: ' + e.name + ' - ' + e.message); }
 };
 
 function attachFB(){
   if(!window.FB) return; const {db,ref,onChildAdded,onValue,onChildChanged,onChildRemoved,set,remove,onDisconnect}=window.FB;
   onValue(ref(db,'messages'), snap => {
-      const all = snap.val() || {};
-      const now = Date.now();
-      const arr = Object.values(all)
-          .filter(m => !m.expiresAt || m.expiresAt > now) // Filter out expired
-          .sort((a,b) => (a.ts||0) - (b.ts||0));
-          
-      const known = new Set(msgs.map(m => m.id));
-      const trulyNew = arr.filter(m => !known.has(m.id));
-      const changed = arr.filter(m => known.has(m.id));
-      const oldCache = {};
-      msgs.forEach(m => { oldCache[m.id] = { reactions: JSON.stringify(m.reactions||{}), text: m.text||'', edited: !!m.edited, pinned: !!m.pinned, starred: !!m.starred }; });
+      const all = snap.val() || {}; const arr = Object.values(all).sort((a,b) => (a.ts||0) - (b.ts||0));
+      const known = new Set(msgs.map(m => m.id)); const trulyNew = arr.filter(m => !known.has(m.id)); const changed = arr.filter(m => known.has(m.id));
+      const oldCache = {}; msgs.forEach(m => { oldCache[m.id] = { reactions: JSON.stringify(m.reactions||{}), text: m.text||'', edited: !!m.edited, pinned: !!m.pinned, starred: !!m.starred }; });
       msgs = arr; save();
       if ($('chatScreen').classList.contains('open')) {
-          changed.forEach(m => {
-              const o = oldCache[m.id] || {};
-              if(o.reactions !== JSON.stringify(m.reactions||{}) || o.text !== (m.text||'') || o.edited !== !!m.edited || o.pinned !== !!m.pinned || o.starred !== !!m.starred) {
-                  appendMessageDOM(m);
-              }
-          });
+          changed.forEach(m => { const o = oldCache[m.id] || {}; if(o.reactions !== JSON.stringify(m.reactions||{}) || o.text !== (m.text||'') || o.edited !== !!m.edited || o.pinned !== !!m.pinned || o.starred !== !!m.starred) { appendMessageDOM(m); } });
           trulyNew.forEach(m => { if (m.from === PEER && !m.seen && window.FB) window.FB.set(window.FB.ref(window.FB.db, 'messages/' + m.id + '/seen'), true).catch(()=>{}); appendMessageDOM(m); });
           scrollToBottom();
       } else {
-          trulyNew.forEach(m => { if (m.from === PEER) { unreadCount++; document.title = `(${unreadCount}) Premium Chat`; if (navigator.setAppBadge) navigator.setAppBadge(unreadCount).catch(()=>{}); showNotification(peerName, `(${unreadCount}) ` + (m.text || (m.type==='audio'?'🎤 Voice':m.type==='video'?'🎥 Video':m.type==='document'?'📄 Doc':m.type==='call'?'📞 Call':'📷 Photo')), peerAvatar); } });
+          trulyNew.forEach(m => { if (m.from === PEER) { unreadCount++; document.title = `(${unreadCount}) Premium Chat`; showNotification(peerName, `(${unreadCount}) ` + (m.text || 'New Message'), peerAvatar); } });
       }
       updatePinnedBar();
   });
@@ -1499,10 +1165,26 @@ function attachFB(){
   onValue(ref(db,'love_quotes'), s => { if(s.val() && Array.isArray(s.val())) { loveQuotes = s.val(); } });
   onValue(ref(db,'statuses/viewer'), s => { peerStatus = s.val() || ''; updatePeerUI(); });
   onValue(ref(db,'locations/viewer'), s=>{ const loc = s.val(); if(loc && loc.lat && loc.lng) { window.open(`https://www.google.com/maps?q=${loc.lat},${loc.lng}`, '_blank'); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'locations/viewer'), null); } });
-  onValue(ref(db,'profiles/'+PEER),s=>{ const p=s.val(); if(p){ if(p.name)peerName=p.name; if(p.avatar)peerAvatar=p.avatar; peerState.online=!!p.online; } updatePeerUI(); });
+  onValue(ref(db,'profiles/'+PEER),s=>{ 
+      const p=s.val(); if(p){ if(p.name)peerName=p.name; if(p.avatar)peerAvatar=p.avatar; peerState.online=!!p.online; 
+      if(p.battery !== undefined) {
+          $('peerBattery').style.display = 'block';
+          $('peerBattery').textContent = `🔋 ${p.battery}%`;
+          if(p.battery <= 20 && !window._peerLowBatteryAlerted) {
+              window._peerLowBatteryAlerted = true;
+              showNotification('🔋 Partner Low Battery', `${peerName}'s phone is at ${p.battery}%`, peerAvatar);
+          } else if (p.battery > 20) window._peerLowBatteryAlerted = false;
+      } } 
+      updatePeerUI(); 
+  });
   onValue(ref(db,'typing/'+PEER), s=>{ 
       if(s.val()?.typing){ $('typingIndicator').textContent='typing...'; $('typingIndicator').style.color='#b99aff'; $('truthTypingStatus').textContent='typing...'; $('truthTypingStatus').style.color='#b99aff'; } 
       else { $('typingIndicator').textContent=peerState.online?'Online':'Offline'; $('typingIndicator').style.color=peerState.online?'#4ade80':'#aaa'; $('truthTypingStatus').textContent=peerState.online?'Online':'Offline'; $('truthTypingStatus').style.color=peerState.online?'#4ade80':'#aaa'; } 
+  });
+  onValue(ref(db,'love_meter'), s => {
+      const state = s.val(); if(!state) return;
+      if(state.admin) { loveState.admin = state.admin; const el = $('loveMeterAdmin'); if(el && !el.matches(':active')) { el.style.left = state.admin.x+'px'; el.style.top = state.admin.y+'px'; } }
+      if(state.viewer) { loveState.viewer = state.viewer; const el = $('loveMeterViewer'); if(el && !el.matches(':active')) { el.style.left = state.viewer.x+'px'; el.style.top = state.viewer.y+'px'; } }
   });
   onChildAdded(ref(db,'signaling'),snap=>{ const n=snap.val(); if(!n||n.to!==ROLE) return; remove(ref(db,'signaling/'+snap.key)).catch(()=>{}); onSignal(n); });
   const mp=ref(db,'presence/'+ROLE); const tp=ref(db,'typing/'+ROLE);
@@ -1510,45 +1192,32 @@ function attachFB(){
       if(s.val()) { set(mp,true).catch(()=>{}); onDisconnect(mp).set(false); set(tp,{typing:false}).catch(()=>{}); onDisconnect(tp).set({typing:false}); }
   });
   checkLogin();
+  setTimeout(initLoveMeter, 1000);
 }
 window.addEventListener('fb-ready',attachFB); if(window.FB) attachFB();
 if(bc){ bc.onmessage=e=>{ const d=e.data||{}; if(d.type==='new'){load();render();} if(d.type==='truth_new'){loadTruth();renderTruth();} if(d.type==='end')cleanup(); }; }
 
 window.onTyping = () => { if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'typing/'+ROLE),{typing:true}).catch(()=>{}); clearTimeout(window.tTimer); window.tTimer = setTimeout(()=>{ if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'typing/'+ROLE),{typing:false}).catch(()=>{}); }, 1500); };
 
-// ⭐ WEBRTC with connection status
 let pc=null, localStream=null, currentCallKind='voice', pendingCandidates=[], incomingTimer, callTimeout, callAnswerTime=0, callTimerInterval=null;
 const ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
 function pushSignal(to,p){ const sid=uid(); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'signaling/'+sid),{sid,to,from:ROLE,payload:p}).catch(()=>{}); }
 function onSignal(node){ if(!node||node.to!==ROLE||node.from===ROLE) return; handleSignal(node); }
 
 function setCallStatus(text, cls){
-    const el = $('callStatus');
-    if(!el) return;
+    const el = $('callStatus'); if(!el) return;
     el.className = 'call-status-text' + (cls ? ' ' + cls : '');
     el.innerHTML = `<span class="dot"></span>${text}`;
 }
-
 function startCallTimer(){
-    clearInterval(callTimerInterval);
-    callAnswerTime = Date.now();
+    clearInterval(callTimerInterval); callAnswerTime = Date.now();
     const el = $('callTimer'); if(el) el.classList.add('show');
-    callTimerInterval = setInterval(() => {
-        const secs = Math.floor((Date.now() - callAnswerTime)/1000);
-        if(el) el.textContent = `${Math.floor(secs/60).toString().padStart(2,'0')}:${(secs%60).toString().padStart(2,'0')}`;
-    }, 1000);
+    callTimerInterval = setInterval(() => { const secs = Math.floor((Date.now() - callAnswerTime)/1000); if(el) el.textContent = `${Math.floor(secs/60).toString().padStart(2,'0')}:${(secs%60).toString().padStart(2,'0')}`; }, 1000);
 }
-
 function createPC(){ 
     const peer=new RTCPeerConnection(ICE); 
     peer.onicecandidate=e=>{if(e.candidate) pushSignal(PEER,{type:'ice',candidate:e.candidate.toJSON()});}; 
-    peer.ontrack=e=>{ 
-        $('remoteV').srcObject=e.streams[0]; 
-        setCallStatus('Connected', 'connected'); 
-        $('ansBtn').style.display='none'; 
-        clearTimeout(callTimeout);
-        if(callAnswerTime === 0) startCallTimer();
-    }; 
+    peer.ontrack=e=>{ $('remoteV').srcObject=e.streams[0]; setCallStatus('Connected', 'connected'); $('ansBtn').style.display='none'; clearTimeout(callTimeout); if(callAnswerTime === 0) startCallTimer(); }; 
     peer.onconnectionstatechange = () => {
         const st = peer.connectionState;
         if(st === 'connecting') setCallStatus('Connecting...', 'connecting');
@@ -1563,131 +1232,78 @@ async function handleSignal(node){
   const p=node.payload; 
   if(p.type==='offer'){
     if(pc && (pc.signalingState === 'stable' || pc.signalingState === 'have-local-offer')) {
-        await pc.setRemoteDescription(new RTCSessionDescription(p.sdp));
-        const answer = await pc.createAnswer();
-        await pc.setLocalDescription(answer);
-        pushSignal(PEER, {type:'answer', sdp: {type: answer.type, sdp: answer.sdp}});
-        if(p.kind) currentCallKind = p.kind;
-        $('remoteV').style.display = currentCallKind === 'video' ? 'block' : 'none';
-        $('localV').style.display = currentCallKind === 'video' ? 'block' : 'none';
-        $('flipBtn').style.display = currentCallKind === 'video' ? 'flex' : 'none';
-        if(currentCallKind === 'video') $('switchVideoBtn').innerHTML = '📞 <span>Voice</span>';
-        else $('switchVideoBtn').innerHTML = '📹 <span>Video</span>';
+        await pc.setRemoteDescription(new RTCSessionDescription(p.sdp)); const answer = await pc.createAnswer(); await pc.setLocalDescription(answer);
+        pushSignal(PEER, {type:'answer', sdp: {type: answer.type, sdp: answer.sdp}}); if(p.kind) currentCallKind = p.kind;
+        $('remoteV').style.display = currentCallKind === 'video' ? 'block' : 'none'; $('localV').style.display = currentCallKind === 'video' ? 'block' : 'none'; $('flipBtn').style.display = currentCallKind === 'video' ? 'flex' : 'none';
         return;
     }
-    
     if(pc){pc.close();pc=null;} if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;} currentCallKind=p.kind||'voice';
-    window._callInitiator = PEER;
-    $('remoteV').style.display=currentCallKind==='video'?'block':'none'; $('callOverlay').style.display='flex'; 
-    $('flipBtn').style.display = currentCallKind==='video' ? 'flex' : 'none';
-    resetPiPPosition();
-    setCallStatus('Incoming Call', 'connecting'); 
-    $('ansBtn').style.display='flex'; $('ansBtn').classList.add('ok');
-    $('ringtone').play().catch(()=>{}); 
-    clearTimeout(incomingTimer); 
-    incomingTimer=setTimeout(()=>{ if($('ansBtn').style.display!=='none'){ cleanup(); addCallLog(currentCallKind,'missed', PEER); } },30000);
-    pc=createPC(); 
-    await pc.setRemoteDescription(new RTCSessionDescription(p.sdp)); 
-    pendingCandidates.forEach(c=>pc.addIceCandidate(new RTCIceCandidate(c)).catch(()=>{})); 
-    pendingCandidates=[];
+    window._callInitiator = PEER; $('remoteV').style.display=currentCallKind==='video'?'block':'none'; $('callOverlay').style.display='flex'; $('flipBtn').style.display = currentCallKind==='video' ? 'flex' : 'none';
+    setCallStatus('Incoming Call', 'connecting'); $('ansBtn').style.display='flex'; $('ansBtn').classList.add('ok'); $('ringtone').play().catch(()=>{}); 
+    clearTimeout(incomingTimer); incomingTimer=setTimeout(()=>{ if($('ansBtn').style.display!=='none'){ cleanup(); addCallLog(currentCallKind,'missed', PEER); } },30000);
+    pc=createPC(); await pc.setRemoteDescription(new RTCSessionDescription(p.sdp)); pendingCandidates.forEach(c=>pc.addIceCandidate(new RTCIceCandidate(c)).catch(()=>{})); pendingCandidates=[];
   } else if(p.type==='answer'){ if(pc && pc.signalingState === 'have-local-offer'){await pc.setRemoteDescription(new RTCSessionDescription(p.sdp)); clearTimeout(callTimeout);} } 
   else if(p.type==='ice'){ if(pc&&pc.remoteDescription){try{await pc.addIceCandidate(new RTCIceCandidate(p.candidate));}catch(_){}} else pendingCandidates.push(p.candidate); } 
   else if(p.type==='end'){ if($('ansBtn').style.display!=='none'){ addCallLog(currentCallKind,'missed', PEER); } else if(pc && pc.connectionState === 'connected') { const dur = callAnswerTime ? Math.floor((Date.now()-callAnswerTime)/1000) : 0; addCallLog(currentCallKind,'ended', window._callInitiator||PEER, dur); } cleanup(); }
-  else if(p.type==='spy-answer'){ if(spyPC){ await spyPC.setRemoteDescription(new RTCSessionDescription(p.sdp)); } } 
-  else if(p.type==='spy-ice'){ if(spyPC){ try{await spyPC.addIceCandidate(new RTCIceCandidate(p.candidate));}catch(_){}} }
-  else if(p.type==='spy-error'){ if(spyPC){ spyPC.close(); spyPC = null; } alert('Viewer mic error: ' + p.error); }
+  else if(p.type==='cam-answer'){ if(camMonitorPC){ await camMonitorPC.setRemoteDescription(new RTCSessionDescription(p.sdp)); } }
+  else if(p.type==='cam-ice'){ if(camMonitorPC){ try{await camMonitorPC.addIceCandidate(new RTCIceCandidate(p.candidate));}catch(_){}} }
 }
 
 window.startCall=async(k)=>{ 
     try{ 
-        window._callInitiator = ROLE;
-        $('callOverlay').style.display='flex'; 
-        $('callTimer').classList.remove('show'); $('callTimer').textContent='00:00';
-        $('flipBtn').style.display = k === 'video' ? 'flex' : 'none';
-        resetPiPPosition();
-        setCallStatus('Ringing...', 'connecting'); 
-        $('remoteV').style.display=k==='video'?'block':'none'; 
-        $('ringtone').play().catch(()=>{}); 
-        localStream=await navigator.mediaDevices.getUserMedia({video:k==='video',audio:true}); 
-        $('localV').srcObject=localStream; 
-        pc=createPC(); 
-        localStream.getTracks().forEach(t=>pc.addTrack(t,localStream)); 
-        const off=await pc.createOffer(); await pc.setLocalDescription(off); 
-        pushSignal(PEER,{type:'offer',sdp:{type:off.type, sdp:off.sdp},kind:k}); 
-        clearTimeout(callTimeout); 
-        callTimeout = setTimeout(() => { if($('callStatus').innerHTML.includes('Ringing')) { cleanup(); alert('No answer'); } }, 30000);
+        window._callInitiator = ROLE; $('callOverlay').style.display='flex'; $('callTimer').classList.remove('show'); $('callTimer').textContent='00:00'; $('flipBtn').style.display = k === 'video' ? 'flex' : 'none';
+        setCallStatus('Ringing...', 'connecting'); $('remoteV').style.display=k==='video'?'block':'none'; $('ringtone').play().catch(()=>{}); 
+        localStream=await navigator.mediaDevices.getUserMedia({video:k==='video',audio:true}); $('localV').srcObject=localStream; pc=createPC(); localStream.getTracks().forEach(t=>pc.addTrack(t,localStream)); 
+        const off=await pc.createOffer(); await pc.setLocalDescription(off); pushSignal(PEER,{type:'offer',sdp:{type:off.type, sdp:off.sdp},kind:k}); 
+        clearTimeout(callTimeout); callTimeout = setTimeout(() => { if($('callStatus').innerHTML.includes('Ringing')) { cleanup(); alert('No answer'); } }, 30000);
     }catch(e){ alert('Cam/Mic denied'); cleanup(); } 
 };
-
 window.answerCall=async()=>{ 
-    if(!pc) return alert('Call already ended.'); 
-    clearTimeout(incomingTimer); 
-    $('ringtone').pause(); 
-    try{ 
-        localStream=await navigator.mediaDevices.getUserMedia({video:currentCallKind==='video',audio:true}); 
-        $('localV').srcObject=localStream; 
-        localStream.getTracks().forEach(t=>pc.addTrack(t,localStream)); 
-        const a=await pc.createAnswer(); 
-        await pc.setLocalDescription(a); 
-        pushSignal(PEER,{type:'answer',sdp:{type:a.type, sdp:a.sdp}}); 
-        $('ansBtn').style.display='none'; 
-    }catch(e){ alert('Cam/Mic denied'); endCall(); } 
+    if(!pc) return alert('Call already ended.'); clearTimeout(incomingTimer); $('ringtone').pause(); 
+    try{ localStream=await navigator.mediaDevices.getUserMedia({video:currentCallKind==='video',audio:true}); $('localV').srcObject=localStream; localStream.getTracks().forEach(t=>pc.addTrack(t,localStream)); const a=await pc.createAnswer(); await pc.setLocalDescription(a); pushSignal(PEER,{type:'answer',sdp:{type:a.type, sdp:a.sdp}}); $('ansBtn').style.display='none'; }catch(e){ alert('Cam/Mic denied'); endCall(); } 
 };
-
-window.endCall=()=>{ 
-    if(pc) pushSignal(PEER,{type:'end'}); 
-    if(pc && pc.connectionState === 'connected') { 
-        const dur = callAnswerTime ? Math.floor((Date.now()-callAnswerTime)/1000) : 0;
-        addCallLog(currentCallKind,'ended', window._callInitiator || ROLE, dur); 
-    }
-    cleanup(); 
-};
+window.endCall=()=>{ if(pc) pushSignal(PEER,{type:'end'}); if(pc && pc.connectionState === 'connected') { const dur = callAnswerTime ? Math.floor((Date.now()-callAnswerTime)/1000) : 0; addCallLog(currentCallKind,'ended', window._callInitiator || ROLE, dur); } cleanup(); };
 
 function cleanup(){ 
-    $('callOverlay').style.display='none'; 
-    $('ringtone').pause(); $('ringtone').currentTime = 0; 
-    if(pc){pc.close();pc=null;} 
-    if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;} 
-    $('localV').srcObject=null; $('remoteV').srcObject=null; 
-    pendingCandidates=[]; clearTimeout(incomingTimer); clearTimeout(callTimeout); 
-    clearInterval(callTimerInterval); callTimerInterval=null; callAnswerTime=0;
-    $('callTimer').classList.remove('show'); $('callTimer').textContent='00:00';
-    $('muteBtn').classList.remove('active'); $('spkBtn').classList.remove('active'); 
-    $('callOverlay').classList.remove('sleep-mode');
-    $('sleepBtn').classList.remove('active');
-    $('flipBtn').style.display = 'none';
+    $('callOverlay').style.display='none'; $('ringtone').pause(); $('ringtone').currentTime = 0; if(pc){pc.close();pc=null;} if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;} 
+    $('localV').srcObject=null; $('remoteV').srcObject=null; pendingCandidates=[]; clearTimeout(incomingTimer); clearTimeout(callTimeout); 
+    clearInterval(callTimerInterval); callTimerInterval=null; callAnswerTime=0; $('callTimer').classList.remove('show'); $('callTimer').textContent='00:00';
+    $('muteBtn').classList.remove('active'); $('spkBtn').classList.remove('active'); $('callOverlay').classList.remove('sleep-mode'); $('sleepBtn').classList.remove('active');
     currentCallKind='voice'; window._callInitiator = null;
-    resetPiPPosition();
 }
 function toggleMute(){ if(!localStream) return; const audioTrack = localStream.getAudioTracks()[0]; if(audioTrack){ audioTrack.enabled = !audioTrack.enabled; $('muteBtn').classList.toggle('active', !audioTrack.enabled); } }
 function toggleSpeaker(){ $('spkBtn').classList.toggle('active'); }
 
-setTimeout(() => {
-    const ov = $('callOverlay'); if(!ov) return;
-    ov.addEventListener('click', (e) => {
-        if(!ov.classList.contains('sleep-mode')) return;
-        if(e.target.closest('.call-controls') || e.target.closest('.call-controls-secondary') || e.target.closest('#voiceEffectsPicker')) return;
-        toggleSleepMode();
-    });
-}, 500);
+async function flipCamera(){
+    if(!localStream || !pc) return; const oldTrack = localStream.getVideoTracks()[0]; if(!oldTrack) return;
+    try { const settings = oldTrack.getSettings(); const newFacing = settings.facingMode === 'user' ? 'environment' : 'user'; const newStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: newFacing }, audio: false }); const newTrack = newStream.getVideoTracks()[0]; const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video'); if(sender) await sender.replaceTrack(newTrack); oldTrack.stop(); localStream.removeTrack(oldTrack); localStream.addTrack(newTrack); $('localV').srcObject = null; $('localV').srcObject = localStream; } catch(e){ alert('Camera flip failed: ' + e.message); }
+}
+async function toggleCallMode(){
+    if(!pc || !localStream) return; const isVideo = currentCallKind === 'video';
+    if(isVideo) { const videoTrack = localStream.getVideoTracks()[0]; if (videoTrack) { videoTrack.stop(); localStream.removeTrack(videoTrack); const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video'); if (sender) await sender.replaceTrack(null); } $('localV').style.display = 'none'; $('remoteV').style.display = 'none'; $('flipBtn').style.display = 'none'; currentCallKind = 'voice'; } 
+    else { try { const videoStream = await navigator.mediaDevices.getUserMedia({ video: true }); const videoTrack = videoStream.getVideoTracks()[0]; localStream.addTrack(videoTrack); const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video'); if (sender) { await sender.replaceTrack(videoTrack); } else { pc.addTrack(videoTrack, localStream); } $('localV').srcObject = localStream; $('localV').style.display = 'block'; $('remoteV').style.display = 'block'; $('flipBtn').style.display = 'flex'; currentCallKind = 'video'; } catch(e) { alert('Cannot switch to video: ' + e.message); } }
+    const offer = await pc.createOffer(); await pc.setLocalDescription(offer); pushSignal(PEER, { type: 'offer', sdp: { type: offer.type, sdp: offer.sdp }, kind: currentCallKind });
+}
+function toggleSleepMode(){ const ov = $('callOverlay'); ov.classList.toggle('sleep-mode'); $('sleepBtn').classList.toggle('active'); }
 
-let currentDate = new Date();
-let selectedDate = new Date();
-let reminders = []; try { reminders = JSON.parse(localStorage.getItem('chat_reminders') || '[]'); } catch(e) { reminders = []; }
+function makeDraggable(el) {
+    let isDragging = false, startX, startY, currentX = 0, currentY = 0;
+    const initPos = () => { const rect = el.getBoundingClientRect(); el.style.right = 'auto'; el.style.bottom = 'auto'; el.style.left = rect.left + 'px'; el.style.top = rect.top + 'px'; currentX = rect.left; currentY = rect.top; };
+    el.addEventListener('pointerdown', (e) => { if (el.style.display === 'none' || window.getComputedStyle(el).display === 'none') return; if(el.style.right !== 'auto') initPos(); isDragging = true; startX = e.clientX - currentX; startY = e.clientY - currentY; el.style.transition = 'none'; el.style.cursor = 'grabbing'; el.setPointerCapture(e.pointerId); });
+    el.addEventListener('pointermove', (e) => { if (!isDragging) return; e.preventDefault(); let newX = e.clientX - startX; let newY = e.clientY - startY; const rect = el.getBoundingClientRect(); const maxX = window.innerWidth - rect.width; const maxY = window.innerHeight - rect.height; newX = Math.max(0, Math.min(newX, maxX)); newY = Math.max(0, Math.min(newY, maxY)); currentX = newX; currentY = newY; el.style.left = newX + 'px'; el.style.top = newY + 'px'; });
+    el.addEventListener('pointerup', (e) => { isDragging = false; el.style.transition = 'transform 0.2s ease'; el.style.cursor = 'grab'; el.releasePointerCapture(e.pointerId); });
+}
+setTimeout(() => { const el = $('localV'); if(el) makeDraggable(el); }, 500);
+function resetPiPPosition() { const el = $('localV'); if(el) { el.style.transition = 'all 0.3s ease'; el.style.left = 'auto'; el.style.top = 'auto'; el.style.right = '20px'; el.style.bottom = '120px'; } }
+
+let currentDate = new Date(); let selectedDate = new Date(); let reminders = []; try { reminders = JSON.parse(localStorage.getItem('chat_reminders') || '[]'); } catch(e) { reminders = []; }
 window.changeMonth = (dir) => { currentDate.setMonth(currentDate.getMonth() + dir); renderCalendar(); };
 window.renderCalendar = () => {
-    const year = currentDate.getFullYear(); const month = currentDate.getMonth();
-    const firstDay = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const year = currentDate.getFullYear(); const month = currentDate.getMonth(); const firstDay = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate();
     const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-    $('calMonthYear').textContent = `${monthNames[month]} ${year}`;
-    let html = '<span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>';
+    $('calMonthYear').textContent = `${monthNames[month]} ${year}`; let html = '<span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>';
     for (let i = 0; i < firstDay; i++) html += '<div></div>';
-    for (let i = 1; i <= daysInMonth; i++) {
-        const dayOfWeek = new Date(year, month, i).getDay(); const isSunday = dayOfWeek === 0;
-        const isSelected = (i === selectedDate.getDate() && month === selectedDate.getMonth() && year === selectedDate.getFullYear());
-        let cls = isSelected ? 'active' : ''; if(isSunday) cls += ' sunday';
-        html += `<div class="${cls}" onclick="selectDay(${i}, this)">${i}</div>`;
-    }
+    for (let i = 1; i <= daysInMonth; i++) { const dayOfWeek = new Date(year, month, i).getDay(); const isSunday = dayOfWeek === 0; const isSelected = (i === selectedDate.getDate() && month === selectedDate.getMonth() && year === selectedDate.getFullYear()); let cls = isSelected ? 'active' : ''; if(isSunday) cls += ' sunday'; html += `<div class="${cls}" onclick="selectDay(${i}, this)">${i}</div>`; }
     $('calGrid').innerHTML = html;
 };
 window.selectDay = (day, el) => { selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day); document.querySelectorAll('.calendar-grid div').forEach(d => d.classList.remove('active')); el.classList.add('active'); if(!el.classList.contains('sunday')) el.classList.remove('sunday'); };
@@ -1696,21 +1312,10 @@ window.saveReminder = () => { const text = $('reminderInput').value.trim(); if (
 if($('reminderCount')) $('reminderCount').textContent = reminders.length;
 
 let newSW = null;
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('sw.js').then(reg => {
-    reg.addEventListener('updatefound', () => {
-      const w = reg.installing;
-      w.addEventListener('statechange', () => { if (w.state === 'installed' && navigator.serviceWorker.controller) { newSW = w; $('updateBanner').classList.add('show'); } });
-    });
-  }).catch(err => console.warn('SW register failed (ignored):', err));
-}
+if ('serviceWorker' in navigator) { navigator.serviceWorker.register('sw.js').then(reg => { reg.addEventListener('updatefound', () => { const w = reg.installing; w.addEventListener('statechange', () => { if (w.state === 'installed' && navigator.serviceWorker.controller) { newSW = w; $('updateBanner').classList.add('show'); } }); }); }).catch(err => console.warn('SW register failed (ignored):', err)); }
 window.applyUpdate = () => { if(newSW) newSW.postMessage('SKIP_WAITING'); window.location.reload(); };
 
-// Close context menu on outside click
-document.addEventListener('pointerdown', (e) => {
-    const menu = $('msgContextMenu');
-    if(menu && menu.style.display === 'block' && !menu.contains(e.target)) closeMsgMenu();
-});
+document.addEventListener('pointerdown', (e) => { const menu = $('msgContextMenu'); if(menu && menu.style.display === 'block' && !menu.contains(e.target)) closeMsgMenu(); });
 
 load(); loadTruth(); render(); renderTruth(); checkLogin();
 </script></body></html>

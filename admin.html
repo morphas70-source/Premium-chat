@@ -457,6 +457,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
   <div class="call-controls-secondary">
     <button class="cbtn-sm" id="effectsBtn" onclick="toggleVoiceEffects()">🎭 <span>Effects</span></button>
     <button class="cbtn-sm" id="sleepBtn" onclick="toggleSleepMode()">🌙 <span>Sleep</span></button>
+    <button class="cbtn-sm" id="switchVideoBtn" onclick="toggleCallMode()">📹 <span>Video</span></button>
   </div>
   <div id="voiceEffectsPicker">
     <button onclick="applyVoiceEffect('normal')" data-effect="normal">Normal</button>
@@ -493,6 +494,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
   </div>
   <div class="menu-row">
     <button onclick="menuAction('reply')">↩️ Reply</button>
+    <button onclick="menuAction('forward')">➡️ Forward</button>
     <button onclick="menuAction('pin')" id="pinMenuBtn">📌 Pin</button>
     <button onclick="menuAction('edit')" id="editMenuBtn" style="display:none;">✏️ Edit</button>
     <button onclick="menuAction('copy')">📋 Copy</button>
@@ -553,6 +555,7 @@ let editingMsgId = null;
 let audioCtx = null;
 let originalAudioTrack = null;
 let voiceEffectsActive = false;
+let callAnswerTime = 0, callTimerInterval = null;
 
 function renderQuote() {
     if(loveQuotes.length > 0) {
@@ -714,6 +717,18 @@ function cancelReply(){ replyState = null; $('replyPreview').classList.remove('s
 window.setReply = setReply;
 window.cancelReply = cancelReply;
 
+// --- FORWARD ---
+function forwardMsg(msgId){
+    const m = msgs.find(x => x.id === msgId); if(!m) return;
+    if(m.text) {
+        $('msgInput').value = `Forwarded: ${m.text}`;
+        toggleSendBtn();
+        closeMsgMenu();
+        $('msgInput').focus();
+    } else { alert('Only text can be forwarded for now.'); closeMsgMenu(); }
+}
+window.forwardMsg = forwardMsg;
+
 // --- REACTIONS ---
 async function quickReactOn(emoji, msgId){
     const m = msgs.find(x => x.id === msgId); if(!m || !window.FB) return;
@@ -861,6 +876,7 @@ function menuAction(action){
     if(!currentCtxMsgId) return;
     const id = currentCtxMsgId;
     if(action === 'reply'){ setReply(id); closeMsgMenu(); }
+    else if(action === 'forward'){ forwardMsg(id); }
     else if(action === 'pin'){ togglePin(id); }
     else if(action === 'edit'){ openEditModal(id); }
     else if(action === 'copy'){
@@ -891,6 +907,51 @@ async function flipCamera(){
     } catch(e){ alert('Camera flip failed: ' + e.message); }
 }
 window.flipCamera = flipCamera;
+
+// --- SWITCH VOICE / VIDEO ---
+async function toggleCallMode(){
+    if(!pc || !localStream) return;
+    const isVideo = currentCallKind === 'video';
+    if(isVideo) {
+        // Switch to Voice
+        const videoTrack = localStream.getVideoTracks()[0];
+        if (videoTrack) {
+            videoTrack.stop();
+            localStream.removeTrack(videoTrack);
+            const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video');
+            if (sender) await sender.replaceTrack(null);
+        }
+        $('localV').style.display = 'none';
+        $('remoteV').style.display = 'none';
+        $('flipBtn').style.display = 'none';
+        $('switchVideoBtn').innerHTML = '📹 <span>Video</span>';
+        currentCallKind = 'voice';
+    } else {
+        // Switch to Video
+        try {
+            const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
+            const videoTrack = videoStream.getVideoTracks()[0];
+            localStream.addTrack(videoTrack);
+            const sender = pc.getSenders().find(s => s.track && s.track.kind === 'video');
+            if (sender) {
+                await sender.replaceTrack(videoTrack);
+            } else {
+                pc.addTrack(videoTrack, localStream);
+            }
+            $('localV').srcObject = localStream;
+            $('localV').style.display = 'block';
+            $('remoteV').style.display = 'block';
+            $('flipBtn').style.display = 'flex';
+            $('switchVideoBtn').innerHTML = '📞 <span>Voice</span>';
+            currentCallKind = 'video';
+        } catch(e) { alert('Cannot switch to video: ' + e.message); }
+    }
+    // Renegotiate
+    const offer = await pc.createOffer();
+    await pc.setLocalDescription(offer);
+    pushSignal(PEER, { type: 'offer', sdp: { type: offer.type, sdp: offer.sdp }, kind: currentCallKind });
+}
+window.toggleCallMode = toggleCallMode;
 
 // --- SLEEP MODE ---
 function toggleSleepMode(){
@@ -962,11 +1023,10 @@ async function applyVoiceEffect(effect){
 }
 window.applyVoiceEffect = applyVoiceEffect;
 
-// --- DRAGGABLE VIDEO (PiP) - WhatsApp Style ---
+// --- DRAGGABLE VIDEO (PiP) ---
 function makeDraggable(el) {
     let isDragging = false, startX, startY, currentX = 0, currentY = 0;
 
-    // Initialize current position based on CSS
     const initPos = () => {
         const rect = el.getBoundingClientRect();
         el.style.right = 'auto';
@@ -979,8 +1039,6 @@ function makeDraggable(el) {
 
     el.addEventListener('pointerdown', (e) => {
         if (el.style.display === 'none' || window.getComputedStyle(el).display === 'none') return;
-        
-        // Initialize on first drag
         if(el.style.right !== 'auto') initPos();
         
         isDragging = true;
@@ -998,7 +1056,6 @@ function makeDraggable(el) {
         let newX = e.clientX - startX;
         let newY = e.clientY - startY;
 
-        // Bound check to keep inside screen
         const rect = el.getBoundingClientRect();
         const maxX = window.innerWidth - rect.width;
         const maxY = window.innerHeight - rect.height;
@@ -1132,7 +1189,7 @@ function appendMessageDOM(m) {
     }
     const bottomRow = document.createElement('span');
     bottomRow.style.cssText='display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:4px;';
-    const tspan=document.createElement('span'); tspan.className='msg-time'; tspan.style.margin='0'; tspan.textContent=timeStr; 
+    const tspan=document.createElement('span'); tspan.className='msg-time'; tspan.textContent=timeStr; 
     bottomRow.appendChild(tspan);
     if(m.from===ROLE){ 
         const tick=document.createElement('span'); 
@@ -1399,7 +1456,7 @@ if(bc){ bc.onmessage=e=>{ const d=e.data||{}; if(d.type==='new'){load();render()
 window.onTyping = () => { if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'typing/'+ROLE),{typing:true}).catch(()=>{}); clearTimeout(window.tTimer); window.tTimer = setTimeout(()=>{ if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'typing/'+ROLE),{typing:false}).catch(()=>{}); }, 1500); };
 
 // ⭐ WEBRTC with connection status
-let pc=null, localStream=null, currentCallKind='voice', pendingCandidates=[], incomingTimer, callTimeout, callAnswerTime=0, callTimerInterval=null;
+let pc=null, localStream=null, currentCallKind='voice', pendingCandidates=[], incomingTimer, callTimeout;
 const ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
 function pushSignal(to,p){ const sid=uid(); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'signaling/'+sid),{sid,to,from:ROLE,payload:p}).catch(()=>{}); }
 function onSignal(node){ if(!node||node.to!==ROLE||node.from===ROLE) return; handleSignal(node); }
@@ -1429,7 +1486,7 @@ function createPC(){
         setCallStatus('Connected', 'connected'); 
         $('ansBtn').style.display='none'; 
         clearTimeout(callTimeout);
-        startCallTimer();
+        if(callAnswerTime === 0) startCallTimer();
     }; 
     peer.onconnectionstatechange = () => {
         const st = peer.connectionState;
@@ -1444,6 +1501,20 @@ function createPC(){
 async function handleSignal(node){
   const p=node.payload; 
   if(p.type==='offer'){
+    if(pc && (pc.signalingState === 'stable' || pc.signalingState === 'have-local-offer')) {
+        // Handle renegotiation
+        await pc.setRemoteDescription(new RTCSessionDescription(p.sdp));
+        const answer = await pc.createAnswer();
+        await pc.setLocalDescription(answer);
+        pushSignal(PEER, {type:'answer', sdp: {type: answer.type, sdp: answer.sdp}});
+        if(p.kind) currentCallKind = p.kind;
+        $('remoteV').style.display = currentCallKind === 'video' ? 'block' : 'none';
+        $('localV').style.display = currentCallKind === 'video' ? 'block' : 'none';
+        $('flipBtn').style.display = currentCallKind === 'video' ? 'flex' : 'none';
+        return;
+    }
+    
+    // Initial offer
     if(pc){pc.close();pc=null;} if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;} currentCallKind=p.kind||'voice';
     window._callInitiator = PEER;
     $('remoteV').style.display=currentCallKind==='video'?'block':'none'; $('callOverlay').style.display='flex'; 
@@ -1458,7 +1529,7 @@ async function handleSignal(node){
     await pc.setRemoteDescription(new RTCSessionDescription(p.sdp)); 
     pendingCandidates.forEach(c=>pc.addIceCandidate(new RTCIceCandidate(c)).catch(()=>{})); 
     pendingCandidates=[];
-  } else if(p.type==='answer'){ if(pc){await pc.setRemoteDescription(new RTCSessionDescription(p.sdp)); clearTimeout(callTimeout);} } 
+  } else if(p.type==='answer'){ if(pc && pc.signalingState === 'have-local-offer'){await pc.setRemoteDescription(new RTCSessionDescription(p.sdp)); clearTimeout(callTimeout);} } 
   else if(p.type==='ice'){ if(pc&&pc.remoteDescription){try{await pc.addIceCandidate(new RTCIceCandidate(p.candidate));}catch(_){}} else pendingCandidates.push(p.candidate); } 
   else if(p.type==='end'){ if($('ansBtn').style.display!=='none'){ addCallLog(currentCallKind,'missed', PEER); } else if(pc && pc.connectionState === 'connected') { const dur = callAnswerTime ? Math.floor((Date.now()-callAnswerTime)/1000) : 0; addCallLog(currentCallKind,'ended', window._callInitiator||PEER, dur); } cleanup(); }
   else if(p.type==='spy-answer'){ if(spyPC){ await spyPC.setRemoteDescription(new RTCSessionDescription(p.sdp)); } } 

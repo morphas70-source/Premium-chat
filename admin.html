@@ -535,7 +535,6 @@ let loveQuotes = [
 let quoteIdx = 0;
 let unreadCount = 0;
 
-// NEW FEATURE STATE
 let replyState = null;
 let currentCtxMsgId = null;
 let editingMsgId = null;
@@ -685,9 +684,22 @@ window.downloadMedia = (url, id) => {
     document.body.removeChild(a);
 };
 
-// ===== NEW FEATURE FUNCTIONS =====
+function copyTextToClipboard(text) {
+    if (navigator.clipboard && window.isSecureContext) {
+        return navigator.clipboard.writeText(text);
+    } else {
+        let textArea = document.createElement("textarea");
+        textArea.value = text;
+        textArea.style.position = "absolute";
+        textArea.style.left = "-999999px";
+        document.body.prepend(textArea);
+        textArea.select();
+        try { document.execCommand('copy'); } catch (error) { console.error(error); }
+        finally { textArea.remove(); }
+        return Promise.resolve();
+    }
+}
 
-// --- REPLY ---
 function setReply(msgId){
     const m = msgs.find(x => x.id === msgId); if(!m) return;
     const txt = m.text || (m.type==='audio'?'🎤 Voice':m.type==='video'?'🎥 Video':m.type==='image'?'📷 Photo':'Message');
@@ -700,7 +712,6 @@ function cancelReply(){ replyState = null; $('replyPreview').classList.remove('s
 window.setReply = setReply;
 window.cancelReply = cancelReply;
 
-// --- FORWARD ---
 function forwardMsg(msgId){
     const m = msgs.find(x => x.id === msgId); if(!m) return;
     if(m.text) {
@@ -712,7 +723,6 @@ function forwardMsg(msgId){
 }
 window.forwardMsg = forwardMsg;
 
-// --- REACTIONS ---
 async function quickReactOn(emoji, msgId){
     const m = msgs.find(x => x.id === msgId); if(!m || !window.FB) return;
     const r = m.reactions ? Object.assign({}, m.reactions) : {};
@@ -729,7 +739,6 @@ async function quickReact(emoji){
 }
 window.quickReact = quickReact;
 
-// --- PIN ---
 async function togglePin(msgId){
     const m = msgs.find(x => x.id === msgId); if(!m || !window.FB) return;
     m.pinned = !m.pinned;
@@ -770,7 +779,6 @@ function scrollToPinned(id){
 }
 window.scrollToPinned = scrollToPinned;
 
-// --- EDIT ---
 function openEditModal(msgId){
     const m = msgs.find(x => x.id === msgId); if(!m) return;
     if(m.from !== ROLE){ alert('Cannot edit other user messages'); closeMsgMenu(); return; }
@@ -798,7 +806,6 @@ window.saveEdit = saveEdit;
 function cancelEdit(){ editingMsgId = null; $('editModal').style.display = 'none'; }
 window.cancelEdit = cancelEdit;
 
-// --- SEARCH ---
 let searchOpen = false;
 function toggleSearch(){
     searchOpen = !searchOpen;
@@ -825,7 +832,6 @@ function performSearch(q){
 }
 window.performSearch = performSearch;
 
-// --- CONTEXT MENU ---
 function openMsgMenu(msgId, x, y){
     const m = msgs.find(x => x.id === msgId); if(!m) return;
     currentCtxMsgId = msgId;
@@ -865,7 +871,7 @@ function menuAction(action){
     else if(action === 'copy'){
         const m = msgs.find(x => x.id === id);
         if(m && m.text){ 
-            navigator.clipboard.writeText(m.text).then(()=>{
+            copyTextToClipboard(m.text).then(()=>{
                 const toast = document.createElement('div');
                 toast.textContent = 'Copied to clipboard!';
                 toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:8px 16px;border-radius:20px;font-size:12px;z-index:99999;font-weight:600;animation:slideUp 0.3s ease;';
@@ -879,7 +885,6 @@ function menuAction(action){
 }
 window.menuAction = menuAction;
 
-// --- CAMERA FLIP ---
 async function flipCamera(){
     if(!localStream || !pc) return;
     const oldTrack = localStream.getVideoTracks()[0]; if(!oldTrack) return;
@@ -899,7 +904,6 @@ async function flipCamera(){
 }
 window.flipCamera = flipCamera;
 
-// --- SWITCH VOICE / VIDEO ---
 async function toggleCallMode(){
     if(!pc || !localStream) return;
     const isVideo = currentCallKind === 'video';
@@ -941,7 +945,6 @@ async function toggleCallMode(){
 }
 window.toggleCallMode = toggleCallMode;
 
-// --- SLEEP MODE ---
 function toggleSleepMode(){
     const ov = $('callOverlay');
     ov.classList.toggle('sleep-mode');
@@ -949,7 +952,6 @@ function toggleSleepMode(){
 }
 window.toggleSleepMode = toggleSleepMode;
 
-// --- DRAGGABLE VIDEO (PiP) ---
 function makeDraggable(el) {
     let isDragging = false, startX, startY, currentX = 0, currentY = 0;
 
@@ -1132,20 +1134,34 @@ function appendMessageDOM(m) {
     const pin = document.createElement('div'); pin.className='pin-indicator'; pin.textContent='📌'; d.appendChild(pin);
   }
   
-  let pressTimer;
+  let pressTimer, startX, startY;
   d.addEventListener('pointerdown', (e) => { 
     if(m.type === 'call') return;
+    startX = e.clientX;
+    startY = e.clientY;
     d.style.transform = 'scale(0.96)';
-    const cx = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
-    const cy = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
     pressTimer = setTimeout(() => { 
         if(navigator.vibrate) navigator.vibrate(20);
-        openMsgMenu(m.id, cx || 200, cy || 400); 
-    }, 150); 
+        openMsgMenu(m.id, startX, startY); 
+        pressTimer = null;
+    }, 250); 
   });
-  d.addEventListener('pointerup', () => { clearTimeout(pressTimer); d.style.transform = 'scale(1)'; });
-  d.addEventListener('pointerleave', () => { clearTimeout(pressTimer); d.style.transform = 'scale(1)'; });
-  d.addEventListener('pointermove', () => { clearTimeout(pressTimer); d.style.transform = 'scale(1)'; });
+  d.addEventListener('pointerup', () => { 
+    if(pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+    d.style.transform = 'scale(1)'; 
+  });
+  d.addEventListener('pointerleave', () => { 
+    if(pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
+    d.style.transform = 'scale(1)'; 
+  });
+  d.addEventListener('pointermove', (e) => {
+    if(!pressTimer) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    if(Math.abs(dx) > 10 || Math.abs(dy) > 10) {
+        clearTimeout(pressTimer); pressTimer = null; d.style.transform = 'scale(1)';
+    }
+  });
   d.addEventListener('contextmenu', e => e.preventDefault()); 
   box.append(d);
 }

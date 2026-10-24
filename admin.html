@@ -237,10 +237,10 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .pin-indicator{position:absolute;top:-8px;right:-6px;font-size:14px;background:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.15);}
 
 /* Smooth Context Menu */
-#menuBackdrop{position:fixed;inset:0;background:rgba(0,0,0,0.2);backdrop-filter:blur(2px);z-index:10000;display:none;}
+#menuBackdrop{position:fixed;inset:0;background:rgba(0,0,0,0.15);backdrop-filter:blur(1px);z-index:10000;display:none;}
 #msgContextMenu{position:fixed;display:none;z-index:10001;background:white;border-radius:20px;padding:8px;box-shadow:0 15px 40px rgba(0,0,0,0.3);border:2px solid white;min-width:220px;max-width:280px;transform-origin:center;}
-#msgContextMenu.show{display:block;animation:popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
-@keyframes popIn{from{opacity:0;transform:scale(0.8) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
+#msgContextMenu.show{display:block;animation:popIn 0.15s cubic-bezier(0.175, 0.885, 0.32, 1.275);}
+@keyframes popIn{from{opacity:0;transform:scale(0.85) translateY(10px);}to{opacity:1;transform:scale(1) translateY(0);}}
 #msgContextMenu .reaction-row{display:flex;gap:4px;padding:6px 4px;border-bottom:1px solid #f0e2f4;margin-bottom:6px;justify-content:space-between;}
 #msgContextMenu .reaction-row button{background:none;border:none;font-size:22px;cursor:pointer;padding:4px;border-radius:8px;transition:transform 0.15s,background 0.15s;}
 #msgContextMenu .reaction-row button:active{transform:scale(1.3);background:#f5f5f5;}
@@ -256,11 +256,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .cbtn-sm{padding:8px 16px;border-radius:20px;background:rgba(255,255,255,0.15);backdrop-filter:blur(10px);border:2px solid rgba(255,255,255,0.25);color:white;font-weight:700;font-size:12px;cursor:pointer;transition:all 0.15s;font-family:inherit;display:flex;align-items:center;gap:6px;box-shadow:0 4px 12px rgba(0,0,0,0.2);}
 .cbtn-sm:active{transform:scale(0.9);}
 .cbtn-sm.active{background:rgba(255,255,255,0.85);color:#1A1A2E;}
-#voiceEffectsPicker{display:none;position:absolute;bottom:180px;left:50%;transform:translateX(-50%);background:rgba(255,255,255,0.96);backdrop-filter:blur(15px);border-radius:20px;padding:10px;gap:6px;z-index:20;border:2px solid white;box-shadow:0 10px 30px rgba(0,0,0,0.3);flex-wrap:wrap;max-width:340px;justify-content:center;}
-#voiceEffectsPicker.show{display:flex;}
-#voiceEffectsPicker button{padding:8px 14px;border-radius:14px;border:2px solid white;background:linear-gradient(135deg,#a5aaff,#e5a6f7);color:white;font-weight:800;font-size:11px;cursor:pointer;font-family:inherit;transition:transform 0.15s;}
-#voiceEffectsPicker button:active{transform:scale(0.9);}
-#voiceEffectsPicker button.active{background:linear-gradient(135deg,#22c55e,#16a34a);}
 #callOverlay.sleep-mode{background:#000 !important;}
 #callOverlay.sleep-mode .call-avatar, #callOverlay.sleep-mode .call-name-display, #callOverlay.sleep-mode .call-status-text, #callOverlay.sleep-mode .call-timer, #callOverlay.sleep-mode #localV, #callOverlay.sleep-mode video{opacity:0.04;transition:opacity 1.5s ease;}
 #callOverlay.sleep-mode .call-controls, #callOverlay.sleep-mode .call-controls-secondary{opacity:0.08;transition:opacity 1.5s ease;}
@@ -455,16 +450,8 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
   <video id="localV" autoplay muted playsinline></video>
   
   <div class="call-controls-secondary">
-    <button class="cbtn-sm" id="effectsBtn" onclick="toggleVoiceEffects()">🎭 <span>Effects</span></button>
     <button class="cbtn-sm" id="sleepBtn" onclick="toggleSleepMode()">🌙 <span>Sleep</span></button>
     <button class="cbtn-sm" id="switchVideoBtn" onclick="toggleCallMode()">📹 <span>Video</span></button>
-  </div>
-  <div id="voiceEffectsPicker">
-    <button onclick="applyVoiceEffect('normal')" data-effect="normal">Normal</button>
-    <button onclick="applyVoiceEffect('robot')" data-effect="robot">🤖 Robot</button>
-    <button onclick="applyVoiceEffect('deep')" data-effect="deep">🎩 Deep</button>
-    <button onclick="applyVoiceEffect('chipmunk')" data-effect="chipmunk">🐿️ Chipmunk</button>
-    <button onclick="applyVoiceEffect('echo')" data-effect="echo">🌊 Echo</button>
   </div>
 
   <div class="call-controls">
@@ -552,10 +539,6 @@ let unreadCount = 0;
 let replyState = null;
 let currentCtxMsgId = null;
 let editingMsgId = null;
-let audioCtx = null;
-let originalAudioTrack = null;
-let voiceEffectsActive = false;
-let callAnswerTime = 0, callTimerInterval = null;
 
 function renderQuote() {
     if(loveQuotes.length > 0) {
@@ -847,7 +830,7 @@ function openMsgMenu(msgId, x, y){
     const m = msgs.find(x => x.id === msgId); if(!m) return;
     currentCtxMsgId = msgId;
     
-    if(navigator.vibrate) navigator.vibrate(40);
+    if(navigator.vibrate) navigator.vibrate(30);
     
     const menu = $('msgContextMenu');
     $('menuBackdrop').style.display = 'block';
@@ -881,7 +864,15 @@ function menuAction(action){
     else if(action === 'edit'){ openEditModal(id); }
     else if(action === 'copy'){
         const m = msgs.find(x => x.id === id);
-        if(m && m.text){ navigator.clipboard.writeText(m.text).catch(()=>{}); }
+        if(m && m.text){ 
+            navigator.clipboard.writeText(m.text).then(()=>{
+                const toast = document.createElement('div');
+                toast.textContent = 'Copied to clipboard!';
+                toast.style.cssText = 'position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:8px 16px;border-radius:20px;font-size:12px;z-index:99999;font-weight:600;animation:slideUp 0.3s ease;';
+                document.body.appendChild(toast);
+                setTimeout(()=>toast.remove(), 2000);
+            }).catch(()=>{});
+        }
         closeMsgMenu();
     }
     else if(action === 'delete'){ const m = msgs.find(x => x.id === id); closeMsgMenu(); if(m) openDeleteSheet(id, 'msg'); }
@@ -913,7 +904,6 @@ async function toggleCallMode(){
     if(!pc || !localStream) return;
     const isVideo = currentCallKind === 'video';
     if(isVideo) {
-        // Switch to Voice
         const videoTrack = localStream.getVideoTracks()[0];
         if (videoTrack) {
             videoTrack.stop();
@@ -927,7 +917,6 @@ async function toggleCallMode(){
         $('switchVideoBtn').innerHTML = '📹 <span>Video</span>';
         currentCallKind = 'voice';
     } else {
-        // Switch to Video
         try {
             const videoStream = await navigator.mediaDevices.getUserMedia({ video: true });
             const videoTrack = videoStream.getVideoTracks()[0];
@@ -946,7 +935,6 @@ async function toggleCallMode(){
             currentCallKind = 'video';
         } catch(e) { alert('Cannot switch to video: ' + e.message); }
     }
-    // Renegotiate
     const offer = await pc.createOffer();
     await pc.setLocalDescription(offer);
     pushSignal(PEER, { type: 'offer', sdp: { type: offer.type, sdp: offer.sdp }, kind: currentCallKind });
@@ -960,68 +948,6 @@ function toggleSleepMode(){
     $('sleepBtn').classList.toggle('active');
 }
 window.toggleSleepMode = toggleSleepMode;
-
-// --- VOICE EFFECTS ---
-function toggleVoiceEffects(){
-    if(!pc || !localStream){ alert('Start a call first'); return; }
-    $('voiceEffectsPicker').classList.toggle('show');
-}
-window.toggleVoiceEffects = toggleVoiceEffects;
-
-async function applyVoiceEffect(effect){
-    if(!pc || !localStream){ alert('Start a call first'); return; }
-    const audioTrack = localStream.getAudioTracks()[0]; if(!audioTrack) return;
-    const sender = pc.getSenders().find(s => s.track && s.track.kind === 'audio');
-    if(!sender) return;
-    try {
-        if(effect === 'normal'){
-            if(originalAudioTrack) await sender.replaceTrack(originalAudioTrack);
-            voiceEffectsActive = false;
-            document.querySelectorAll('#voiceEffectsPicker button').forEach(b => b.classList.remove('active'));
-            document.querySelector('#voiceEffectsPicker button[data-effect="normal"]').classList.add('active');
-            return;
-        }
-        if(!originalAudioTrack) originalAudioTrack = audioTrack;
-        if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if(audioCtx.state === 'suspended') await audioCtx.resume();
-        const source = audioCtx.createMediaStreamSource(new MediaStream([originalAudioTrack]));
-        let lastNode = source;
-        if(effect === 'robot'){
-            const gain = audioCtx.createGain(); gain.gain.value = 0;
-            const osc = audioCtx.createOscillator(); osc.frequency.value = 60; osc.connect(gain);
-            const ringMod = audioCtx.createGain(); ringMod.gain.value = 0;
-            gain.connect(ringMod.gain);
-            source.connect(ringMod);
-            osc.start();
-            lastNode = ringMod;
-        } else if(effect === 'deep'){
-            const filter = audioCtx.createBiquadFilter(); filter.type = 'lowpass'; filter.frequency.value = 400;
-            source.connect(filter); lastNode = filter;
-        } else if(effect === 'chipmunk'){
-            const filter = audioCtx.createBiquadFilter(); filter.type = 'highpass'; filter.frequency.value = 1200;
-            source.connect(filter); lastNode = filter;
-        } else if(effect === 'echo'){
-            const delay = audioCtx.createDelay(); delay.delayTime.value = 0.22;
-            const fb = audioCtx.createGain(); fb.gain.value = 0.35;
-            const dry = audioCtx.createGain(); dry.gain.value = 0.7;
-            const wet = audioCtx.createGain(); wet.gain.value = 0.5;
-            source.connect(dry); source.connect(delay);
-            delay.connect(fb); fb.connect(delay);
-            delay.connect(wet);
-            const merge = audioCtx.createGain();
-            dry.connect(merge); wet.connect(merge);
-            lastNode = merge;
-        }
-        const dest = audioCtx.createMediaStreamDestination();
-        lastNode.connect(dest);
-        const processedTrack = dest.stream.getAudioTracks()[0];
-        await sender.replaceTrack(processedTrack);
-        voiceEffectsActive = true;
-        document.querySelectorAll('#voiceEffectsPicker button').forEach(b => b.classList.remove('active'));
-        document.querySelector(`#voiceEffectsPicker button[data-effect="${effect}"]`).classList.add('active');
-    } catch(e){ console.error('Voice effect error:', e); alert('Effect failed: ' + e.message); }
-}
-window.applyVoiceEffect = applyVoiceEffect;
 
 // --- DRAGGABLE VIDEO (PiP) ---
 function makeDraggable(el) {
@@ -1209,13 +1135,17 @@ function appendMessageDOM(m) {
   let pressTimer;
   d.addEventListener('pointerdown', (e) => { 
     if(m.type === 'call') return;
+    d.style.transform = 'scale(0.96)';
     const cx = e.clientX || (e.touches && e.touches[0] ? e.touches[0].clientX : 0);
     const cy = e.clientY || (e.touches && e.touches[0] ? e.touches[0].clientY : 0);
-    pressTimer = setTimeout(() => { openMsgMenu(m.id, cx || 200, cy || 400); }, 250); 
+    pressTimer = setTimeout(() => { 
+        if(navigator.vibrate) navigator.vibrate(20);
+        openMsgMenu(m.id, cx || 200, cy || 400); 
+    }, 150); 
   });
-  d.addEventListener('pointerup', () => clearTimeout(pressTimer));
-  d.addEventListener('pointerleave', () => clearTimeout(pressTimer));
-  d.addEventListener('pointermove', () => clearTimeout(pressTimer));
+  d.addEventListener('pointerup', () => { clearTimeout(pressTimer); d.style.transform = 'scale(1)'; });
+  d.addEventListener('pointerleave', () => { clearTimeout(pressTimer); d.style.transform = 'scale(1)'; });
+  d.addEventListener('pointermove', () => { clearTimeout(pressTimer); d.style.transform = 'scale(1)'; });
   d.addEventListener('contextmenu', e => e.preventDefault()); 
   box.append(d);
 }
@@ -1456,7 +1386,7 @@ if(bc){ bc.onmessage=e=>{ const d=e.data||{}; if(d.type==='new'){load();render()
 window.onTyping = () => { if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'typing/'+ROLE),{typing:true}).catch(()=>{}); clearTimeout(window.tTimer); window.tTimer = setTimeout(()=>{ if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'typing/'+ROLE),{typing:false}).catch(()=>{}); }, 1500); };
 
 // ⭐ WEBRTC with connection status
-let pc=null, localStream=null, currentCallKind='voice', pendingCandidates=[], incomingTimer, callTimeout;
+let pc=null, localStream=null, currentCallKind='voice', pendingCandidates=[], incomingTimer, callTimeout, callAnswerTime=0, callTimerInterval=null;
 const ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
 function pushSignal(to,p){ const sid=uid(); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'signaling/'+sid),{sid,to,from:ROLE,payload:p}).catch(()=>{}); }
 function onSignal(node){ if(!node||node.to!==ROLE||node.from===ROLE) return; handleSignal(node); }
@@ -1502,7 +1432,6 @@ async function handleSignal(node){
   const p=node.payload; 
   if(p.type==='offer'){
     if(pc && (pc.signalingState === 'stable' || pc.signalingState === 'have-local-offer')) {
-        // Handle renegotiation
         await pc.setRemoteDescription(new RTCSessionDescription(p.sdp));
         const answer = await pc.createAnswer();
         await pc.setLocalDescription(answer);
@@ -1511,10 +1440,11 @@ async function handleSignal(node){
         $('remoteV').style.display = currentCallKind === 'video' ? 'block' : 'none';
         $('localV').style.display = currentCallKind === 'video' ? 'block' : 'none';
         $('flipBtn').style.display = currentCallKind === 'video' ? 'flex' : 'none';
+        if(currentCallKind === 'video') $('switchVideoBtn').innerHTML = '📞 <span>Voice</span>';
+        else $('switchVideoBtn').innerHTML = '📹 <span>Video</span>';
         return;
     }
     
-    // Initial offer
     if(pc){pc.close();pc=null;} if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;} currentCallKind=p.kind||'voice';
     window._callInitiator = PEER;
     $('remoteV').style.display=currentCallKind==='video'?'block':'none'; $('callOverlay').style.display='flex'; 
@@ -1594,13 +1524,7 @@ function cleanup(){
     $('muteBtn').classList.remove('active'); $('spkBtn').classList.remove('active'); 
     $('callOverlay').classList.remove('sleep-mode');
     $('sleepBtn').classList.remove('active');
-    $('effectsBtn').classList.remove('active');
-    $('voiceEffectsPicker').classList.remove('show');
     $('flipBtn').style.display = 'none';
-    document.querySelectorAll('#voiceEffectsPicker button').forEach(b => b.classList.remove('active'));
-    if(audioCtx){ audioCtx.close().catch(()=>{}); audioCtx = null; }
-    originalAudioTrack = null;
-    voiceEffectsActive = false;
     currentCallKind='voice'; window._callInitiator = null;
     resetPiPPosition();
 }

@@ -79,6 +79,19 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .seen-tick svg{width:16px;height:16px;stroke-width:2.5;}
 .msg-time{font-size:10px;opacity:0.55;margin-top:4px;display:block;text-align:right;font-weight:600;}
 
+/* Message Text Formatting */
+.bub code { background: rgba(0,0,0,0.1); padding: 2px 4px; border-radius: 4px; font-family: monospace; font-size: 14px; }
+.bub b, .bub strong { font-weight: 800; }
+.bub i, .bub em { font-style: italic; }
+.bub s, .bub del { text-decoration: line-through; opacity: 0.7; }
+
+/* Document Attachment */
+.doc-card { display:flex; align-items:center; gap:10px; padding:10px; background:rgba(255,255,255,0.5); border-radius:10px; margin-top:6px; border:1px solid rgba(255,255,255,0.8); text-decoration:none; color:inherit; }
+.doc-icon { width:36px; height:36px; background:#ff4d4d; color:white; display:flex; align-items:center; justify-content:center; border-radius:8px; font-weight:900; font-size:18px; flex-shrink:0; }
+.doc-info { flex:1; overflow:hidden; }
+.doc-name { font-size:13px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.doc-size { font-size:10px; color:#666; }
+
 /* ⭐ PREMIUM CALL HISTORY CARD */
 .call-card{display:flex;align-items:center;gap:12px;padding:12px 14px;background:linear-gradient(135deg,#1c1c1e,#2c2c2e);border-radius:18px;min-width:250px;box-shadow:0 6px 18px rgba(0,0,0,0.25);position:relative;overflow:hidden;}
 .call-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:linear-gradient(to bottom,#22c55e,#16a34a);}
@@ -235,6 +248,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .reaction-chip.mine{background:linear-gradient(135deg,#ffd1dc,#e5a6f7);border-color:white;}
 .edited-tag{font-size:10px;opacity:0.55;font-style:italic;margin-left:4px;}
 .pin-indicator{position:absolute;top:-8px;right:-6px;font-size:14px;background:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.15);}
+.star-indicator{position:absolute;top:-8px;left:-6px;font-size:14px;background:white;border-radius:50%;width:22px;height:22px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.15);}
 
 /* Smooth Context Menu */
 #menuBackdrop{position:fixed;inset:0;background:rgba(0,0,0,0.15);backdrop-filter:blur(1px);z-index:10000;display:none;}
@@ -264,11 +278,12 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 #editModal .modal-box{text-align:left;}
 #editModal .modal-box h3{text-align:center;}
 #editInput{width:100%;padding:12px;border-radius:15px;border:2px solid #f0e2f4;background:white;outline:none;font-weight:600;margin-bottom:12px;font-family:inherit;font-size:14px;resize:none;min-height:80px;}
-#pinnedListModal .modal-box{text-align:left;max-width:380px;}
-.pinned-item{padding:10px 12px;background:linear-gradient(135deg,rgba(255,232,214,0.8),rgba(255,207,228,0.6));border-radius:14px;margin-bottom:8px;cursor:pointer;border:2px solid white;position:relative;}
-.pinned-item b{font-size:11px;color:#b84f91;display:block;margin-bottom:4px;}
-.pinned-item p{font-size:13px;color:#333;margin:0;font-weight:600;word-break:break-word;}
-.pinned-item .unpin-btn{position:absolute;top:6px;right:8px;background:none;border:none;font-size:16px;cursor:pointer;color:#ff4d4d;font-weight:900;}
+#pinnedListModal .modal-box, #starredListModal .modal-box{text-align:left;max-width:380px;}
+.pinned-item, .starred-item{padding:10px 12px;background:linear-gradient(135deg,rgba(255,232,214,0.8),rgba(255,207,228,0.6));border-radius:14px;margin-bottom:8px;cursor:pointer;border:2px solid white;position:relative;}
+.starred-item{background:linear-gradient(135deg,rgba(255,255,200,0.9),rgba(255,230,150,0.7));}
+.pinned-item b, .starred-item b{font-size:11px;color:#b84f91;display:block;margin-bottom:4px;}
+.pinned-item p, .starred-item p{font-size:13px;color:#333;margin:0;font-weight:600;word-break:break-word;}
+.pinned-item .unpin-btn, .starred-item .unstar-btn{position:absolute;top:6px;right:8px;background:none;border:none;font-size:16px;cursor:pointer;color:#ff4d4d;font-weight:900;}
 </style></head><body>
 
 <div id="updateBanner" onclick="applyUpdate()"><span>🔄</span><span>Update Available! Tap to refresh</span></div>
@@ -339,6 +354,9 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
       <div class="back-btn" onclick="closeChatScreen()">←</div>
       <div id="peerStatusRing" onclick="viewStatus(PEER)" style="width:40px;height:40px;border-radius:50%;overflow:hidden;border:2px solid white;cursor:pointer;"><div id="peerAvatar" style="width:100%;height:100%;"></div></div>
       <div style="flex:1;min-width:0;"><b id="peerName">...</b><div id="typingIndicator" style="font-size:11px;color:#4ade80;">Online</div></div>
+      <div class="head-icon-btn" onclick="showStarredList()" title="Starred" style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-right:4px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+      </div>
       <div class="head-icon-btn" onclick="toggleSearch()" title="Search" style="width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;cursor:pointer;margin-right:4px;">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       </div>
@@ -465,7 +483,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
   </div>
 </div>
 <audio id="ringtone" src="https://assets.mixkit.co/active_storage/sfx/1355/1355-preview.mp3" loop></audio>
-<input type="file" id="fileInp" accept="image/*,video/*" hidden onchange="handleMediaUpload(event)">
+<input type="file" id="fileInp" accept="*/*" hidden onchange="handleMediaUpload(event)">
 <input type="file" id="avatarInp" accept="image/*" hidden>
 <input type="file" id="statusInp" accept="image/*" hidden onchange="handleStatusUpload(event)">
 
@@ -482,6 +500,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
   <div class="menu-row">
     <button onclick="menuAction('reply')">↩️ Reply</button>
     <button onclick="menuAction('forward')">➡️ Forward</button>
+    <button onclick="menuAction('star')" id="starMenuBtn">⭐ Star</button>
     <button onclick="menuAction('pin')" id="pinMenuBtn">📌 Pin</button>
     <button onclick="menuAction('edit')" id="editMenuBtn" style="display:none;">✏️ Edit</button>
     <button onclick="menuAction('copy')">📋 Copy</button>
@@ -506,6 +525,14 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
   </div>
 </div>
 
+<div class="modal" id="starredListModal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal-box">
+    <h3>⭐ Starred Messages</h3>
+    <div id="starredListContent" style="max-height:60vh;overflow-y:auto;margin-bottom:15px;"></div>
+    <button class="modal-btn" onclick="document.getElementById('starredListModal').style.display='none'">Close</button>
+  </div>
+</div>
+
 <script>
 document.addEventListener('contextmenu', e => e.preventDefault());
 const ROLE='admin', PEER='viewer';
@@ -522,6 +549,19 @@ function avatarHTML(name, avatar, size=40){
   const color=colors[(initial.charCodeAt(0)||0)%colors.length];
   return `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:${color};color:white;font-weight:900;font-size:${Math.round(size*0.45)}px;">${esc(initial)}</div>`;
 }
+
+// Format text with bold, italic, strikethrough, code
+function formatText(text) {
+    let f = esc(text);
+    f = f.replace(/\*(.+?)\*/gs, '<b>$1</b>');
+    f = f.replace(/_(.+?)_/gs, '<i>$1</i>');
+    f = f.replace(/~(.+?)~/gs, '<s>$1</s>');
+    f = f.replace(/```(.+?)```/gs, '<code>$1</code>');
+    f = f.replace(/`(.+?)`/gs, '<code>$1</code>');
+    f = f.replace(/\n/g, '<br>');
+    return f;
+}
+
 let currentUser=localStorage.getItem('chat_username')||'';
 let currentAbout=localStorage.getItem('chat_about')||'Available';
 let currentAvatar=localStorage.getItem('chat_user_avatar')||'';
@@ -538,6 +578,15 @@ let unreadCount = 0;
 let replyState = null;
 let currentCtxMsgId = null;
 let editingMsgId = null;
+let isDisappearing = false;
+let currentWallpaperIdx = 0;
+const wallpapers = [
+    'linear-gradient(135deg, #f6f0fa 0%, #fdf5f7 50%, #eef2ff 100%)',
+    'linear-gradient(135deg, #e0f2fe 0%, #f0f9ff 50%, #bae6fd 100%)',
+    'linear-gradient(135deg, #fce7f3 0%, #fdf2f8 50%, #fbcfe8 100%)',
+    'linear-gradient(135deg, #fef3c7 0%, #fffbeb 50%, #fde68a 100%)',
+    'linear-gradient(135deg, #dcfce7 0%, #f0fdf4 50%, #bbf7d0 100%)'
+];
 
 function renderQuote() {
     if(loveQuotes.length > 0) {
@@ -618,6 +667,8 @@ function checkLogin(){
     $('myNameDisplay').textContent=currentUser; $('userAvatar').innerHTML=avatarHTML(currentUser,currentAvatar,68);
     if(window.FB) { window.FB.set(window.FB.ref(window.FB.db,'profiles/'+ROLE),{name:currentUser,about:currentAbout,avatar:currentAvatar,online:true}).catch(()=>{}); }
     if(!localStorage.getItem('app_permissions_granted')) { setTimeout(() => { $('permModal').style.display = 'flex'; }, 1000); }
+    const savedBg = localStorage.getItem('chat_wallpaper');
+    if(savedBg) $('msgsBox').style.background = savedBg;
   } else { $('loginScreen').style.display='flex'; $('mainHome').style.display='none'; $('bottomNav').style.display='none'; }
 }
 
@@ -675,10 +726,10 @@ window.toggleTruthSendBtn=()=>{ const v=$('truthInput').value.trim(); if(v){ $('
 
 function scrollToBottom(force=false) { const box=$('msgsBox'); if (force || box.scrollHeight - box.scrollTop - box.clientHeight < 150) box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' }); }
 
-window.downloadMedia = (url, id) => {
+window.downloadMedia = (url, id, filename) => {
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'premium_chat_' + id;
+    a.download = filename || ('premium_chat_' + id);
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -702,7 +753,7 @@ function copyTextToClipboard(text) {
 
 function setReply(msgId){
     const m = msgs.find(x => x.id === msgId); if(!m) return;
-    const txt = m.text || (m.type==='audio'?'🎤 Voice':m.type==='video'?'🎥 Video':m.type==='image'?'📷 Photo':'Message');
+    const txt = m.text || (m.type==='audio'?'🎤 Voice':m.type==='video'?'🎥 Video':m.type==='image'?'📷 Photo':m.type==='document'?'📄 Document':'Message');
     replyState = { id: m.id, text: txt.slice(0,80), sender: m.sender || (m.from===ROLE ? currentUser : peerName) };
     $('replyPreviewText').textContent = (replyState.sender||'User') + ': ' + replyState.text;
     $('replyPreview').classList.add('show');
@@ -739,6 +790,30 @@ async function quickReact(emoji){
 }
 window.quickReact = quickReact;
 
+async function toggleStar(msgId){
+    const m = msgs.find(x => x.id === msgId); if(!m || !window.FB) return;
+    m.starred = !m.starred;
+    try { await window.FB.set(window.FB.ref(window.FB.db, 'messages/' + msgId + '/starred'), m.starred || null); } catch(e){}
+    closeMsgMenu();
+}
+window.toggleStar = toggleStar;
+
+function showStarredList(){
+    const starred = msgs.filter(m => m.starred);
+    const html = starred.map(m => `<div class="starred-item" onclick="scrollToPinned('${m.id}')"><button class="unstar-btn" onclick="event.stopPropagation();unstarFromList('${m.id}')">×</button><b>${esc(m.sender || (m.from === ROLE ? currentUser : peerName))}</b><p>${esc(m.text || (m.type==='image'?'📷 Photo':m.type==='video'?'🎥 Video':m.type==='audio'?'🎤 Voice':m.type==='document'?'📄 Doc':'Message'))}</p></div>`).join('');
+    $('starredListContent').innerHTML = html || '<p style="text-align:center;color:#888;">No starred messages</p>';
+    $('starredListModal').style.display = 'flex';
+}
+window.showStarredList = showStarredList;
+
+async function unstarFromList(msgId){
+    const m = msgs.find(x => x.id === msgId); if(!m || !window.FB) return;
+    m.starred = false;
+    try { await window.FB.set(window.FB.ref(window.FB.db, 'messages/' + msgId + '/starred'), null); } catch(e){}
+    showStarredList();
+}
+window.unstarFromList = unstarFromList;
+
 async function togglePin(msgId){
     const m = msgs.find(x => x.id === msgId); if(!m || !window.FB) return;
     m.pinned = !m.pinned;
@@ -758,7 +833,7 @@ window.updatePinnedBar = updatePinnedBar;
 
 function showPinnedList(){
     const pinned = msgs.filter(m => m.pinned);
-    const html = pinned.map(m => `<div class="pinned-item" onclick="scrollToPinned('${m.id}')"><button class="unpin-btn" onclick="event.stopPropagation();unpinFromList('${m.id}')">×</button><b>${esc(m.sender || (m.from === ROLE ? currentUser : peerName))}</b><p>${esc(m.text || (m.type==='image'?'📷 Photo':m.type==='video'?'🎥 Video':m.type==='audio'?'🎤 Voice':'Message'))}</p></div>`).join('');
+    const html = pinned.map(m => `<div class="pinned-item" onclick="scrollToPinned('${m.id}')"><button class="unpin-btn" onclick="event.stopPropagation();unpinFromList('${m.id}')">×</button><b>${esc(m.sender || (m.from === ROLE ? currentUser : peerName))}</b><p>${esc(m.text || (m.type==='image'?'📷 Photo':m.type==='video'?'🎥 Video':m.type==='audio'?'🎤 Voice':m.type==='document'?'📄 Doc':'Message'))}</p></div>`).join('');
     $('pinnedListContent').innerHTML = html || '<p style="text-align:center;color:#888;">No pinned messages</p>';
     $('pinnedListModal').style.display = 'flex';
 }
@@ -774,6 +849,7 @@ window.unpinFromList = unpinFromList;
 
 function scrollToPinned(id){
     $('pinnedListModal').style.display = 'none';
+    $('starredListModal').style.display = 'none';
     const el = document.getElementById('msg_' + id);
     if(el){ el.scrollIntoView({behavior:'smooth', block:'center'}); el.classList.add('search-hit'); setTimeout(()=>el.classList.remove('search-hit'), 2000); }
 }
@@ -842,7 +918,7 @@ function openMsgMenu(msgId, x, y){
     $('menuBackdrop').style.display = 'block';
     menu.style.display = 'block';
     
-    const mw = 260, mh = 280;
+    const mw = 260, mh = 320;
     const posX = Math.max(10, Math.min(x - mw/2, window.innerWidth - mw - 10));
     const posY = Math.max(10, Math.min(y - 40, window.innerHeight - mh - 10));
     
@@ -853,6 +929,7 @@ function openMsgMenu(msgId, x, y){
     if(m.from === ROLE && m.type === 'text' && (Date.now() - (m.ts||0)) < 300000){ editBtn.style.display = 'flex'; }
     else { editBtn.style.display = 'none'; }
     $('pinMenuBtn').textContent = m.pinned ? '📌 Unpin' : '📌 Pin';
+    $('starMenuBtn').textContent = m.starred ? '⭐ Unstar' : '⭐ Star';
 }
 function closeMsgMenu(){ 
     $('msgContextMenu').style.display = 'none'; 
@@ -866,6 +943,7 @@ function menuAction(action){
     const id = currentCtxMsgId;
     if(action === 'reply'){ setReply(id); closeMsgMenu(); }
     else if(action === 'forward'){ forwardMsg(id); }
+    else if(action === 'star'){ toggleStar(id); }
     else if(action === 'pin'){ togglePin(id); }
     else if(action === 'edit'){ openEditModal(id); }
     else if(action === 'copy'){
@@ -1082,20 +1160,36 @@ function appendMessageDOM(m) {
         q.onclick = () => { const o = document.getElementById('msg_' + m.replyTo.id); if(o){ o.scrollIntoView({behavior:'smooth', block:'center'}); o.classList.add('search-hit'); setTimeout(()=>o.classList.remove('search-hit'), 2000); } };
         d.appendChild(q);
     }
-    if(m.text) d.append(document.createTextNode(m.text));
+    if(m.text) {
+        // Insert formatted text
+        const textSpan = document.createElement('span');
+        textSpan.innerHTML = formatText(m.text);
+        d.appendChild(textSpan);
+    }
     if(m.edited){ const ed = document.createElement('span'); ed.className='edited-tag'; ed.textContent='(edited)'; d.appendChild(ed); }
+    
     if(m.url){ 
         const mediaWrap = document.createElement('div');
         mediaWrap.style.cssText = 'position:relative; display:inline-block; margin-top:6px;';
         const dlBtn = document.createElement('div');
         dlBtn.innerHTML = '⬇️';
         dlBtn.style.cssText = 'position:absolute; top:5px; right:5px; background:rgba(255,255,255,0.8); border-radius:50%; width:28px; height:28px; display:flex; align-items:center; justify-content:center; cursor:pointer; z-index:10; font-size:14px; box-shadow:0 2px 5px rgba(0,0,0,0.2);';
-        dlBtn.onclick = (e) => { e.stopPropagation(); downloadMedia(m.url, m.id); };
+        dlBtn.onclick = (e) => { e.stopPropagation(); downloadMedia(m.url, m.id, m.fileName); };
         mediaWrap.appendChild(dlBtn);
-        if(m.type==='video' || m.url.startsWith('data:video')){
+        
+        if(m.type==='video' || (m.url && m.url.startsWith('data:video'))){
             const vid = document.createElement('video'); vid.src=m.url; vid.controls=true; vid.style.cssText='display:block;max-width:200px;border-radius:12px;border:2px solid white;'; 
             vid.onload = () => scrollToBottom();
             mediaWrap.appendChild(vid);
+        } else if (m.type === 'document') {
+            mediaWrap.appendChild((() => {
+                const docDiv = document.createElement('a');
+                docDiv.href = m.url;
+                docDiv.download = m.fileName || 'document';
+                docDiv.className = 'doc-card';
+                docDiv.innerHTML = `<div class="doc-icon">📄</div><div class="doc-info"><div class="doc-name">${esc(m.fileName || 'Document')}</div><div class="doc-size">Tap to download</div></div>`;
+                return docDiv;
+            })());
         } else {
             const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:160px;border-radius:12px;border:2px solid white;'; 
             img.onload = () => scrollToBottom();
@@ -1132,6 +1226,9 @@ function appendMessageDOM(m) {
   d.id = 'msg_' + m.id;
   if(m.pinned){
     const pin = document.createElement('div'); pin.className='pin-indicator'; pin.textContent='📌'; d.appendChild(pin);
+  }
+  if(m.starred){
+    const star = document.createElement('div'); star.className='star-indicator'; star.textContent='⭐'; d.appendChild(star);
   }
   
   let pressTimer, startX, startY;
@@ -1173,6 +1270,13 @@ function render(){
 }
 function addMessage(o){
   if(!o.id) o.id=uid(); if(!o.ts) o.ts=Date.now(); if(msgs.some(x=>x.id===o.id)) return;
+  
+  // Disappearing messages logic
+  if(isDisappearing && o.type !== 'call') {
+      o.expiresAt = Date.now() + 86400000; // 24 Hours
+      o.isDisappearing = true;
+  }
+
   const r=!!o.__remote; delete o.__remote; msgs.push(o); save(); 
   if($('chatScreen').classList.contains('open')){ appendMessageDOM(o); scrollToBottom(); }
   if(!r){ if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'messages/'+o.id),o).catch(()=>{}); if(bc) bc.postMessage({type:'new'}); }
@@ -1182,7 +1286,7 @@ function addMessage(o){
           unreadCount++;
           document.title = `(${unreadCount}) Premium Chat`;
           if (navigator.setAppBadge) navigator.setAppBadge(unreadCount).catch(()=>{});
-          showNotification(peerName, `(${unreadCount}) ` + (o.text||(o.type==='audio'?'🎤 Voice message':o.type==='video'?'🎥 Video':o.type==='call'?'📞 Call':'📷 Photo')), peerAvatar); 
+          showNotification(peerName, `(${unreadCount}) ` + (o.text||(o.type==='audio'?'🎤 Voice message':o.type==='video'?'🎥 Video':o.type==='document'?'📄 Document':o.type==='call'?'📞 Call':'📷 Photo')), peerAvatar); 
       }
       else scrollToBottom(); 
   }
@@ -1208,11 +1312,14 @@ function addCallLog(callType, status, callerId, duration){
 window.handleMediaUpload = (e) => {
     const f = e.target.files[0];
     if(!f) return;
-    if(f.size > 2 * 1024 * 1024) return alert("File too large! Max 2MB.");
+    if(f.size > 5 * 1024 * 1024) return alert("File too large! Max 5MB.");
     const r = new FileReader();
     r.onload = () => {
-        const type = f.type.startsWith('video/') ? 'video' : 'image';
-        const msg = {type: type, url: r.result, from: ROLE, sender: currentUser, seen: false};
+        let type = 'document';
+        if(f.type.startsWith('video/')) type = 'video';
+        else if(f.type.startsWith('image/')) type = 'image';
+        
+        const msg = {type: type, url: r.result, fileName: f.name, from: ROLE, sender: currentUser, seen: false};
         if(replyState){ msg.replyTo = { id: replyState.id, text: replyState.text, sender: replyState.sender }; replyState = null; $('replyPreview').classList.remove('show'); }
         addMessage(msg);
         if(!$('chatScreen').classList.contains('open')) openChat();
@@ -1274,7 +1381,11 @@ function renderTruth(){
         label.style.cssText='color:#b84f91;font-size:11px;display:block;margin-bottom:4px;'; 
         label.textContent=`📖 ${esc(m.sender||(m.from===ROLE?currentUser:peerName))}`; 
         d.appendChild(label); 
-        if(m.text) d.append(document.createTextNode(m.text)); 
+        if(m.text) {
+            const textSpan = document.createElement('span');
+            textSpan.innerHTML = formatText(m.text);
+            d.appendChild(textSpan);
+        }
         if(m.url){ const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:160px;border-radius:12px;margin-top:6px;border:2px solid white;'; d.append(img);} 
         const tspan=document.createElement('span'); tspan.className='msg-time'; tspan.textContent=new Date(m.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); d.appendChild(tspan);
         d.id = 'truth_' + m.id; 
@@ -1359,24 +1470,28 @@ function attachFB(){
   if(!window.FB) return; const {db,ref,onChildAdded,onValue,onChildChanged,onChildRemoved,set,remove,onDisconnect}=window.FB;
   onValue(ref(db,'messages'), snap => {
       const all = snap.val() || {};
-      const arr = Object.values(all).sort((a,b) => (a.ts||0) - (b.ts||0));
+      const now = Date.now();
+      const arr = Object.values(all)
+          .filter(m => !m.expiresAt || m.expiresAt > now) // Filter out expired
+          .sort((a,b) => (a.ts||0) - (b.ts||0));
+          
       const known = new Set(msgs.map(m => m.id));
       const trulyNew = arr.filter(m => !known.has(m.id));
       const changed = arr.filter(m => known.has(m.id));
       const oldCache = {};
-      msgs.forEach(m => { oldCache[m.id] = { reactions: JSON.stringify(m.reactions||{}), text: m.text||'', edited: !!m.edited, pinned: !!m.pinned }; });
+      msgs.forEach(m => { oldCache[m.id] = { reactions: JSON.stringify(m.reactions||{}), text: m.text||'', edited: !!m.edited, pinned: !!m.pinned, starred: !!m.starred }; });
       msgs = arr; save();
       if ($('chatScreen').classList.contains('open')) {
           changed.forEach(m => {
               const o = oldCache[m.id] || {};
-              if(o.reactions !== JSON.stringify(m.reactions||{}) || o.text !== (m.text||'') || o.edited !== !!m.edited || o.pinned !== !!m.pinned) {
+              if(o.reactions !== JSON.stringify(m.reactions||{}) || o.text !== (m.text||'') || o.edited !== !!m.edited || o.pinned !== !!m.pinned || o.starred !== !!m.starred) {
                   appendMessageDOM(m);
               }
           });
           trulyNew.forEach(m => { if (m.from === PEER && !m.seen && window.FB) window.FB.set(window.FB.ref(window.FB.db, 'messages/' + m.id + '/seen'), true).catch(()=>{}); appendMessageDOM(m); });
           scrollToBottom();
       } else {
-          trulyNew.forEach(m => { if (m.from === PEER) { unreadCount++; document.title = `(${unreadCount}) Premium Chat`; if (navigator.setAppBadge) navigator.setAppBadge(unreadCount).catch(()=>{}); showNotification(peerName, `(${unreadCount}) ` + (m.text || (m.type==='audio'?'🎤 Voice':m.type==='video'?'🎥 Video':m.type==='call'?'📞 Call':'📷 Photo')), peerAvatar); } });
+          trulyNew.forEach(m => { if (m.from === PEER) { unreadCount++; document.title = `(${unreadCount}) Premium Chat`; if (navigator.setAppBadge) navigator.setAppBadge(unreadCount).catch(()=>{}); showNotification(peerName, `(${unreadCount}) ` + (m.text || (m.type==='audio'?'🎤 Voice':m.type==='video'?'🎥 Video':m.type==='document'?'📄 Doc':m.type==='call'?'📞 Call':'📷 Photo')), peerAvatar); } });
       }
       updatePinnedBar();
   });

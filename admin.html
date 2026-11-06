@@ -13,7 +13,6 @@ if (!String(firebaseConfig.apiKey).includes('EXAMPLE')) { try { const app = init
 window.__fbReady = true; window.dispatchEvent(new Event('fb-ready'));
 </script>
 <style>
-/* Premium Pastel UI (No Green) */
 :root{--text:#201a35; --primary:#a5aaff; --secondary:#e5a6f7; --navy:#16213E; --navy-light:#1A1A2E; --danger:#ef4444;}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:Inter,sans-serif;margin:0;padding:0;}
 body{min-height:100dvh;display:flex;justify-content:center;align-items:center;background:radial-gradient(ellipse at 5% 5%,#ffe6d9,transparent 40%),radial-gradient(ellipse at 95% 15%,#d9c8ff,transparent 40%),radial-gradient(ellipse at 50% 100%,#ffcfe4,transparent 45%),linear-gradient(145deg,#f9edf8,#e9e6ff,#fff0e8);background-attachment:fixed;color:var(--text);overflow:hidden;}
@@ -24,7 +23,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .app-ic{width:52px;height:52px;flex-shrink:0;border-radius:16px;background:linear-gradient(145deg,#fff,#f8dfff,#d9d7ff);border:3px solid white;box-shadow:0 7px 0 #e3d3ef,0 12px 25px rgba(130,80,170,.18);display:flex;justify-content:center;align-items:center;position:relative;}
 .app-ic::before{content:'';width:28px;height:22px;border-radius:12px 12px 12px 4px;background:linear-gradient(135deg,#ffb8d4,#d2a1ff,#91baff);box-shadow:0 4px 0 rgba(100,60,130,.15);}
 .head-title{font-size:clamp(23px,6vw,28px);font-weight:800;letter-spacing:-1px;color:#211a35;}
-.menu-btn{font-size:26px;font-weight:900;cursor:pointer;color:#211a35;padding:5px 10px;}
+.menu-btn{font-size:26px;font-weight:900;cursor:pointer;color:#211a35;padding:5px 10px;position:relative;}
 
 #loginScreen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;}
 #loginScreen h2{font-size:24px;font-weight:800;color:#211a35;margin-bottom:10px;}
@@ -64,10 +63,18 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .q3d{width:64px;height:52px;border-radius:17px;display:flex;justify-content:center;align-items:center;}
 .q3d svg{width:28px;height:28px;stroke:white;}.qc b{font-size:13px;font-weight:800;color:#29213d;}
 .unread-badge{position:absolute;top:-5px;right:-5px;background:#ef4444;color:#fff;font-size:10px;font-weight:900;min-width:19px;height:19px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:2px solid white;padding:0 3px;z-index:5;}
-.bottom{flex-shrink:0;margin:auto 13px 14px;padding:8px;gap:10px;border-radius:25px;background:rgba(255,255,255,.8);border:2px solid white;box-shadow:0 8px 0 #e8dbe9;display:flex; justify-content:center;}
-.bt{min-height:66px;padding:10px 30px;border-radius:19px;font-size:12px;font-weight:900;gap:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;}
+
+/* WhatsApp Style Bottom Nav */
+.bottom{flex-shrink:0;margin:auto 13px 14px;padding:6px;gap:4px;border-radius:25px;background:rgba(255,255,255,.9);border:2px solid white;box-shadow:0 8px 0 #e8dbe9;display:flex;justify-content:space-around;align-items:center;}
+.bt{min-height:56px;padding:6px 12px;border-radius:16px;font-size:11px;font-weight:800;gap:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:#555;flex:1;transition:0.2s;}
 .bt.active{background:linear-gradient(145deg,#ffe4ed,#ffc8df);color:#b84f91;border:2px solid white;}
-.bt .ico{font-size:23px;}
+.bt .ico{font-size:20px;}
+
+/* Dropdown Menu for Profile Actions */
+#dropdownMenu { position: absolute; right: 20px; top: 75px; background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: none; flex-direction: column; z-index: 1000; border: 2px solid #f0e2f4; overflow: hidden; min-width: 150px; }
+#dropdownMenu button { padding: 12px 16px; border: none; background: none; text-align: left; font-weight: 700; font-size: 13px; cursor: pointer; color: #333; }
+#dropdownMenu button:hover { background: #f9edf8; }
+
 .chat-screen,.truth-screen,.admin-screen,.love-screen{position:absolute;inset:0;z-index:10;display:none;flex-direction:column;overflow:hidden;background:#fffafc;}
 .chat-screen.open,.truth-screen.open,.admin-screen.open,.love-screen.open{display:flex;}
 .chat-screen { background: linear-gradient(135deg, #f6f0fa 0%, #fdf5f7 50%, #eef2ff 100%); }
@@ -304,8 +311,18 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 
 <div class="phone">
   <div class="head">
-    <div class="head-left"><div class="app-ic"></div><div class="head-title">Premium Chat</div></div>
-    <div class="menu-btn" onclick="openReportModal()" aria-label="Report or menu">⋮</div>
+    <div class="head-left"><div class="app-ic"></div><div class="head-title">WhatsApp</div></div>
+    <div class="menu-btn" onclick="toggleDropdownMenu(event)" aria-label="Menu">⋮</div>
+  </div>
+
+  <!-- Profile Menu Dropdown -->
+  <div id="dropdownMenu">
+    <button onclick="openProfileModal(); closeDropdown();">✏️ Edit Profile</button>
+    <button onclick="openAdmin(); closeDropdown();">⚙️ Admin Tools</button>
+    <button onclick="openTruth(); closeDropdown();">📖 Seek the Truth</button>
+    <button onclick="openCalendar(); closeDropdown();">📅 Calendar</button>
+    <button onclick="openLoveScreen(); closeDropdown();">🩷 Love Level</button>
+    <button onclick="logout(); closeDropdown();" style="color:#ef4444;">🚪 Log Out</button>
   </div>
 
   <div id="homeTab" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
@@ -323,14 +340,17 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
         <div style="padding:8px 12px;background:linear-gradient(145deg,#a5aaff,#e5a6f7);color:white;border-radius:12px;font-size:11px;font-weight:800;border:2px solid white;">✏️ Edit</div>
       </div>
       
-      <!-- STATUS SECTION -->
-      <div class="status-section" id="statusSection"></div>
-
+      <!-- QUICK STATS MOVED DOWN -->
       <div class="stats">
         <div class="stat" onclick="openCalendar()"><div class="s3d m1" style="background:#ffb88a;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span class="lbl">Calendar</span><b class="num" id="reminderCount">0</b></div>
         <div class="stat" onclick="openLoveScreen()"><div class="heart-3d-container"><svg class="heart-base-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><div class="ecg-overlay"><svg class="ecg-svg" viewBox="0 0 100 50" preserveAspectRatio="none"><path class="ecg-line" d="M0,25 L20,25 L25,10 L30,40 L35,25 L50,25 L55,5 L60,45 L65,25 L80,25 L85,15 L90,30 L95,25 L100,25" /></svg></div></div><span class="lbl">Love Level</span><b class="num" id="loveLevel">70%</b></div>
         <div class="stat" onclick="openTruth()"><div class="s3d m3" style="background:#68aaff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><span class="lbl">Seek the Truth</span><b class="num" style="font-size:11px;">Bible</b></div>
       </div>
+
+      <!-- STATUS SECTION BELOW STATS (WHATSAPP STYLE) -->
+      <div class="q-head" style="margin-top:15px; font-size:16px;">Updates & Status</div>
+      <div class="status-section" id="statusSection"></div>
+
       <div class="q-head">Quick Actions</div>
       <div class="quick">
         <div class="qc" onclick="openChat()"><span class="unread-badge" id="unreadBadge" style="display:none;">0</span><div class="q3d qm1" style="background:#b98aff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><b>Messages</b></div>
@@ -341,8 +361,12 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     </div>
   </div>
 
+  <!-- WHATSAPP STYLE BOTTOM NAVIGATION (Chats, Updates, Communities, Calls) -->
   <div class="bottom" id="bottomNav" style="display:none;">
-    <div class="bt active" id="bAdmin" onclick="openAdmin()"><span class="ico">⚙️</span>ADMIN TOOLS</div>
+    <div class="bt active" id="navChats" onclick="switchNavTab('chats')"><span class="ico">💬</span>Chats</div>
+    <div class="bt" id="navUpdates" onclick="switchNavTab('updates')"><span class="ico">⭕</span>Updates</div>
+    <div class="bt" id="navCommunities" onclick="switchNavTab('communities')"><span class="ico">👥</span>Communities</div>
+    <div class="bt" id="navCalls" onclick="switchNavTab('calls')"><span class="ico">📞</span>Calls</div>
   </div>
 
   <div class="chat-screen" id="chatScreen">
@@ -764,6 +788,34 @@ window.saveProfile=()=>{
     $('profileModal').style.display='none'; checkLogin();
 };
 $('avatarInp').onchange=e=>{ const f=e.target.files[0]; if(!f)return; compressImage(f, 400, 0.8).then(dataUrl=>{ currentAvatar=dataUrl; $('profileAvatarPreview').innerHTML=`<img src="${esc(currentAvatar)}" style="width:100%;height:100%;object-fit:cover;">`; $('userAvatar').innerHTML=avatarHTML(currentUser,currentAvatar,68)+'<div class="profile-online"></div>'; lsSet('chat_user_avatar',currentAvatar); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'profiles/'+ROLE+'/avatar'),currentAvatar).catch(()=>{}); }).catch(()=>toast('Image load failed','error')); };
+
+/* WhatsApp Navigation Tabs Handler */
+window.switchNavTab = (tab) => {
+    document.querySelectorAll('.bottom .bt').forEach(el => el.classList.remove('active'));
+    if(tab === 'chats') {
+        $('navChats').classList.add('active');
+        openChat();
+    } else if(tab === 'updates') {
+        $('navUpdates').classList.add('active');
+        if(peerStatusObj) openStatusViewer('peer');
+        else { toast('No updates available yet', 'info'); }
+    } else if(tab === 'communities') {
+        $('navCommunities').classList.add('active');
+        openTruth();
+    } else if(tab === 'calls') {
+        $('navCalls').classList.add('active');
+        startCall('voice');
+    }
+};
+
+/* Dropdown Menu Toggle */
+window.toggleDropdownMenu = (e) => {
+    e.stopPropagation();
+    const menu = $('dropdownMenu');
+    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+};
+window.closeDropdown = () => { $('dropdownMenu').style.display = 'none'; };
+window.addEventListener('click', () => { closeDropdown(); });
 
 window.openChat=()=>{
     if($('chatScreen').classList.contains('open')) return;

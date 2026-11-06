@@ -14,6 +14,7 @@ window.__fbReady = true;
 window.dispatchEvent(new Event('fb-ready'));
 </script>
 <style>
+/* CSS - Unchanged except for Call Minimize fixes */
 :root{--text:#201a35; --primary:#a5aaff; --secondary:#e5a6f7; --navy:#16213E; --navy-light:#1A1A2E; --danger:#ef4444;}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:Inter,sans-serif;margin:0;padding:0;}
 body{min-height:100dvh;display:flex;justify-content:center;align-items:center;background:radial-gradient(ellipse at 5% 5%,#ffe6d9,transparent 40%),radial-gradient(ellipse at 95% 15%,#d9c8ff,transparent 40%),radial-gradient(ellipse at 50% 100%,#ffcfe4,transparent 45%),linear-gradient(145deg,#f9edf8,#e9e6ff,#fff0e8);background-attachment:fixed;color:var(--text);overflow:hidden;}
@@ -157,10 +158,10 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 
 /* WhatsApp Style Call Overlay */
 #callOverlay{background:linear-gradient(135deg, #1A1A2E 0%, #16213E 50%, #0f0f1e 100%);position:fixed;inset:0;z-index:9998;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:12px;transition:all 0.3s ease;}
-#callOverlay.minimized { top: 10px; left: 10px; right: auto; bottom: auto; width: 120px; height: 180px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 99999; cursor: grab; border: 2px solid rgba(255,255,255,0.2); }
+#callOverlay.minimized { top: 10px; left: 10px; right: auto; bottom: auto; width: 120px; height: 180px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 99999; cursor: grab; border: 2px solid rgba(255,255,255,0.2); background: #000; }
 #callOverlay.minimized .call-avatar, #callOverlay.minimized .call-name-display, #callOverlay.minimized .call-status-text, #callOverlay.minimized .call-timer, #callOverlay.minimized .call-controls, #callOverlay.minimized .call-controls-secondary { display: none !important; }
 #callOverlay.minimized video { border-radius: 18px; object-fit: cover; }
-#callOverlay.minimized #localV { width: 40px; height: 60px; bottom: 10px; right: 10px; border-radius: 8px; display: block !important; }
+#callOverlay.minimized #localV { width: 40px; height: 60px; bottom: 10px; right: 10px; border-radius: 8px; display: block !important; z-index: 10; }
 .call-avatar{width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#a5aaff,#e5a6f7);display:flex;align-items:center;justify-content:center;font-size:48px;font-weight:900;color:white;margin-top:20px;box-shadow:0 20px 50px rgba(165,170,255,0.4);animation:callPulse 2s infinite;position:relative;z-index:1;overflow:hidden;}
 @keyframes callPulse{0%,100%{box-shadow:0 0 0 0 rgba(165,170,255,0.5),0 20px 50px rgba(165,170,255,0.4);}50%{box-shadow:0 0 0 25px rgba(165,170,255,0),0 20px 50px rgba(165,170,255,0.4);}}
 .call-name-display{font-size:24px;font-weight:800;color:white;margin-top:15px;z-index:1;}
@@ -272,7 +273,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .status-footer { padding: 20px; display: flex; justify-content: space-between; align-items: center; }
 .status-user-info { display: flex; align-items: center; gap: 10px; }
 .status-reply { flex: 1; margin-left: 15px; background: rgba(255,255,255,0.1); border-radius: 25px; padding: 10px 15px; border: 1px solid rgba(255,255,255,0.2); color: white; outline: none; }
-.status-views { font-size: 12px; color: #aaa; text-align: center; margin-top: 10px; }
 </style></head><body>
 
 <div id="updateBanner" onclick="applyUpdate()"><span>🔄</span><span>Update Available! Tap to refresh</span></div>
@@ -400,7 +400,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     <div style="margin-top: 30px; color: #888; font-size: 12px;">Tap anywhere for next quote</div>
   </div>
 
-  <!-- WHATSAPP STYLE CALL HISTORY -->
+  <!-- WHATSAPP STYLE CALL HISTORY (FIXED WITH MISSED TAB) -->
   <div class="callhistory-screen" id="callHistoryScreen">
     <div class="cv-head">
       <div class="back-btn" onclick="closeCallHistory()">←</div>
@@ -409,6 +409,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     </div>
     <div class="call-tabs">
       <div class="call-tab active" onclick="filterCallHistory('all', this)">All</div>
+      <div class="call-tab" onclick="filterCallHistory('missed', this)">Missed</div>
     </div>
     <div id="callHistoryList"></div>
   </div>
@@ -421,9 +422,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
           <div><b id="statusViewerName" style="font-size:15px;"></b><div style="font-size:11px;color:#aaa;" id="statusViewerTime"></div></div>
           <div style="margin-left:auto;font-size:24px;cursor:pointer;" onclick="closeStatusViewer()">×</div>
       </div>
-      <div class="status-content" id="statusContent">
-          <!-- Status Image/Text loads here -->
-      </div>
+      <div class="status-content" id="statusContent"></div>
       <div class="status-footer" id="statusFooter">
           <input type="text" class="status-reply" placeholder="Reply...">
       </div>
@@ -463,7 +462,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
   <div id="infinityText">Infinity Level Love 💕</div>
 </div>
 
-<div id="statusViewerOld" style="display:none;"></div> <!-- Deprecated, kept for safety -->
 <div class="modal" id="delSheet" onclick="if(event.target===this)closeDelSheet()"><div class="modal-box" style="padding:0; border-radius:28px; overflow:hidden; border:none; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px);"><button onclick="doDelete('everyone')" style="width:100%;padding:20px;border:none;background:transparent;color:#ff4d4d;font-weight:800;font-size:16px;border-bottom:1px solid #eee;">Delete for Everyone</button><button onclick="doDelete('me')" style="width:100%;padding:20px;border:none;background:transparent;color:#333;font-weight:800;font-size:16px;border-bottom:1px solid #eee;">Delete for Me</button></div></div>
 <div class="modal" id="calendarModal" onclick="if(event.target===this)this.style.display='none'"><div class="modal-box"><h3>Select Date & Reminder</h3><div class="calendar-header"><button onclick="changeMonth(-1)">&lt;</button><span id="calMonthYear"></span><button onclick="changeMonth(1)">&gt;</button></div><div class="calendar-grid" id="calGrid"></div><input type="text" id="reminderInput" class="modal-input" placeholder="Reminder Note..."><button class="modal-btn" onclick="saveReminder()">Save Reminder</button><button class="modal-btn" style="background:#ff6b6b;box-shadow:0 4px 0 #d94a4a;margin-top:10px" onclick="$('calendarModal').style.display='none'">Close</button></div></div>
 <div class="modal" id="profileModal" onclick="if(event.target===this)this.style.display='none'"><div class="modal-box"><h3>Edit Profile</h3><div style="position:relative;width:90px;height:90px;margin:0 auto 15px;border-radius:50%;overflow:hidden;border:4px solid white;box-shadow:0 5px 15px rgba(0,0,0,.1);cursor:pointer;" onclick="$('avatarInp').click()"><div id="profileAvatarPreview" style="width:100%;height:100%;">👤</div></div><input type="text" id="inputName" class="modal-input" placeholder="Your Name..."><textarea id="inputAbout" class="modal-input" rows="2" placeholder="About..."></textarea><button class="modal-btn" onclick="saveProfile()">Save Profile</button><button class="modal-btn" style="background:#22c55e; box-shadow:0 4px 0 #16a34a;" onclick="$('statusInp').click()">+ Add Status (Story)</button><button class="modal-btn" style="background:#ff6b6b;box-shadow:0 4px 0 #d94a4a;" onclick="$('profileModal').style.display='none'">Cancel</button></div></div>
@@ -607,12 +605,6 @@ function getSupportedAudioMime() {
     for (const t of types) { try { if (MediaRecorder.isTypeSupported(t)) return t; } catch(e){} }
     return '';
 }
-function getSupportedVideoMime() {
-    if (!window.MediaRecorder) return '';
-    const types = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm', 'video/mp4'];
-    for (const t of types) { try { if (MediaRecorder.isTypeSupported(t)) return t; } catch(e){} }
-    return '';
-}
 
 let currentUser=localStorage.getItem('chat_username')||'';
 let currentAbout=localStorage.getItem('chat_about')||'Available';
@@ -636,7 +628,7 @@ function updatePeerUI(){
   ['peerAvatar','truthPeerAv','notifyAv'].forEach(id=>{const el=$(id);if(el)el.innerHTML=avatarHTML(peerName,peerAvatar,40);});
   const elCallName = $('callNameDisplay'); if(elCallName) elCallName.textContent = peerName || 'User';
   const elCallAv = $('callAvatar'); if(elCallAv) elCallAv.innerHTML = avatarHTML(peerName, peerAvatar, 120);
-  if(peerStatus) { $('peerStatusRing').style.border = '3px solid #ff9a9e'; $('truthStatusRing').style.border = '3px solid #ff9a9e'; }
+  if(peerStatusObj) { $('peerStatusRing').style.border = '3px solid #ff9a9e'; $('truthStatusRing').style.border = '3px solid #ff9a9e'; }
   else { $('peerStatusRing').style.border = '2px solid white'; $('truthStatusRing').style.border = '2px solid white'; }
   const statusText = peerState.online ? 'Online' : 'Offline'; const statusColor = peerState.online ? '#4ade80' : '#aaa';
   if(!$('typingIndicator').textContent.includes('typing')) {
@@ -658,7 +650,6 @@ function renderStatusSection() {
     const container = $('statusSection');
     container.innerHTML = '';
     
-    // 1. My Status
     const myDiv = document.createElement('div'); myDiv.className = 'status-item'; myDiv.onclick = () => { if(myStatus) openStatusViewer('my'); else $('addStatusModal').style.display='flex'; };
     const myRing = document.createElement('div'); myRing.className = 'status-ring';
     myRing.innerHTML = avatarHTML(currentUser, currentAvatar, 64) + '<div class="add-icon">+</div>';
@@ -666,7 +657,6 @@ function renderStatusSection() {
     myDiv.appendChild(myRing); myDiv.appendChild(document.createTextNode('My Status'));
     container.appendChild(myDiv);
 
-    // 2. Peer Status
     if(peerStatusObj) {
         const pDiv = document.createElement('div'); pDiv.className = 'status-item'; pDiv.onclick = () => openStatusViewer('peer');
         const pRing = document.createElement('div'); pRing.className = 'status-ring';
@@ -685,15 +675,20 @@ window.uploadTextStatus = () => {
 window.uploadMediaStatus = async (e) => {
     const f = e.target.files[0]; if(!f) return; e.target.value = '';
     try {
-        const type = f.type.startsWith('video') ? 'video' : 'image';
-        const reader = new FileReader();
-        reader.onload = () => {
-            const status = { type: type, content: reader.result, ts: Date.now() };
-            if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'statuses/' + ROLE), status).catch(()=>{});
+        if(f.type.startsWith('image/')) {
+            const dataUrl = await compressImage(f, 1080, 0.7); 
+            const status = { type: 'image', content: dataUrl, ts: Date.now() }; 
+            if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'statuses/' + ROLE), status).catch(()=>{}); 
             $('addStatusModal').style.display='none'; alert('Status posted!');
-        };
-        if(type==='image') { const dataUrl = await compressImage(f, 1080, 0.7); const status = { type: 'image', content: dataUrl, ts: Date.now() }; if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'statuses/' + ROLE), status).catch(()=>{}); $('addStatusModal').style.display='none'; alert('Status posted!'); }
-        else reader.readAsDataURL(f);
+        } else {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const status = { type: 'video', content: reader.result, ts: Date.now() };
+                if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'statuses/' + ROLE), status).catch(()=>{});
+                $('addStatusModal').style.display='none'; alert('Status posted!');
+            };
+            reader.readAsDataURL(f);
+        }
     } catch(err) { alert('Error: ' + err.message); }
 };
 
@@ -711,11 +706,10 @@ window.openStatusViewer = (type) => {
     else if(st.type === 'image') content.innerHTML = `<img src="${st.content}" class="status-media-content">`;
     else if(st.type === 'video') content.innerHTML = `<video src="${st.content}" class="status-media-content" autoplay controls></video>`;
     
-    // Progress Bar Animation
     $('statusProgress').innerHTML = '<div class="status-progress-bar" id="activeBar"></div>';
     setTimeout(() => { $('activeBar').style.width = '100%'; }, 50);
     clearTimeout(statusTimer);
-    statusTimer = setTimeout(() => { closeStatusViewer(); }, 5000); // 5 sec per status
+    statusTimer = setTimeout(() => { closeStatusViewer(); }, 5000);
 };
 window.closeStatusViewer = () => {
     $('statusViewerScreen').classList.remove('open');
@@ -723,16 +717,36 @@ window.closeStatusViewer = () => {
     $('statusProgress').innerHTML = '';
 };
 
-// --- WHATSAPP CALL OVERLAY ---
 window.toggleMinimizeCall = () => {
     const overlay = $('callOverlay');
     overlay.classList.toggle('minimized');
     if(overlay.classList.contains('minimized')){
-        overlay.style.top = '20px'; overlay.style.left = '20px';
+        overlay.style.top = '20px'; overlay.style.left = '20px'; overlay.style.right = 'auto'; overlay.style.bottom = 'auto'; overlay.style.transform = 'none';
+        makeCallOverlayDraggable(overlay);
     } else {
-        overlay.style.top = '0'; overlay.style.left = '0';
+        overlay.style.top = '0'; overlay.style.left = '0'; overlay.style.right = '0'; overlay.style.bottom = '0'; overlay.style.transform = 'none';
     }
 };
+
+function makeCallOverlayDraggable(el) {
+    let isDragging = false, startX, startY, currentX = 0, currentY = 0;
+    el.addEventListener('pointerdown', (e) => {
+        if(!el.classList.contains('minimized')) return;
+        isDragging = true;
+        const rect = el.getBoundingClientRect();
+        startX = e.clientX - rect.left; startY = e.clientY - rect.top;
+        el.style.cursor = 'grabbing';
+    });
+    document.addEventListener('pointermove', (e) => {
+        if (!isDragging) return;
+        e.preventDefault();
+        let newX = e.clientX - startX; let newY = e.clientY - startY;
+        const maxX = window.innerWidth - el.offsetWidth; const maxY = window.innerHeight - el.offsetHeight;
+        newX = Math.max(0, Math.min(newX, maxX)); newY = Math.max(0, Math.min(newY, maxY));
+        el.style.left = newX + 'px'; el.style.top = newY + 'px'; el.style.right = 'auto'; el.style.bottom = 'auto';
+    });
+    document.addEventListener('pointerup', () => { isDragging = false; el.style.cursor = 'grab'; });
+}
 
 // --- APP LOGIC ---
 window.openReportModal = () => { $('reportInput').value = ''; $('reportModal').style.display = 'flex'; };
@@ -783,7 +797,7 @@ window.closeTruthScreen=()=>{ $('truthScreen').classList.remove('open'); history
 window.openAdmin=()=>{ if($('adminScreen').classList.contains('open')) return; $('adminScreen').classList.add('open'); history.pushState({screen: 'admin'}, ''); };
 window.closeAdminScreen=()=>{ $('adminScreen').classList.remove('open'); history.back(); };
 window.openLoveScreen=()=>{ if($('loveScreen').classList.contains('open')) return; $('loveScreen').classList.add('open'); history.pushState({screen: 'love'}, ''); renderQuote(); };
-window.viewStatus=()=>{ if(peerStatus) { $('statusImage').src=peerStatus; $('statusViewerOld').style.display='flex'; } else { alert('No Status'); } }; // Legacy fallback
+window.viewStatus=()=>{ if(peerStatusObj) { openStatusViewer('peer'); } };
 window.closeSubTab=()=>{ $('adminSubTab').classList.remove('open'); history.back(); };
 
 window.addEventListener('popstate', (e) => {
@@ -1013,7 +1027,15 @@ window.doDelete=(mode)=>{
     }
 };
 
-window.openCallHistory = () => { if ($('callHistoryScreen').classList.contains('open')) return; $('callHistoryScreen').classList.add('open'); history.pushState({screen: 'callhistory'}, ''); renderCallHistory('all'); };
+// ✅ FIX: Call History Functions
+window.openCallHistory = () => { 
+    if ($('callHistoryScreen').classList.contains('open')) return; 
+    $('callHistoryScreen').classList.add('open'); 
+    document.querySelectorAll('.call-tab').forEach(t => t.classList.remove('active')); 
+    document.querySelectorAll('.call-tab')[0].classList.add('active'); 
+    history.pushState({screen: 'callhistory'}, ''); 
+    renderCallHistory('all'); 
+};
 window.closeCallHistory = () => { $('callHistoryScreen').classList.remove('open'); history.back(); };
 
 function getDayLabel(ts) { const d = new Date(ts); const today = new Date(); const yest = new Date(); yest.setDate(yest.getDate() - 1); if (d.toDateString() === today.toDateString()) return 'Today'; if (d.toDateString() === yest.toDateString()) return 'Yesterday'; return d.toLocaleDateString([], {day:'2-digit', month:'short', year:'numeric'}); }
@@ -1159,16 +1181,8 @@ function attachFB(){
 
   onValue(ref(db,'statuses'), snap => {
       const all = snap.val() || {}; const now = Date.now(); const LIMIT = 24 * 60 * 60 * 1000;
-      if(all[PEER]) { 
-          if(now - all[PEER].ts < LIMIT) peerStatusObj = all[PEER]; 
-          else peerStatusObj = null; 
-      } else peerStatusObj = null;
-      
-      if(all[ROLE]) {
-          if(now - all[ROLE].ts < LIMIT) myStatus = all[ROLE];
-          else myStatus = null;
-      } else myStatus = null;
-      
+      if(all[PEER]) { if(now - all[PEER].ts < LIMIT) peerStatusObj = all[PEER]; else peerStatusObj = null; } else peerStatusObj = null;
+      if(all[ROLE]) { if(now - all[ROLE].ts < LIMIT) myStatus = all[ROLE]; else myStatus = null; } else myStatus = null;
       renderStatusSection();
   });
 
@@ -1196,7 +1210,7 @@ function attachFB(){
 
   onValue(ref(db,'truth_messages'), snap => { const all = snap.val() || {}; const deletedTruth = getDeletedTruth(); truthMsgs = Object.values(all).filter(m => !deletedTruth.has(m.id)).sort((a,b) => (a.ts||0) - (b.ts||0)); saveTruth(); if($('truthScreen').classList.contains('open')) renderTruth(); });
   onValue(ref(db,'love_quotes'), s => { if(s.val() && Array.isArray(s.val())) { loveQuotes = s.val(); renderQuote(); } });
-  onValue(ref(db,'statuses/'+PEER), s => { peerStatus = s.val() ? 'true' : ''; updatePeerUI(); }); // Just indicating ring presence
+  onValue(ref(db,'statuses/'+PEER), s => { peerStatus = s.val() ? 'true' : ''; updatePeerUI(); });
   
   onValue(ref(db,'profiles/'+PEER),s=>{
       const p=s.val(); if(p){ if(p.name)peerName=p.name; if(p.avatar)peerAvatar=p.avatar; peerState.online=!!p.online;

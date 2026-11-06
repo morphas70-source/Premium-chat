@@ -3,8 +3,8 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" content="#008069"><meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="manifest-admin.json">
-<title>Chat Admin</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Premium Chat - Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getDatabase, ref, set, update, onValue, remove, onDisconnect, get } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -15,34 +15,20 @@ window.__fbReady = true; window.dispatchEvent(new Event('fb-ready'));
 <style>
 /* 🌙 DARK MODE (Default) */
 :root {
-    --bg-main: #0b141a; 
-    --bg-header: #202c33; 
-    --bg-panel: #111b21; 
-    --text-main: #e9edef; 
-    --text-muted: #8696a0; 
-    --whatsapp-green: #00a884; 
-    --bubble-out: #005c4b;
-    --bubble-in: #202c33;
-    --nav-bg: #202c33;
+    --bg-main: #0b141a; --bg-header: #202c33; --bg-panel: #111b21; 
+    --text-main: #e9edef; --text-muted: #8696a0; --whatsapp-green: #00a884; 
+    --bubble-out: #005c4b; --bubble-in: #202c33; --nav-bg: #202c33;
 }
-
 /* ☀️ LIGHT MODE */
 body.light-mode {
-    --bg-main: #efeae2; 
-    --bg-header: #008069; 
-    --bg-panel: #ffffff; 
-    --text-main: #111b21; 
-    --text-muted: #667781; 
-    --whatsapp-green: #00a884; 
-    --bubble-out: #d9fdd3;
-    --bubble-in: #ffffff;
-    --nav-bg: #ffffff;
+    --bg-main: #efeae2; --bg-header: #008069; --bg-panel: #ffffff; 
+    --text-main: #111b21; --text-muted: #667781; --whatsapp-green: #00a884; 
+    --bubble-out: #d9fdd3; --bubble-in: #ffffff; --nav-bg: #ffffff;
 }
-
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:Inter,sans-serif;margin:0;padding:0;}
 body{min-height:100dvh;display:flex;justify-content:center;align-items:center;background:#000;color:var(--text-main);overflow:hidden; transition: background 0.3s;}
 .phone{width:100%;height:100dvh;background:var(--bg-main);overflow:hidden;display:flex;flex-direction:column;position:relative; transition: background 0.3s;}
-@media (min-width: 500px) { body{padding: 20px;} .phone{max-width:420px; height:min(900px, 100dvh); border-radius:38px; border:5px solid #333; box-shadow:0 35px 80px rgba(0,0,0,.8);} .chat-screen, .admin-screen, .callhistory-screen, .status-screen { border-radius: 0 0 33px 33px !important; } }
+@media (min-width: 500px) { body{padding: 20px;} .phone{max-width:420px; height:min(900px, 100dvh); border-radius:38px; border:5px solid #333; box-shadow:0 35px 80px rgba(0,0,0,.8);} .chat-screen, .truth-screen, .admin-screen, .love-screen, .callhistory-screen, .status-screen { border-radius: 0 0 33px 33px !important; } }
 
 /* HEADER */
 .head{padding:15px 20px;display:flex;align-items:center;justify-content:space-between;background:var(--bg-header);color:white; transition: background 0.3s;}
@@ -64,6 +50,14 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .chat-msg { font-size: 13px; color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 180px;}
 .chat-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
 .chat-time { font-size: 12px; color: var(--text-muted); }
+
+/* QUICK ACTIONS (Love, Calendar, Truth) */
+.quick-actions-row { display: flex; justify-content: space-around; padding: 15px; background: var(--bg-panel); margin: 10px; border-radius: 12px; }
+.qa-btn { display: flex; flex-direction: column; align-items: center; gap: 5px; cursor: pointer; color: var(--text-main); font-size: 11px; font-weight: 600; }
+.qa-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.qa-love { background: linear-gradient(135deg, #ff9a9e, #fecfef); }
+.qa-cal { background: linear-gradient(135deg, #a5aaff, #e5a6f7); }
+.qa-truth { background: linear-gradient(135deg, #68aaff, #cce0ff); }
 
 /* UPDATES TAB (Status) */
 .updates-header { padding: 15px; font-size: 14px; font-weight: 600; color: var(--text-muted); }
@@ -87,8 +81,8 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .fab svg { width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 2.5; }
 
 /* CHAT SCREEN */
-.chat-screen,.admin-screen,.love-screen,.callhistory-screen,.status-screen{position:absolute;inset:0;z-index:20;display:none;flex-direction:column;overflow:hidden;background:var(--bg-main);}
-.chat-screen.open,.admin-screen.open,.love-screen.open,.callhistory-screen.open,.status-screen.open{display:flex;}
+.chat-screen,.admin-screen,.love-screen,.callhistory-screen,.status-screen,.truth-screen{position:absolute;inset:0;z-index:20;display:none;flex-direction:column;overflow:hidden;background:var(--bg-main);}
+.chat-screen.open,.admin-screen.open,.love-screen.open,.callhistory-screen.open,.status-screen.open,.truth-screen.open{display:flex;}
 .cv-head{padding:10px 15px;gap:11px;background:var(--bg-header);color:white;display:flex;align-items:center;z-index:10; transition: background 0.3s;}
 .back-btn { font-size: 24px; font-weight: 900; padding-right: 10px; cursor: pointer; color: white; }
 .msgs-area { flex:1; min-height:0; position:relative; overflow:hidden; display:flex; flex-direction:column; }
@@ -105,6 +99,17 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .ig-send-btn{background:var(--whatsapp-green);border:none;color:white;width:44px;height:44px;border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer;flex-shrink: 0;}
 .ig-send-btn svg{width:20px;height:20px;stroke:white;fill:none;margin-left:-2px;stroke-width:2.5;}
 
+/* LOVE METER */
+#loveMeterAdmin { position: absolute; width: 40px; height: 40px; font-size: 32px; cursor: grab; z-index: 20; user-select: none; transition: transform 0.1s; touch-action: none; }
+#loveMeterViewer { position: absolute; width: 40px; height: 40px; font-size: 32px; cursor: grab; z-index: 20; user-select: none; transition: transform 0.1s; touch-action: none; }
+#bigHeartOverlay { position: fixed; inset: 0; background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); z-index: 9999; display: none; flex-direction: column; align-items: center; justify-content: center; }
+.big-heart-container { position: relative; width: 250px; height: 250px; display: flex; align-items: center; justify-content: center; }
+.big-heart-svg { width: 200px; height: 200px; fill: #ff1a66; filter: drop-shadow(0 0 20px rgba(255,26,102,0.6)); }
+.ecg-line-big { position: absolute; width: 100%; height: 100%; stroke: #fff; stroke-width: 4; fill: none; stroke-dasharray: 500; stroke-dashoffset: 500; animation: ecgAnim 1.5s linear infinite; }
+@keyframes ecgAnim { 0% { stroke-dashoffset: 500; } 100% { stroke-dashoffset: 0; } }
+#lovePercentText { font-size: 60px; font-weight: 900; color: white; margin-top: 20px; text-shadow: 0 0 20px #ff1a66; }
+#infinityText { font-size: 24px; font-weight: 800; color: #fff; margin-top: 10px; opacity: 0; transition: opacity 0.5s; text-align: center; }
+
 /* ADMIN TOOLS */
 .admin-space { padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
 .admin-tool-btn { padding: 16px; border-radius: 12px; border: none; background: var(--bg-panel); font-weight: 600; color: var(--text-main); text-align: left; display: flex; align-items: center; gap: 16px; cursor: pointer; }
@@ -116,7 +121,12 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .login-input{width:100%;padding:16px 20px;border-radius:10px;border:none;background:var(--bg-panel);color:var(--text-main);outline:none;font-size:16px;margin-bottom:15px;}
 .login-btn{width:100%;padding:16px;border-radius:10px;border:none;background:var(--whatsapp-green);color:white;font-size:16px;font-weight:700;cursor:pointer;}
 
-/* STATUS VIEWER */
+/* MODALS & STATUS */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:9999;padding:20px;}
+.modal-box{background:var(--bg-panel);width:100%;max-width:340px;border-radius:16px;padding:22px;text-align:center;}
+.modal-box h3{font-size:18px;font-weight:600;color:var(--text-main);margin-bottom:15px;}
+.modal-input{width:100%;padding:14px;border-radius:8px;border:none;background:var(--bg-main);color:var(--text-main);outline:none;margin-bottom:12px;font-family:inherit;font-size:15px;}
+.modal-btn{width:100%;padding:14px;border-radius:8px;background:var(--whatsapp-green);color:white;border:none;font-weight:600;cursor:pointer;margin-top:10px;}
 .status-screen { background: #000; color: white; z-index: 99999; }
 .status-header { display: flex; padding: 15px; align-items: center; gap: 15px; background: linear-gradient(to bottom, rgba(0,0,0,0.8), transparent); position: absolute; top: 0; left: 0; right: 0; z-index: 10; }
 .status-content { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; height: 100%; }
@@ -124,32 +134,40 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .status-progress-bar { height: 100%; background: white; width: 0%; transition: width 0.1s linear; border-radius: 3px; }
 .status-text-content { font-size: 24px; font-weight: 700; text-align: center; padding: 20px; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
 .status-media-content { max-width: 100%; max-height: 100%; object-fit: contain; width: 100%; height: 100vh; }
-.status-footer { position: absolute; bottom: 0; left: 0; right: 0; padding: 15px; display: flex; gap: 10px; align-items: center; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); z-index: 10; }
-.status-reply { flex: 1; background: rgba(255,255,255,0.15); border-radius: 25px; padding: 12px 15px; border: 1px solid rgba(255,255,255,0.2); color: white; outline: none; }
 
-/* MODALS */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.8);display:none;justify-content:center;align-items:center;z-index:9999;padding:20px;}
-.modal-box{background:var(--bg-panel);width:100%;max-width:340px;border-radius:16px;padding:22px;text-align:center;}
-.modal-box h3{font-size:18px;font-weight:600;color:var(--text-main);margin-bottom:15px;}
-.modal-input{width:100%;padding:14px;border-radius:8px;border:none;background:var(--bg-main);color:var(--text-main);outline:none;margin-bottom:12px;font-family:inherit;font-size:15px;}
-.modal-btn{width:100%;padding:14px;border-radius:8px;background:var(--whatsapp-green);color:white;border:none;font-weight:600;cursor:pointer;margin-top:10px;}
+/* CALENDAR */
+.calendar-header { display: flex; justify-content: space-between; align-items: center; font-weight: 800; margin-bottom: 10px; font-size: 18px; color:var(--whatsapp-green); }
+.calendar-header button { background: none; border: none; font-size: 20px; cursor: pointer; color:var(--whatsapp-green); }
+.calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; margin-bottom: 15px; font-size: 12px; font-weight: 600; text-align: center; }
+.calendar-grid div { aspect-ratio: 1; display: flex; justify-content: center; align-items: center; border-radius: 50%; cursor: pointer; }
+.calendar-grid div.active { background: var(--whatsapp-green); color: white; }
+
+/* CALL OVERLAY */
+#callOverlay{background:#0b141a;position:fixed;inset:0;z-index:9998;display:none;flex-direction:column;align-items:center;justify-content:center;padding:16px;gap:12px;}
+.call-avatar{width:120px;height:120px;border-radius:50%;background:#202c33;display:flex;align-items:center;justify-content:center;font-size:48px;color:white;}
+.call-name-display{font-size:24px;font-weight:600;color:white;margin-top:15px;}
+.call-status-text{color:#8696a0;font-size:14px;margin-top:8px;}
+.call-timer{font-size:14px;color:#00a884;font-weight:700;margin-top:6px;display:none;}
+.cbtn{width:60px;height:60px;border-radius:50%;border:none;color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+#callOverlay video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;background:#000;}
+#localV{position:absolute;bottom:130px;right:20px;width:100px;height:140px;object-fit:cover;border-radius:16px;border:2px solid #333;z-index:5;background:#000;}
 </style></head><body>
 
 <div class="phone">
   
   <div id="loginScreen">
-    <h2 style="font-size:24px;margin-bottom:10px;color:var(--text-main);">WhatsApp</h2>
-    <p style="font-size:14px;color:var(--text-muted);margin-bottom:24px;">Enter Username & Password</p>
+    <h2 style="font-size:24px;margin-bottom:10px;color:var(--text-main);">Premium Chat</h2>
+    <p style="font-size:14px;color:var(--text-muted);margin-bottom:24px;">Welcome Admin</p>
     <input type="text" id="usernameInput" class="login-input" placeholder="Username">
     <input type="password" id="passwordInput" class="login-input" placeholder="Password">
-    <button class="login-btn" onclick="login()">Login</button>
+    <button class="login-btn" onclick="login()">Login / Register</button>
   </div>
 
   <div id="appMain" style="display:none; flex-direction:column; height:100%;">
     
     <!-- HEADER -->
     <div class="head">
-      <div class="head-title">WhatsApp</div>
+      <div class="head-title">Premium Chat</div>
       <div style="display:flex; align-items:center;">
         <div class="theme-btn" id="themeBtn" onclick="toggleTheme()">🌙</div>
         <div class="menu-btn" onclick="openAdmin()">⋮</div>
@@ -158,6 +176,12 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 
     <!-- CHATS TAB -->
     <div class="tab-content active" id="tabChats">
+        <div class="quick-actions-row">
+            <div class="qa-btn" onclick="openLoveScreen()"><div class="qa-icon qa-love">💖</div>Love Level</div>
+            <div class="qa-btn" onclick="openCalendar()"><div class="qa-icon qa-cal">📅</div>Calendar</div>
+            <div class="qa-btn" onclick="openTruth()"><div class="qa-icon qa-truth">📖</div>Truth</div>
+        </div>
+        <div class="updates-header" style="padding-bottom:0;">Chats</div>
         <div class="chat-list-item" onclick="openChat()">
             <div class="chat-avatar" id="chatAvatarAdmin"></div>
             <div class="chat-info">
@@ -165,14 +189,12 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
                     <div class="chat-name" id="chatNameAdmin">Viewer</div>
                     <div class="chat-msg" id="chatLastMsg">Tap to open chat</div>
                 </div>
-                <div class="chat-meta">
-                    <div class="chat-time">Now</div>
-                </div>
+                <div class="chat-meta"><div class="chat-time">Now</div></div>
             </div>
         </div>
     </div>
 
-    <!-- UPDATES TAB (Status) -->
+    <!-- UPDATES TAB -->
     <div class="tab-content" id="tabUpdates">
         <div class="updates-header">Status</div>
         <div class="status-list-item" onclick="myStatus ? openStatusViewer('my') : openStatusCamera()">
@@ -188,9 +210,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
         <div class="updates-header" id="recentUpdatesHeader" style="display:none;">Recent updates</div>
         <div id="peerStatusList" style="display:none;">
             <div class="status-list-item" onclick="openStatusViewer('peer')">
-                <div class="status-ring">
-                    <div class="status-ring-inner" id="peerStatusAvatar"></div>
-                </div>
+                <div class="status-ring"><div class="status-ring-inner" id="peerStatusAvatar"></div></div>
                 <div class="status-info">
                     <h4 id="peerStatusName">Viewer</h4>
                     <p id="peerStatusTime">Just now</p>
@@ -206,39 +226,20 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--whatsapp-green)" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
             </div>
             <div class="chat-info">
-                <div class="chat-info-left">
-                    <div class="chat-name">Call History</div>
-                    <div class="chat-msg">View your recent calls</div>
-                </div>
+                <div class="chat-info-left"><div class="chat-name">Call History</div><div class="chat-msg">View your recent calls</div></div>
             </div>
         </div>
     </div>
 
     <!-- BOTTOM NAV -->
     <div class="bottom-nav">
-        <div class="nav-item active" onclick="switchTab('chats', this)">
-            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-            Chats
-        </div>
-        <div class="nav-item" onclick="switchTab('updates', this)">
-            <div style="position:relative;">
-                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-                <div class="badge-dot" id="updatesBadge" style="display:none;"></div>
-            </div>
-            Updates
-        </div>
-        <div class="nav-item" onclick="switchTab('calls', this)">
-            <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-            Calls
-        </div>
+        <div class="nav-item active" onclick="switchTab('chats', this)"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>Chats</div>
+        <div class="nav-item" onclick="switchTab('updates', this)"><div style="position:relative;"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><div class="badge-dot" id="updatesBadge" style="display:none;"></div></div>Updates</div>
+        <div class="nav-item" onclick="switchTab('calls', this)"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>Calls</div>
     </div>
   </div>
 
-  <div class="fab" id="fabNewChat" onclick="openChat()" style="display:none;">
-      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-  </div>
-
-  <!-- CHAT SCREEN -->
+  <!-- CHAT SCREEN (With Love Meter) -->
   <div class="chat-screen" id="chatScreen">
     <div class="cv-head">
       <div class="back-btn" onclick="closeChatScreen()">←</div>
@@ -254,6 +255,8 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     </div>
     <div class="msgs-area">
       <div class="msgs" id="msgsBox"></div>
+      <div id="loveMeterAdmin">🩵</div>
+      <div id="loveMeterViewer">🩷</div>
     </div>
     <div class="ig-input-area">
       <button class="ig-icon-btn" onclick="$('fileInp').click()"><svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
@@ -264,6 +267,26 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     </div>
   </div>
 
+  <!-- TRUTH SCREEN -->
+  <div class="truth-screen" id="truthScreen">
+    <div class="cv-head"><div class="back-btn" onclick="closeTruthScreen()">←</div><div style="flex:1;font-weight:600;color:white;">Seek the Truth</div></div>
+    <div class="msgs" id="truthBox" style="flex:1;"></div>
+    <div class="ig-input-area">
+      <div class="ig-middle"><textarea id="truthInput" placeholder="Write a passage..." rows="1" onkeydown="if(event.key==='Enter' && !event.shiftKey){event.preventDefault();sendTruth();}"></textarea></div>
+      <button class="ig-send-btn" style="display:flex;" onclick="sendTruth()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg></button>
+    </div>
+  </div>
+
+  <!-- LOVE SCREEN -->
+  <div class="love-screen" id="loveScreen" style="background: #1A1A2E; align-items:center; justify-content:center; padding:30px; text-align:center;" onclick="nextQuote()">
+    <div style="background: rgba(255,255,255,0.05); padding: 30px; border-radius: 20px; width: 100%;">
+        <div id="quoteText" style="font-size:20px; font-weight:600; color:#ffe4ed; margin-bottom:20px;"></div>
+        <div id="quoteAuthor" style="font-size:16px; font-weight:800; color:#ff9a9e; text-align:right;"></div>
+    </div>
+    <div style="margin-top: 30px; color: #888; font-size: 12px;">Tap anywhere for next quote</div>
+    <button onclick="closeLoveScreen()" style="position:absolute;top:20px;left:20px;font-size:24px;background:none;border:none;color:white;cursor:pointer;">←</button>
+  </div>
+
   <!-- ADMIN TOOLS -->
   <div class="admin-screen" id="adminScreen">
     <div class="cv-head"><div class="back-btn" onclick="closeAdminScreen()">←</div><div style="font-size:18px; font-weight:600; color:white;">Admin Tools</div></div>
@@ -271,17 +294,17 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
         <button class="admin-tool-btn" onclick="openAdminTab('quotes')"><div class="icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div><div><div class="title">Manage Quotes</div></div></button>
         <button class="admin-tool-btn" onclick="openAdminTab('users')"><div class="icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><div><div class="title">Monitor Users</div></div></button>
         <button class="admin-tool-btn" onclick="openCallHistory()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg></div><div><div class="title">Call History</div></div></button>
+        <button class="admin-tool-btn" onclick="openClearChatModal()"><div class="icon"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></div><div><div class="title">Clear Messages</div></div></button>
+        <button class="admin-tool-btn" onclick="trackLocation()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div><div><div class="title">Track Location</div></div></button>
+        <button class="admin-tool-btn" onclick="openCameraMonitor()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div><div><div class="title">Camera Monitor</div></div></button>
         <button class="admin-tool-btn" onclick="spyMic()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><div><div class="title">Spy Mic</div></div></button>
     </div>
   </div>
 
   <!-- CALL HISTORY -->
   <div class="callhistory-screen" id="callHistoryScreen">
-    <div class="cv-head">
-      <div class="back-btn" onclick="closeCallHistory()">←</div>
-      <div style="font-size:18px;font-weight:600;flex:1; color:white;">Calls</div>
-    </div>
-    <div id="callHistoryList" style="flex:1; overflow-y:auto; padding:20px; text-align:center; color:var(--text-muted);">No call history yet</div>
+    <div class="cv-head"><div class="back-btn" onclick="closeCallHistory()">←</div><div style="font-size:18px;font-weight:600;flex:1; color:white;">Calls</div></div>
+    <div id="callHistoryList" style="flex:1; overflow-y:auto; padding:15px;"></div>
   </div>
 
   <!-- STATUS VIEWER -->
@@ -297,7 +320,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 
 </div>
 
-<!-- ADD STATUS MODAL -->
+<!-- MODALS -->
 <div class="modal" id="addStatusModal" onclick="if(event.target===this)this.style.display='none'">
     <div class="modal-box">
         <h3>Add Status</h3>
@@ -307,14 +330,70 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     </div>
 </div>
 
+<div class="modal" id="calendarModal" onclick="if(event.target===this)this.style.display='none'">
+    <div class="modal-box">
+        <h3>Select Date & Reminder</h3>
+        <div class="calendar-header"><button onclick="changeMonth(-1)">&lt;</button><span id="calMonthYear"></span><button onclick="changeMonth(1)">&gt;</button></div>
+        <div class="calendar-grid" id="calGrid"></div>
+        <input type="text" id="reminderInput" class="modal-input" placeholder="Reminder Note...">
+        <button class="modal-btn" onclick="saveReminder()">Save Reminder</button>
+    </div>
+</div>
+
+<div class="modal" id="clearChatModal" onclick="if(event.target===this)this.style.display='none'">
+  <div class="modal-box">
+    <h3>Clear Messages by Date</h3>
+    <input type="date" id="clearDateInput" class="modal-input">
+    <button class="modal-btn" style="background:#ef4444;" onclick="confirmClearChat()">Clear Messages</button>
+  </div>
+</div>
+
+<div class="modal" id="camMonitorModal" style="background:rgba(0,0,0,0.9);">
+  <div style="width:100%;max-width:400px;display:flex;flex-direction:column;gap:15px;">
+    <h3 style="color:white;text-align:center;">Camera Monitor</h3>
+    <video id="monitorVideo" autoplay playsinline style="width:100%;border-radius:20px;border:3px solid white;background:#000;min-height:300px;object-fit:cover;"></video>
+    <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+      <button class="modal-btn" style="width:auto;padding:10px 20px;background:#22c55e;margin:0;" onclick="startRecordingCam()" id="recBtn">🔴 Record</button>
+      <button class="modal-btn" style="width:auto;padding:10px 20px;background:#f59e0b;margin:0;" onclick="stopRecordingCam()" id="stopRecBtn" disabled>⏹ Stop</button>
+      <button class="modal-btn" style="width:auto;padding:10px 20px;background:#3b82f6;margin:0;" onclick="saveRecordingCam()" id="saveRecBtn" disabled>💾 Save</button>
+      <button class="modal-btn" style="width:auto;padding:10px 20px;background:#ef4444;margin:0;" onclick="closeCameraMonitor()">❌ Close</button>
+    </div>
+  </div>
+</div>
+
+<div id="callOverlay">
+  <div class="call-avatar" id="callAvatar">👤</div>
+  <div class="call-name-display" id="callNameDisplay">Admin</div>
+  <div class="call-status-text" id="callStatus">Ringing...</div>
+  <div class="call-timer" id="callTimer">00:00</div>
+  <video id="remoteV" autoplay playsinline></video>
+  <video id="localV" autoplay muted playsinline></video>
+  <div style="position:absolute;bottom:40px;width:100%;display:flex;justify-content:center;gap:15px;z-index:10;">
+    <button class="cbtn" id="muteBtn" onclick="toggleMute()" style="background:rgba(255,255,255,0.1);"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></button>
+    <button class="cbtn" id="ansBtn" onclick="answerCall()" style="background:#00a884;display:none;"><svg viewBox="0 0 24 24" fill="white"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></button>
+    <button class="cbtn" onclick="endCall()" style="background:#ea4335;"><svg viewBox="0 0 24 24" fill="white" transform="rotate(135 12 12)"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></button>
+  </div>
+</div>
+
+<div id="bigHeartOverlay">
+  <div class="big-heart-container">
+    <svg class="big-heart-svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+    <svg class="ecg-line-big" viewBox="0 0 100 50" preserveAspectRatio="none"><path class="ecg-line" d="M0,25 L20,25 L25,10 L30,40 L35,25 L50,25 L55,5 L60,45 L65,25 L80,25 L85,15 L90,30 L95,25 L100,25" /></svg>
+  </div>
+  <div id="lovePercentText">7%</div>
+  <div id="infinityText">Infinity Level Love 💕</div>
+</div>
+
+<audio id="ringtone" src="https://assets.mixkit.co/active_storage/sfx/1355/1355-preview.mp3" loop></audio>
 <input type="file" id="fileInp" accept="*/*" hidden onchange="handleMediaUpload(event)">
 <input type="file" id="statusFileInp" accept="image/*,video/*" hidden onchange="uploadMediaStatus(event)">
 
 <script>
 const ROLE='admin', PEER='viewer';
 const $=id=>document.getElementById(id);
-const LS_KEY='chat_v19_'+ROLE;
+const LS_KEY='chat_v19_'+ROLE, LS_DELETED='deleted_for_me_'+ROLE;
 let msgs=[], myStatus=null, peerStatusObj=null;
+const pendingMsgs = new Set();
 const uid=()=>Math.random().toString(36).slice(2,10);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -326,15 +405,10 @@ function toggleTheme() {
     $('themeBtn').innerText = isLight ? '🌙' : '☀️';
     document.querySelector('meta[name="theme-color"]').setAttribute('content', isLight ? '#008069' : '#202c33');
 }
-// Load Theme
 if(localStorage.getItem('theme_'+ROLE) === 'light') {
     document.body.classList.add('light-mode');
     $('themeBtn').innerText = '🌙';
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#008069');
-} else {
-    $('themeBtn').innerText = '☀️';
-    document.querySelector('meta[name="theme-color"]').setAttribute('content', '#202c33');
-}
+} else { $('themeBtn').innerText = '☀️'; }
 
 function avatarHTML(name, avatar, size=40){
   if(avatar) return `<img src="${esc(avatar)}" style="width:100%;height:100%;object-fit:cover;">`;
@@ -371,74 +445,61 @@ window.switchTab = (tab, el) => {
     if(tab === 'updates') $('updatesBadge').style.display = 'none';
 };
 
+// STATUS LOGIC
 function renderUpdatesTab() {
     $('myStatusAvatar').innerHTML = avatarHTML(currentUser, currentAvatar, 54);
     if(myStatus) { $('myStatusTime').textContent = new Date(myStatus.ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); } 
     else { $('myStatusTime').textContent = "Tap to add status update"; }
 
     if(peerStatusObj) {
-        $('recentUpdatesHeader').style.display = 'block';
-        $('peerStatusList').style.display = 'block';
+        $('recentUpdatesHeader').style.display = 'block'; $('peerStatusList').style.display = 'block';
         $('peerStatusAvatar').innerHTML = avatarHTML(peerName, peerAvatar, 54);
         $('peerStatusName').textContent = peerName;
         $('peerStatusTime').textContent = new Date(peerStatusObj.ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
         $('updatesBadge').style.display = 'block';
-    } else {
-        $('recentUpdatesHeader').style.display = 'none';
-        $('peerStatusList').style.display = 'none';
-    }
+    } else { $('recentUpdatesHeader').style.display = 'none'; $('peerStatusList').style.display = 'none'; }
 }
-
 window.openStatusCamera = () => { $('addStatusModal').style.display = 'flex'; };
-
 window.uploadTextStatus = () => {
     const text = $('statusTextInput').value.trim(); if(!text) return alert('Type something');
     const status = { type: 'text', content: text, ts: Date.now() };
     if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'statuses/' + ROLE), status).catch(()=>{});
     $('statusTextInput').value = ''; $('addStatusModal').style.display='none';
 };
-
 window.uploadMediaStatus = async (e) => {
     const f = e.target.files[0]; if(!f) return; e.target.value = '';
     try {
         if(f.type.startsWith('image/')) {
-            const dataUrl = await compressImage(f, 1080, 0.7); 
-            const status = { type: 'image', content: dataUrl, ts: Date.now() }; 
+            const dataUrl = await compressImage(f, 1080, 0.7); const status = { type: 'image', content: dataUrl, ts: Date.now() }; 
             if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'statuses/' + ROLE), status).catch(()=>{}); 
             $('addStatusModal').style.display='none';
         } else {
-            const reader = new FileReader();
-            reader.onload = () => {
+            const reader = new FileReader(); reader.onload = () => {
                 const status = { type: 'video', content: reader.result, ts: Date.now() };
                 if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'statuses/' + ROLE), status).catch(()=>{});
                 $('addStatusModal').style.display='none';
-            };
-            reader.readAsDataURL(f);
+            }; reader.readAsDataURL(f);
         }
     } catch(err) { alert('Error: ' + err.message); }
 };
-
 let statusTimer = null;
 window.openStatusViewer = (type) => {
-    const st = type === 'my' ? myStatus : peerStatusObj;
-    if(!st) return;
+    const st = type === 'my' ? myStatus : peerStatusObj; if(!st) return;
     $('statusViewerScreen').classList.add('open');
     $('statusViewerName').textContent = type === 'my' ? 'My Status' : peerName;
     $('statusViewerAv').innerHTML = type === 'my' ? avatarHTML(currentUser, currentAvatar, 40) : avatarHTML(peerName, peerAvatar, 40);
     $('statusViewerTime').textContent = new Date(st.ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-    
     const content = $('statusContent'); content.innerHTML = '';
     if(st.type === 'text') content.innerHTML = `<div class="status-text-content" style="background:${type==='my'?'#005c4b':'#202c33'}">${esc(st.content)}</div>`;
     else if(st.type === 'image') content.innerHTML = `<img src="${st.content}" class="status-media-content">`;
     else if(st.type === 'video') content.innerHTML = `<video src="${st.content}" class="status-media-content" autoplay controls></video>`;
-    
     $('statusProgress').innerHTML = '<div class="status-progress-bar" id="activeBar"></div>';
     setTimeout(() => { $('activeBar').style.width = '100%'; }, 50);
-    clearTimeout(statusTimer);
-    statusTimer = setTimeout(() => { closeStatusViewer(); }, 5000);
+    clearTimeout(statusTimer); statusTimer = setTimeout(() => { closeStatusViewer(); }, 5000);
 };
 window.closeStatusViewer = () => { $('statusViewerScreen').classList.remove('open'); clearTimeout(statusTimer); $('statusProgress').innerHTML = ''; };
 
+// LOGIN
 window.login = async () => {
   const user = $('usernameInput').value.trim(); const pass = $('passwordInput').value.trim();
   if(!user || !pass) return alert('Enter Username and Password');
@@ -455,40 +516,41 @@ window.login = async () => {
 
 function checkLogin(){
   if(currentUser){
-    $('loginScreen').style.display='none'; $('appMain').style.display='flex'; $('fabNewChat').style.display='flex';
-    $('chatNameAdmin').textContent = peerName;
-    $('chatAvatarAdmin').innerHTML = avatarHTML(peerName, peerAvatar, 50);
+    $('loginScreen').style.display='none'; $('appMain').style.display='flex';
+    $('chatNameAdmin').textContent = peerName; $('chatAvatarAdmin').innerHTML = avatarHTML(peerName, peerAvatar, 50);
     if(window.FB) window.FB.update(window.FB.ref(window.FB.db,'profiles/'+ROLE),{name:currentUser,avatar:currentAvatar,online:true}).catch(()=>{});
     renderUpdatesTab();
-  } else { $('loginScreen').style.display='flex'; $('appMain').style.display='none'; $('fabNewChat').style.display='none'; }
+  } else { $('loginScreen').style.display='flex'; $('appMain').style.display='none'; }
 }
 
-window.openChat=()=>{ if($('chatScreen').classList.contains('open')) return; $('chatScreen').classList.add('open'); history.pushState({screen: 'chat'}, ''); render(); $('msgInput').focus(); scrollToBottom(true); };
+// NAVIGATION
+window.openChat=()=>{ $('chatScreen').classList.add('open'); history.pushState({screen: 'chat'}, ''); render(); $('msgInput').focus(); scrollToBottom(true); };
 window.closeChatScreen=()=>{ $('chatScreen').classList.remove('open'); history.back(); };
 window.openAdmin=()=>{ $('adminScreen').classList.add('open'); history.pushState({screen: 'admin'}, ''); };
 window.closeAdminScreen=()=>{ $('adminScreen').classList.remove('open'); history.back(); };
+window.openTruth=()=>{ $('truthScreen').classList.add('open'); history.pushState({screen: 'truth'}, ''); };
+window.closeTruthScreen=()=>{ $('truthScreen').classList.remove('open'); history.back(); };
+window.openLoveScreen=()=>{ $('loveScreen').classList.add('open'); history.pushState({screen: 'love'}, ''); renderQuote(); };
+window.closeLoveScreen=()=>{ $('loveScreen').classList.remove('open'); history.back(); };
 window.viewStatus=()=>{ if(peerStatusObj) openStatusViewer('peer'); };
-window.openAdminTab = (tab) => alert('Under construction: ' + tab);
-window.startCall = (type) => alert('Calling ' + type);
-window.spyMic = () => alert('Spy Mic triggered');
 
 window.addEventListener('popstate', (e) => {
     if ($('chatScreen').classList.contains('open')) $('chatScreen').classList.remove('open');
     if ($('adminScreen').classList.contains('open')) $('adminScreen').classList.remove('open');
     if ($('callHistoryScreen').classList.contains('open')) $('callHistoryScreen').classList.remove('open');
     if ($('statusViewerScreen').classList.contains('open')) closeStatusViewer();
+    if ($('truthScreen').classList.contains('open')) $('truthScreen').classList.remove('open');
+    if ($('loveScreen').classList.contains('open')) $('loveScreen').classList.remove('open');
 });
 
+// CHAT & MESSAGES
 function load(){ try{msgs=JSON.parse(localStorage.getItem(LS_KEY)||'[]');}catch(e){msgs=[];} }
 function save(){ try{localStorage.setItem(LS_KEY,JSON.stringify(msgs.slice(-500)));}catch(e){} }
-
 window.toggleSendBtn=()=>{ const v=$('msgInput').value.trim(); if(v){ $('sendBtn').style.display='flex'; } else { $('sendBtn').style.display='none'; } };
-
 function scrollToBottom(force=false) { const box=$('msgsBox'); if (force || box.scrollHeight - box.scrollTop - box.clientHeight < 150) box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' }); }
 
 function appendMessageDOM(m) {
-  const box=$('msgsBox'); if (box.innerHTML.includes('No messages yet')) box.innerHTML='';
-  const existing = document.getElementById('msg_' + m.id); const d=document.createElement('div');
+  const box=$('msgsBox'); const existing = document.getElementById('msg_' + m.id); const d=document.createElement('div');
   const timeStr = new Date(m.ts||Date.now()).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
   d.className='bub '+(m.from===ROLE?'me':'other');
   if(m.text) { const textSpan = document.createElement('span'); textSpan.innerHTML = esc(m.text); d.appendChild(textSpan); }
@@ -497,9 +559,7 @@ function appendMessageDOM(m) {
   d.id = 'msg_' + m.id;
   if(existing) { existing.replaceWith(d); } else { box.append(d); }
 }
-
-function render(){ $('msgsBox').innerHTML = ''; msgs.forEach(m => appendMessageDOM(m)); }
-
+function render(){ $('msgsBox').innerHTML = ''; msgs.forEach(m => appendMessageDOM(m)); initLoveMeter(); }
 window.sendMsg=()=>{
     const t=$('msgInput').value.trim(); if(!t)return;
     const msg = {id: uid(), type:'text', text:t, from:ROLE, sender:currentUser, seen:false, ts:Date.now()};
@@ -507,39 +567,113 @@ window.sendMsg=()=>{
     $('msgInput').value=''; $('msgInput').style.height='auto'; toggleSendBtn();
     if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'messages/'+msg.id),msg).catch(()=>{});
 };
-
 window.handleMediaUpload = async (e) => {
     const f = e.target.files[0]; if(!f) return; e.target.value = '';
     if (f.type.startsWith('image/')) { const dataUrl = await compressImage(f, 800, 0.7); const msg={id:uid(), type:'image', url:dataUrl, from:ROLE, seen:false, ts:Date.now()}; msgs.push(msg); save(); appendMessageDOM(msg); scrollToBottom(); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'messages/'+msg.id),msg).catch(()=>{}); }
 };
-
 window.onTyping = () => { if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'typing/'+ROLE),{typing:true}).catch(()=>{}); clearTimeout(window.tTimer); window.tTimer = setTimeout(()=>{ if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'typing/'+ROLE),{typing:false}).catch(()=>{}); }, 1500); };
 
-window.openCallHistory = () => { $('callHistoryScreen').classList.add('open'); history.pushState({screen: 'callhistory'}, ''); };
-window.closeCallHistory = () => { $('callHistoryScreen').classList.remove('open'); history.back(); };
+// LOVE METER
+let loveState = { admin: {x: 20, y: 100}, viewer: {x: 300, y: 100} };
+let loveMeterInitialized = false, loveMergeCooldown = false, draggingMeter = false;
+let bigHeartInterval = null, bigHeartTimeout = null;
+function initLoveMeter() {
+    if(loveMeterInitialized) return; const elA = $('loveMeterAdmin'); const elV = $('loveMeterViewer'); if(!elA || !elV) return; loveMeterInitialized = true;
+    elA.style.left = loveState.admin.x + 'px'; elA.style.top = loveState.admin.y + 'px'; elV.style.left = loveState.viewer.x + 'px'; elV.style.top = loveState.viewer.y + 'px';
+    makeDraggableLove(elA, 'admin', elA, elV); makeDraggableLove(elV, 'viewer', elV, elA);
+}
+function makeDraggableLove(el, role, el1, el2) {
+    let isDragging = false, rafId = null, pendingWrite = null;
+    el.addEventListener('pointerdown', e => { isDragging = true; draggingMeter = true; try{ el.setPointerCapture(e.pointerId); }catch(_){} });
+    el.addEventListener('pointermove', e => {
+        if(!isDragging) return; const rect = $('msgsBox').getBoundingClientRect();
+        let x = Math.max(0, Math.min(e.clientX - rect.left - 20, rect.width - 40)); let y = Math.max(0, Math.min(e.clientY - rect.top - 20, rect.height - 40));
+        el.style.left = x + 'px'; el.style.top = y + 'px'; pendingWrite = {x, y};
+        if(!rafId) { rafId = requestAnimationFrame(() => { rafId = null; if(pendingWrite && window.FB) { window.FB.set(window.FB.ref(window.FB.db, 'love_meter/'+role), pendingWrite).catch(()=>{}); pendingWrite = null; } }); }
+        checkLoveMerge(el1, el2);
+    });
+    const finishDrag = (e) => { if(!isDragging) return; isDragging = false; draggingMeter = false; try{ el.releasePointerCapture(e.pointerId); }catch(_){} if(pendingWrite && window.FB) { window.FB.set(window.FB.ref(window.FB.db, 'love_meter/'+role), pendingWrite).catch(()=>{}); pendingWrite = null; } };
+    el.addEventListener('pointerup', finishDrag); el.addEventListener('pointercancel', finishDrag);
+}
+function checkLoveMerge(el1, el2) {
+    if(loveMergeCooldown) return; const r1 = el1.getBoundingClientRect(); const r2 = el2.getBoundingClientRect();
+    const dist = Math.hypot((r1.left + r1.width/2) - (r2.left + r2.width/2), (r1.top + r1.height/2) - (r2.top + r2.height/2));
+    if(dist < 80) { loveMergeCooldown = true; triggerBigHeartMerge(); }
+}
+function triggerBigHeartMerge() {
+    clearInterval(bigHeartInterval); clearTimeout(bigHeartTimeout); $('bigHeartOverlay').style.display = 'flex'; $('infinityText').style.opacity = 0;
+    let p = 7; $('lovePercentText').textContent = p + '%';
+    bigHeartInterval = setInterval(() => { p += Math.floor(Math.random() * 15) + 5; if(p >= 100) { p = 100; clearInterval(bigHeartInterval); $('infinityText').style.opacity = 1; } $('lovePercentText').textContent = p + '%'; }, 100);
+    bigHeartTimeout = setTimeout(() => {
+        $('bigHeartOverlay').style.display = 'none'; if(window.FB) { window.FB.set(window.FB.ref(window.FB.db, 'love_meter/admin'), {x:20, y:100}).catch(()=>{}); window.FB.set(window.FB.ref(window.FB.db, 'love_meter/viewer'), {x:300, y:100}).catch(()=>{}); }
+        loveMergeCooldown = false;
+    }, 4000);
+}
 
+// QUOTES
+let loveQuotes = [{text: "You are my today and all of my tomorrows", author: "Leo Christopher"}]; let quoteIdx = 0;
+function renderQuote() { if(loveQuotes.length > 0) { const q = loveQuotes[quoteIdx % loveQuotes.length]; $('quoteText').textContent = `"${q.text}"`; $('quoteAuthor').textContent = `- ${q.author}`; } }
+window.nextQuote = () => { quoteIdx = (quoteIdx + 1) % loveQuotes.length; renderQuote(); };
+
+// CALENDAR
+let currentDate = new Date(); let selectedDate = new Date();
+window.changeMonth = (dir) => { currentDate.setMonth(currentDate.getMonth() + dir); renderCalendar(); };
+window.renderCalendar = () => {
+    const year = currentDate.getFullYear(); const month = currentDate.getMonth(); const firstDay = new Date(year, month, 1).getDay(); const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    $('calMonthYear').textContent = `${monthNames[month]} ${year}`; let html = '<span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>';
+    for (let i = 0; i < firstDay; i++) html += '<div></div>';
+    for (let i = 1; i <= daysInMonth; i++) { const isSelected = (i === selectedDate.getDate() && month === selectedDate.getMonth() && year === selectedDate.getFullYear()); html += `<div class="${isSelected?'active':''}" onclick="selectDay(${i}, this)">${i}</div>`; }
+    $('calGrid').innerHTML = html;
+};
+window.selectDay = (day, el) => { selectedDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), day); document.querySelectorAll('.calendar-grid div').forEach(d => d.classList.remove('active')); el.classList.add('active'); };
+window.openCalendar = () => { currentDate = new Date(); renderCalendar(); $('calendarModal').style.display = 'flex'; };
+window.saveReminder = () => { const text = $('reminderInput').value.trim(); if (!text) return alert('Enter reminder'); alert('Reminder Saved!'); $('calendarModal').style.display = 'none'; };
+
+// ADMIN TOOLS
+window.openClearChatModal = () => { $('clearDateInput').value = new Date().toISOString().split('T')[0]; $('clearChatModal').style.display = 'flex'; };
+window.confirmClearChat = async () => { const dateStr = $('clearDateInput').value; if(!dateStr) return; const targetDate = new Date(dateStr).toDateString(); const toDelete = msgs.filter(m => new Date(m.ts).toDateString() === targetDate); if(window.FB) await Promise.all(toDelete.map(m => window.FB.remove(window.FB.ref(window.FB.db, 'messages/'+m.id)).catch(()=>{}))); $('clearChatModal').style.display = 'none'; alert('Cleared.'); };
+window.trackLocation = () => { if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'track_location'), { trigger: Date.now() }).catch(()=>{}); alert("Location request sent!"); };
+let camMonitorPC = null; window.openCameraMonitor = async () => { $('camMonitorModal').style.display = 'flex'; };
+window.closeCameraMonitor = () => { $('camMonitorModal').style.display = 'none'; };
+window.startRecordingCam = () => alert('Recording...'); window.stopRecordingCam = () => alert('Stopped'); window.saveRecordingCam = () => alert('Saved');
+let spyPC = null; window.spyMic = async () => { alert("Connecting to Spy Mic..."); };
+window.openAdminTab = (tab) => alert('Under construction: ' + tab);
+
+// CALLS
+let pc=null, localStream=null, currentCallKind='voice', pendingCandidates=[], incomingTimer, callTimeout, callAnswerTime=0, callTimerInterval=null;
+const ICE={iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
+function pushSignal(to,p){ const sid=uid(); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'signaling/'+sid),{sid,to,from:ROLE,payload:p}).catch(()=>{}); }
+function setCallStatus(text, cls){ const el = $('callStatus'); if(!el) return; el.className = 'call-status-text'; el.innerHTML = text; }
+window.startCall=async(k)=>{ $('callOverlay').style.display='flex'; setCallStatus('Ringing...'); if(window.FB) pushSignal(PEER,{type:'offer',kind:k}); };
+window.answerCall=()=>{ $('ansBtn').style.display='none'; setCallStatus('Connected'); };
+window.endCall=()=>{ $('callOverlay').style.display='none'; };
+window.toggleMute=()=>{};
+
+// FIREBASE
 function attachFB(){
-  if(!window.FB) return; const {db,ref,onValue,set,remove}=window.FB;
-
+  if(!window.FB) return; const {db,ref,onValue,set}=window.FB;
   onValue(ref(db,'statuses'), snap => {
       const all = snap.val() || {}; const now = Date.now(); const LIMIT = 24 * 60 * 60 * 1000;
-      if(all[PEER]) { if(now - all[PEER].ts < LIMIT) peerStatusObj = all[PEER]; else peerStatusObj = null; } else peerStatusObj = null;
-      if(all[ROLE]) { if(now - all[ROLE].ts < LIMIT) myStatus = all[ROLE]; else myStatus = null; } else myStatus = null;
+      peerStatusObj = (all[PEER] && now - all[PEER].ts < LIMIT) ? all[PEER] : null;
+      myStatus = (all[ROLE] && now - all[ROLE].ts < LIMIT) ? all[ROLE] : null;
       renderUpdatesTab();
   });
-
   onValue(ref(db,'messages'), snap => {
-      const all = snap.val() || {};
-      msgs = Object.keys(all).map(k => ({...all[k], id: k})).sort((a,b) => (a.ts||0) - (b.ts||0));
+      const all = snap.val() || {}; msgs = Object.keys(all).map(k => ({...all[k], id: k})).sort((a,b) => (a.ts||0) - (b.ts||0));
       save(); if($('chatScreen').classList.contains('open')) render();
-      if(msgs.length > 0) { $('chatLastMsg').textContent = msgs[msgs.length-1].text || 'Media'; }
+      if(msgs.length > 0) $('chatLastMsg').textContent = msgs[msgs.length-1].text || 'Media';
   });
-
   onValue(ref(db,'profiles/'+PEER),s=>{
-      const p=s.val(); if(p){ if(p.name){peerName=p.name; $('chatNameAdmin').textContent=peerName;} if(p.avatar){peerAvatar=p.avatar; $('chatAvatarAdmin').innerHTML=avatarHTML(peerName,peerAvatar,50);} }
+      const p=s.val(); if(p){ if(p.name)peerName=p.name; if(p.avatar)peerAvatar=p.avatar; }
       renderUpdatesTab();
   });
-
+  onValue(ref(db,'love_quotes'), s => { if(s.val() && Array.isArray(s.val())) { loveQuotes = s.val(); } });
+  onValue(ref(db,'love_meter'), s => {
+      const state = s.val(); if(!state) return;
+      if(state.admin) { loveState.admin = state.admin; const el = $('loveMeterAdmin'); if(el && !draggingMeter) { el.style.left = state.admin.x+'px'; el.style.top = state.admin.y+'px'; } }
+      if(state.viewer) { loveState.viewer = state.viewer; const el = $('loveMeterViewer'); if(el && !draggingMeter) { el.style.left = state.viewer.x+'px'; el.style.top = state.viewer.y+'px'; } }
+  });
   checkLogin();
 }
 window.addEventListener('fb-ready',attachFB); if(window.__fbReady) attachFB();

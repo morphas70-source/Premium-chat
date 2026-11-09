@@ -23,7 +23,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .app-ic{width:52px;height:52px;flex-shrink:0;border-radius:16px;background:linear-gradient(145deg,#fff,#f8dfff,#d9d7ff);border:3px solid white;box-shadow:0 7px 0 #e3d3ef,0 12px 25px rgba(130,80,170,.18);display:flex;justify-content:center;align-items:center;position:relative;}
 .app-ic::before{content:'';width:28px;height:22px;border-radius:12px 12px 12px 4px;background:linear-gradient(135deg,#ffb8d4,#d2a1ff,#91baff);box-shadow:0 4px 0 rgba(100,60,130,.15);}
 .head-title{font-size:clamp(23px,6vw,28px);font-weight:800;letter-spacing:-1px;color:#211a35;}
-.menu-btn{font-size:26px;font-weight:900;cursor:pointer;color:#211a35;padding:5px 10px;position:relative;}
+.menu-btn{font-size:26px;font-weight:900;cursor:pointer;color:#211a35;padding:5px 10px;}
 
 #loginScreen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;}
 #loginScreen h2{font-size:24px;font-weight:800;color:#211a35;margin-bottom:10px;}
@@ -32,12 +32,22 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .login-btn{width:100%;padding:18px;border-radius:22px;border:3px solid white;background:linear-gradient(145deg,#a5aaff,#b68bff,#e5a6f7);color:white;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 8px 0 #9983d9;transition:transform .15s ease;}
 .login-btn:active{transform:translateY(5px) scale(.97);box-shadow:0 3px 0 #9983d9;}
 
-#mainHome{flex:1;overflow-y:auto;display:none;flex-direction:column;padding-bottom:10px;}
+#mainHome{flex:1;overflow-y:auto;display:none;flex-direction:column;padding-bottom:15px;}
 .profile{margin:4px 15px;padding:16px 14px;gap:14px;background:linear-gradient(135deg,rgba(255,225,224,.95),rgba(255,238,232,.95),rgba(242,220,255,.9));border:3px solid white;border-radius:24px;box-shadow:0 8px 0 #e9d0e5;display:flex;align-items:center;cursor:pointer;position:relative;}
 .p-av{width:68px;height:68px;border:3px solid white;border-radius:50%;overflow:hidden;display:flex;justify-content:center;align-items:center;background:#ffe4d6;font-size:26px;position:relative;}
 .p-av img{width:100%;height:100%;object-fit:cover;}
 .profile-online{position:absolute;bottom:2px;right:2px;width:14px;height:14px;border-radius:50%;background:#22c55e;border:2px solid white;}
 .p-name{font-size:17px;font-weight:800;}.p-on{font-size:11px;font-weight:700;color:#289b65;}
+
+/* STATUS SECTION */
+.status-section { margin: 15px; display: flex; gap: 12px; overflow-x: auto; padding-bottom: 5px; }
+.status-item { display: flex; flex-direction: column; align-items: center; gap: 6px; cursor: pointer; min-width: 68px; }
+.status-ring { width: 64px; height: 64px; border-radius: 50%; padding: 3px; background: linear-gradient(45deg, #a5aaff, #e5a6f7); position: relative; }
+.status-ring.seen { background: #ccc; }
+.status-ring img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid white; }
+.status-ring .add-icon { position: absolute; bottom: 0; right: 0; background: #22c55e; color: white; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; font-weight: bold; border: 2px solid white; font-size: 14px; }
+.status-item b { font-size: 11px; color: #333; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 68px; }
+
 .stats{margin:18px 15px 0;gap:9px;display:grid;grid-template-columns:1fr 1fr 1fr;}
 .stat{padding:14px 5px;gap:8px;border:2px solid white;border-radius:21px;box-shadow:0 7px 0 rgba(104,75,135,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;}
 .stat:nth-child(1){background:linear-gradient(145deg,#fff0e4,#ffcbdc);}
@@ -64,16 +74,34 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .q3d svg{width:28px;height:28px;stroke:white;}.qc b{font-size:13px;font-weight:800;color:#29213d;}
 .unread-badge{position:absolute;top:-5px;right:-5px;background:#ef4444;color:#fff;font-size:10px;font-weight:900;min-width:19px;height:19px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:2px solid white;padding:0 3px;z-index:5;}
 
-/* WhatsApp Style Bottom Nav */
-.bottom{flex-shrink:0;margin:auto 13px 14px;padding:6px;gap:4px;border-radius:25px;background:rgba(255,255,255,.9);border:2px solid white;box-shadow:0 8px 0 #e8dbe9;display:flex;justify-content:space-around;align-items:center;}
-.bt{min-height:56px;padding:6px 12px;border-radius:16px;font-size:11px;font-weight:800;gap:4px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;color:#555;flex:1;transition:0.2s;}
-.bt.active{background:linear-gradient(145deg,#ffe4ed,#ffc8df);color:#b84f91;border:2px solid white;}
-.bt .ico{font-size:20px;}
+/* --- NEW BOTTOM NAVIGATION BAR --- */
+.bottom-nav {
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(15px);
+    padding: 10px 20px; border-radius: 35px; margin: 0 15px 15px 15px;
+    box-shadow: 0 10px 30px rgba(165, 170, 255, 0.2);
+    border: 2px solid white;
+    position: relative; z-index: 20;
+}
+.nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 4px;
+    font-size: 10px; font-weight: 700; color: #888; cursor: pointer; transition: 0.2s;
+    width: 50px;
+}
+.nav-item.active { color: #b98aff; }
+.nav-item svg { width: 24px; height: 24px; stroke: currentColor; fill: none; stroke-width: 2.2; }
+.nav-item.active svg { stroke-width: 2.5; fill: rgba(185, 138, 255, 0.1); }
 
-/* Dropdown Menu for Profile Actions */
-#dropdownMenu { position: absolute; right: 20px; top: 75px; background: white; border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); display: none; flex-direction: column; z-index: 1000; border: 2px solid #f0e2f4; overflow: hidden; min-width: 150px; }
-#dropdownMenu button { padding: 12px 16px; border: none; background: none; text-align: left; font-weight: 700; font-size: 13px; cursor: pointer; color: #333; }
-#dropdownMenu button:hover { background: #f9edf8; }
+.nav-item.center-btn {
+    background: linear-gradient(135deg, #b98aff, #e5a6f7);
+    width: 55px; height: 55px; border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    box-shadow: 0 8px 20px rgba(185, 138, 255, 0.4);
+    border: 3px solid white; margin-top: -25px;
+    transition: transform 0.2s;
+}
+.nav-item.center-btn:active { transform: scale(0.9); }
+.nav-item.center-btn svg { stroke: white; width: 28px; height: 28px; stroke-width: 2.5; }
 
 .chat-screen,.truth-screen,.admin-screen,.love-screen{position:absolute;inset:0;z-index:10;display:none;flex-direction:column;overflow:hidden;background:#fffafc;}
 .chat-screen.open,.truth-screen.open,.admin-screen.open,.love-screen.open{display:flex;}
@@ -311,18 +339,8 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 
 <div class="phone">
   <div class="head">
-    <div class="head-left"><div class="app-ic"></div><div class="head-title">WhatsApp</div></div>
-    <div class="menu-btn" onclick="toggleDropdownMenu(event)" aria-label="Menu">⋮</div>
-  </div>
-
-  <!-- Profile Menu Dropdown -->
-  <div id="dropdownMenu">
-    <button onclick="openProfileModal(); closeDropdown();">✏️ Edit Profile</button>
-    <button onclick="openAdmin(); closeDropdown();">⚙️ Admin Tools</button>
-    <button onclick="openTruth(); closeDropdown();">📖 Seek the Truth</button>
-    <button onclick="openCalendar(); closeDropdown();">📅 Calendar</button>
-    <button onclick="openLoveScreen(); closeDropdown();">🩷 Love Level</button>
-    <button onclick="logout(); closeDropdown();" style="color:#ef4444;">🚪 Log Out</button>
+    <div class="head-left"><div class="app-ic"></div><div class="head-title">Premium Chat</div></div>
+    <div class="menu-btn" onclick="openAdmin()" aria-label="Admin menu">⋮</div>
   </div>
 
   <div id="homeTab" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
@@ -340,17 +358,14 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
         <div style="padding:8px 12px;background:linear-gradient(145deg,#a5aaff,#e5a6f7);color:white;border-radius:12px;font-size:11px;font-weight:800;border:2px solid white;">✏️ Edit</div>
       </div>
       
-      <!-- QUICK STATS MOVED DOWN -->
+      <!-- STATUS SECTION -->
+      <div class="status-section" id="statusSection"></div>
+
       <div class="stats">
         <div class="stat" onclick="openCalendar()"><div class="s3d m1" style="background:#ffb88a;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span class="lbl">Calendar</span><b class="num" id="reminderCount">0</b></div>
         <div class="stat" onclick="openLoveScreen()"><div class="heart-3d-container"><svg class="heart-base-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><div class="ecg-overlay"><svg class="ecg-svg" viewBox="0 0 100 50" preserveAspectRatio="none"><path class="ecg-line" d="M0,25 L20,25 L25,10 L30,40 L35,25 L50,25 L55,5 L60,45 L65,25 L80,25 L85,15 L90,30 L95,25 L100,25" /></svg></div></div><span class="lbl">Love Level</span><b class="num" id="loveLevel">70%</b></div>
         <div class="stat" onclick="openTruth()"><div class="s3d m3" style="background:#68aaff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><span class="lbl">Seek the Truth</span><b class="num" style="font-size:11px;">Bible</b></div>
       </div>
-
-      <!-- STATUS SECTION BELOW STATS (WHATSAPP STYLE) -->
-      <div class="q-head" style="margin-top:15px; font-size:16px;">Updates & Status</div>
-      <div class="status-section" id="statusSection"></div>
-
       <div class="q-head">Quick Actions</div>
       <div class="quick">
         <div class="qc" onclick="openChat()"><span class="unread-badge" id="unreadBadge" style="display:none;">0</span><div class="q3d qm1" style="background:#b98aff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><b>Messages</b></div>
@@ -361,12 +376,30 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     </div>
   </div>
 
-  <!-- WHATSAPP STYLE BOTTOM NAVIGATION (Chats, Updates, Communities, Calls) -->
-  <div class="bottom" id="bottomNav" style="display:none;">
-    <div class="bt active" id="navChats" onclick="switchNavTab('chats')"><span class="ico">💬</span>Chats</div>
-    <div class="bt" id="navUpdates" onclick="switchNavTab('updates')"><span class="ico">⭕</span>Updates</div>
-    <div class="bt" id="navCommunities" onclick="switchNavTab('communities')"><span class="ico">👥</span>Communities</div>
-    <div class="bt" id="navCalls" onclick="switchNavTab('calls')"><span class="ico">📞</span>Calls</div>
+  <!-- NEW BOTTOM NAVIGATION BAR -->
+  <div class="bottom-nav" id="bottomNav" style="display:none;">
+    <div class="nav-item active" onclick="switchNav('home', this)">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Home
+    </div>
+    <div class="nav-item" onclick="switchNav('search', this)">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search
+    </div>
+    
+    <!-- CENTER PLUS BUTTON -->
+    <div class="nav-item center-btn" onclick="openQuickAdd()">
+        <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    </div>
+
+    <div class="nav-item" onclick="switchNav('messages', this)">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        Messages
+    </div>
+    <div class="nav-item" onclick="switchNav('profile', this)">
+        <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Profile
+    </div>
   </div>
 
   <div class="chat-screen" id="chatScreen">
@@ -474,23 +507,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 </div>
 
 <div class="modal" id="delSheet" onclick="if(event.target===this)closeDelSheet()"><div class="modal-box" style="padding:0; border-radius:28px; overflow:hidden; border:none; background:rgba(255,255,255,0.95); backdrop-filter:blur(20px);"><button onclick="doDelete('everyone')" style="width:100%;padding:20px;border:none;background:transparent;color:#ff4d4d;font-weight:800;font-size:16px;border-bottom:1px solid #eee;">Delete for Everyone</button><button onclick="doDelete('me')" style="width:100%;padding:20px;border:none;background:transparent;color:#333;font-weight:800;font-size:16px;border-bottom:1px solid #eee;">Delete for Me</button></div></div>
-
-<!-- Calendar Modal -->
-<div class="modal" id="calendarModal" onclick="if(event.target===this)this.style.display='none'">
-  <div class="modal-box">
-    <h3>Select Date & Reminder</h3>
-    <div class="calendar-header">
-      <button onclick="changeMonth(-1)">&lt;</button>
-      <span id="calMonthYear"></span>
-      <button onclick="changeMonth(1)">&gt;</button>
-    </div>
-    <div class="calendar-grid" id="calGrid"></div>
-    <input type="text" id="reminderInput" class="modal-input" placeholder="Reminder Note...">
-    <button class="modal-btn" onclick="saveReminder()">Save Reminder</button>
-    <button class="modal-btn" style="background:#ff6b6b;box-shadow:0 4px 0 #d94a4a;margin-top:10px" onclick="$('calendarModal').style.display='none'">Close</button>
-  </div>
-</div>
-
+<div class="modal" id="calendarModal" onclick="if(event.target===this)this.style.display='none'"><div class="modal-box"><h3>Select Date & Reminder</h3><div class="calendar-header"><button onclick="changeMonth(-1)" aria-label="Previous month">&lt;</button><span id="calMonthYear"></span><button onclick="changeMonth(1)" aria-label="Next month">&gt;</button></div><div class="calendar-grid" id="calGrid"></div><input type="text" id="reminderInput" class="modal-input" placeholder="Reminder Note..."><button class="modal-btn" onclick="saveReminder()">Save Reminder</button><button class="modal-btn" style="background:#ff6b6b;box-shadow:0 4px 0 #d94a4a;margin-top:10px" onclick="$('calendarModal').style.display='none'">Close</button></div></div>
 <div class="modal" id="profileModal" onclick="if(event.target===this)this.style.display='none'"><div class="modal-box"><h3>Edit Profile</h3><div style="position:relative;width:90px;height:90px;margin:0 auto 15px;border-radius:50%;overflow:hidden;border:4px solid white;box-shadow:0 5px 15px rgba(0,0,0,.1);cursor:pointer;" onclick="$('avatarInp').click()"><div id="profileAvatarPreview" style="width:100%;height:100%;">👤</div></div><input type="text" id="inputName" class="modal-input" placeholder="Your Name..."><textarea id="inputAbout" class="modal-input" rows="2" placeholder="About..."></textarea><button class="modal-btn" onclick="saveProfile()">Save Profile</button><button class="modal-btn" style="background:#22c55e; box-shadow:0 4px 0 #16a34a;" onclick="$('statusInp').click()">+ Add Status (Story)</button><button class="modal-btn" style="background:#ff6b6b;box-shadow:0 4px 0 #d94a4a;" onclick="logout()">Log Out</button><button class="modal-btn" style="background:#aaa;box-shadow:0 4px 0 #888;" onclick="$('profileModal').style.display='none'">Cancel</button></div></div>
 
 <div class="modal" id="addStatusModal" onclick="if(event.target===this)this.style.display='none'">
@@ -788,34 +805,6 @@ window.saveProfile=()=>{
     $('profileModal').style.display='none'; checkLogin();
 };
 $('avatarInp').onchange=e=>{ const f=e.target.files[0]; if(!f)return; compressImage(f, 400, 0.8).then(dataUrl=>{ currentAvatar=dataUrl; $('profileAvatarPreview').innerHTML=`<img src="${esc(currentAvatar)}" style="width:100%;height:100%;object-fit:cover;">`; $('userAvatar').innerHTML=avatarHTML(currentUser,currentAvatar,68)+'<div class="profile-online"></div>'; lsSet('chat_user_avatar',currentAvatar); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'profiles/'+ROLE+'/avatar'),currentAvatar).catch(()=>{}); }).catch(()=>toast('Image load failed','error')); };
-
-/* WhatsApp Navigation Tabs Handler */
-window.switchNavTab = (tab) => {
-    document.querySelectorAll('.bottom .bt').forEach(el => el.classList.remove('active'));
-    if(tab === 'chats') {
-        $('navChats').classList.add('active');
-        openChat();
-    } else if(tab === 'updates') {
-        $('navUpdates').classList.add('active');
-        if(peerStatusObj) openStatusViewer('peer');
-        else { toast('No updates available yet', 'info'); }
-    } else if(tab === 'communities') {
-        $('navCommunities').classList.add('active');
-        openTruth();
-    } else if(tab === 'calls') {
-        $('navCalls').classList.add('active');
-        startCall('voice');
-    }
-};
-
-/* Dropdown Menu Toggle */
-window.toggleDropdownMenu = (e) => {
-    e.stopPropagation();
-    const menu = $('dropdownMenu');
-    menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
-};
-window.closeDropdown = () => { $('dropdownMenu').style.display = 'none'; };
-window.addEventListener('click', () => { closeDropdown(); });
 
 window.openChat=()=>{
     if($('chatScreen').classList.contains('open')) return;
@@ -1723,6 +1712,36 @@ async function toggleCallMode(){
     pushSignal(PEER, { type: 'offer', sdp: { type: offer.type, sdp: offer.sdp }, kind: currentCallKind });
 }
 function toggleSleepMode(){ const ov = $('callOverlay'); ov.classList.toggle('sleep-mode'); $('sleepBtn').classList.toggle('active'); }
+
+/* --- NAVIGATION LOGIC --- */
+window.switchNav = (tab, el) => {
+    document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+    if(el && !el.classList.contains('center-btn')) el.classList.add('active');
+    
+    if(tab === 'home') { 
+        closeChatScreen(); closeTruthScreen(); closeAdminScreen(); closeLoveScreen(); 
+    }
+    if(tab === 'search') { 
+        openChat(); 
+        if(!searchOpen) toggleSearch();
+    }
+    if(tab === 'messages') { 
+        openChat(); 
+    }
+    if(tab === 'profile') { 
+        openProfileModal(); 
+        // Reset active state to home after opening profile
+        setTimeout(() => {
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelectorAll('.nav-item')[0].classList.add('active');
+        }, 500);
+    }
+};
+
+window.openQuickAdd = () => {
+    // Center button action - Opens Chat
+    openChat();
+};
 
 /* --- STATUS LOGIC --- */
 function renderUpdatesTab() {

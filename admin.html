@@ -18,7 +18,7 @@ window.dispatchEvent(new Event('fb-ready'));
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;font-family:Inter,sans-serif;margin:0;padding:0;}
 body{min-height:100dvh;display:flex;justify-content:center;align-items:center;background:radial-gradient(ellipse at 5% 5%,#ffe6d9,transparent 40%),radial-gradient(ellipse at 95% 15%,#d9c8ff,transparent 40%),radial-gradient(ellipse at 50% 100%,#ffcfe4,transparent 45%),linear-gradient(145deg,#f9edf8,#e9e6ff,#fff0e8);background-attachment:fixed;color:var(--text);overflow:hidden;}
 .phone{width:100%;height:100dvh;background:rgba(255,250,250,.98);backdrop-filter:blur(24px);overflow:hidden;isolation:isolate;display:flex;flex-direction:column;position:relative;}
-@media (min-width: 500px) { body{padding: 20px;} .phone{max-width:420px; height:min(900px, 100dvh); border-radius:38px; border:5px solid rgba(255,255,255,.98); box-shadow:0 35px 80px rgba(91,60,130,.22);} .chat-screen, .truth-screen, .admin-screen, .calls-screen, .profile-screen { border-radius: 0 0 33px 33px !important; } }
+@media (min-width: 500px) { body{padding: 20px;} .phone{max-width:420px; height:min(900px, 100dvh); border-radius:38px; border:5px solid rgba(255,255,255,.98); box-shadow:0 35px 80px rgba(91,60,130,.22);} .chat-screen, .truth-screen, .admin-screen, .love-screen, .calls-screen, .profile-screen { border-radius: 0 0 33px 33px !important; } }
 
 /* HEADER DESIGN */
 .head{padding:24px 20px 14px;display:flex;align-items:center;justify-content:space-between; background:transparent;}
@@ -100,19 +100,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .ig-send-btn svg{width:20px;height:20px;stroke:white;fill:none;margin-left:-2px;stroke-width:2.5;}
 .ig-send-btn:active{transform:scale(0.9);}
 
-/* P2 #4 Missing CSS */
-.quoted-msg { padding: 8px 12px; margin-bottom: 8px; border-left: 4px solid #a5aaff; background: rgba(255,255,255,0.7); border-radius: 8px; font-size: 12px; color: #555; }
-.quoted-msg b { display: block; color: #b84f91; font-size: 11px; margin-bottom: 2px; }
-.call-log-container { display: flex; width: 100%; margin-bottom: 10px; }
-.call-log-container.me { justify-content: flex-end; }
-.call-log-container.other { justify-content: flex-start; }
-
-/* REPLY PREVIEW */
-#replyPreview { display: none; margin: 0 10px 6px; padding: 10px 14px; background: rgba(255,255,255,0.9); border-left: 3px solid #a5aaff; border-radius: 12px; align-items: center; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); z-index: 5; }
-#replyPreview.show { display: flex; }
-#replyPreviewText { flex: 1; font-size: 12px; color: #666; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
-.reply-cancel { background: none; border: none; font-size: 22px; color: #999; cursor: pointer; padding: 0 4px; font-weight: 900; }
-
 /* CALLS SCREEN */
 .calls-screen { background: #fffafc; z-index: 15; }
 .calls-header-bar { display:flex; justify-content:space-between; align-items:center; padding: 15px 20px; background: white; border-bottom: 1px solid #f0e2f4;}
@@ -129,7 +116,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .call-history-name { font-size: 15px; font-weight: 800; color: #201a35; }
 .call-history-meta { font-size: 12px; color: #888; font-weight: 600; margin-top: 4px; display: flex; gap: 8px; align-items: center;}
 
-/* PROFILE SCREEN */
+/* PROFILE SCREEN (WhatsApp Style) */
 .profile-screen { background: #fffafc; z-index: 15; overflow-y: auto;}
 .profile-header { background: #ffeef2; padding: 30px 20px; display: flex; flex-direction: column; align-items: center; border-bottom: 1px solid #ffd1dc; }
 .profile-av-large { width: 100px; height: 100px; border-radius: 50%; background: white; border: 3px solid #ffb6c1; overflow: hidden; position: relative; margin-bottom: 15px;}
@@ -139,6 +126,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .profile-settings-list { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
 .profile-setting-item { background: white; padding: 15px; border-radius: 18px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #f9f0f3;}
 .profile-setting-label { font-size: 12px; color: #b36a7e; font-weight: 800; margin-bottom: 5px; }
+.profile-setting-value { font-size: 16px; color: #201a35; font-weight: 600; }
 .profile-action-btn { background: #ff8da1; color: white; border: none; padding: 15px; border-radius: 18px; font-weight: 800; font-size: 15px; margin-top: 10px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,141,161,0.3); }
 
 /* STORY VIEWER */
@@ -174,7 +162,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .call-icon-circle.missed { background: #ffebee; }
 .call-details { flex: 1; text-align: left; min-width: 0; }
 .call-type-title { font-weight: 800; font-size: 14px; color: #201a35; }
-.call-meta-text { font-size: 11px; color: #888; margin-top: 3px; font-weight: 600; display: flex; gap: 6px; align-items: center;}
+.call-meta-text { font-size: 11px; color: #888; margin-top: 3px; font-weight: 600; display: flex; gap: 6px; align-items: center; }
 
 /* MODALS & OVERLAYS */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(5px);display:none;justify-content:center;align-items:center;z-index:9999;padding:20px;}
@@ -324,6 +312,8 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     </div>
     <div class="msgs-area">
       <div class="msgs" id="msgsBox"></div>
+      <div id="loveMeterAdmin">🩵</div>
+      <div id="loveMeterViewer">🩷</div>
     </div>
     <div id="replyPreview"><div style="flex:1;min-width:0;"><b style="color:#b84f91;font-size:10px;display:block;">Replying to</b><div id="replyPreviewText"></div></div><button class="reply-cancel" onclick="cancelReply()" aria-label="Cancel reply">×</button></div>
     <div class="ig-input-area">
@@ -487,6 +477,7 @@ const $=id=>document.getElementById(id);
 const LS_KEY='chat_v19_'+ROLE, LS_TRUTH='truth_v19_'+ROLE, LS_DELETED='deleted_for_me_'+ROLE;
 let msgs=[], truthMsgs=[];
 const pendingMsgs = new Set();
+let bc; try{bc=new BroadcastChannel('chat_v19_'+ROLE);}catch(e){}
 const uid=()=>Math.random().toString(36).slice(2,10);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -507,7 +498,6 @@ let __confirmCb = null;
 window.askConfirm = (title, msg, cb) => { __confirmCb = cb; $('confirmTitle').textContent = title; $('confirmMsg').textContent = msg; $('confirmModal').style.display = 'flex'; };
 $('confirmYesBtn').onclick = () => { $('confirmModal').style.display = 'none'; const cb = __confirmCb; __confirmCb = null; if(cb) cb(); };
 
-// P1 #1 Fix: addDeletedForMe logic
 function getDeletedForMe(){ try { return new Set(JSON.parse(lsGet(LS_DELETED)||'[]')); } catch { return new Set(); } }
 function addDeletedForMe(id){ const s = getDeletedForMe(); s.add(id); lsSet(LS_DELETED, JSON.stringify([...s])); }
 
@@ -543,7 +533,6 @@ let peerName='User', peerAvatar='', peerStatus='', myStoryImg='';
 let storiesData = {};
 const peerState={online:false,typing:false};
 let replyState = null, currentCtxMsgId = null, currentCtxType = 'msg';
-let pId=null, pType='msg';
 
 window.openStoryViewer = (key) => {
     if(!storiesData[key]) return;
@@ -564,7 +553,7 @@ function renderStoriesUI() {
     let storyHtml = `
         <div class="story-item">
           <div class="story-avatar" onclick="${myStoryImg ? 'openStoryViewer(\'admin\')' : '$(\'statusInp\').click()'}">
-            <img src="${myStoryImg || currentAvatar || 'https://ui-avatars.com/api/?name='+esc(currentUser)+'&background=ffe4ec&color=d48888'}" alt="My Story">
+            <img src="${myStoryImg || currentAvatar || 'https://ui-avatars.com/api/?name='+currentUser+'&background=ffe4ec&color=d48888'}" alt="My Story">
             ${!myStoryImg ? `<div class="plus">+</div>` : `<div class="story-delete-btn" onclick="event.stopPropagation();deleteMyStory()">×</div>`}
           </div>
           <div class="story-name">My Story</div>
@@ -575,9 +564,9 @@ function renderStoriesUI() {
         if(key === ROLE) return;
         const s = storiesData[key];
         storyHtml += `
-            <div class="story-item" onclick="openStoryViewer('${esc(key)}')">
-              <div class="story-avatar"><img src="${esc(s.img)}"></div>
-              <div class="story-name">${esc(s.name)}</div>
+            <div class="story-item" onclick="openStoryViewer('${key}')">
+              <div class="story-avatar"><img src="${s.img}"></div>
+              <div class="story-name">${s.name}</div>
             </div>
         `;
     });
@@ -587,7 +576,7 @@ function renderStoriesUI() {
 window.openCallsTab = () => {
     if($('callsScreen').classList.contains('open')) return;
     $('callsScreen').classList.add('open'); $('bottomNav').classList.add('hidden');
-    history.pushState({screen: 'calls'}, '', '#calls');
+    history.pushState({screen: 'calls'}, '');
     renderCallHistory();
 };
 
@@ -599,7 +588,7 @@ window.closeCallsTab = () => {
 window.openProfileScreen = () => {
     if($('profileScreen').classList.contains('open')) return;
     $('profileScreen').classList.add('open'); $('bottomNav').classList.add('hidden');
-    history.pushState({screen: 'profile'}, '', '#profile');
+    history.pushState({screen: 'profile'}, '');
     $('profileNameDisplay').textContent = currentUser;
     $('profileAboutDisplay').textContent = currentAbout;
     $('profileAvatarPreview').innerHTML = avatarHTML(currentUser, currentAvatar, 100);
@@ -653,32 +642,28 @@ window.clearCallHistory = async () => {
     });
 };
 
-window.openChat=(name, avatar)=>{
-    if(name) peerName = name;
-    if(avatar) peerAvatar = avatar;
+window.openChat=()=>{
     if($('chatScreen').classList.contains('open')) return;
     $('chatScreen').classList.add('open'); $('bottomNav').classList.add('hidden');
-    $('peerName').textContent = peerName;
-    $('peerAvatar').innerHTML = avatarHTML(peerName, peerAvatar, 40);
-    history.pushState({screen: 'chat'}, '', '#chat'); 
-    render(); $('msgInput').focus(); scrollToBottom(true);
+    history.pushState({screen: 'chat'}, ''); render(); $('msgInput').focus(); scrollToBottom(true);
     if (window.FB) {
         const unseenIds = msgs.filter(m => m.from === PEER && !m.seen).map(m => m.id);
         Promise.all(unseenIds.map(id => window.FB.set(window.FB.ref(window.FB.db, 'messages/' + id + '/seen'), true).catch(()=>{})));
     }
 };
 window.closeChatScreen=()=>{ $('chatScreen').classList.remove('open'); $('bottomNav').classList.remove('hidden'); history.back(); };
-window.openTruth=()=>{ if($('truthScreen').classList.contains('open')) return; $('truthScreen').classList.add('open'); $('bottomNav').classList.add('hidden'); history.pushState({screen: 'truth'}, '', '#truth'); renderTruth(); };
+window.openTruth=()=>{ if($('truthScreen').classList.contains('open')) return; $('truthScreen').classList.add('open'); $('bottomNav').classList.add('hidden'); history.pushState({screen: 'truth'}, ''); renderTruth(); };
 window.closeTruthScreen=()=>{ $('truthScreen').classList.remove('open'); $('bottomNav').classList.remove('hidden'); history.back(); };
-window.openAdmin=()=>{ if($('adminScreen').classList.contains('open')) return; $('adminScreen').classList.add('open'); $('bottomNav').classList.add('hidden'); history.pushState({screen: 'admin'}, '', '#admin'); refreshAdminStats(); };
+window.openAdmin=()=>{ if($('adminScreen').classList.contains('open')) return; $('adminScreen').classList.add('open'); $('bottomNav').classList.add('hidden'); history.pushState({screen: 'admin'}, ''); refreshAdminStats(); };
 window.closeAdminScreen=()=>{ $('adminScreen').classList.remove('open'); $('bottomNav').classList.remove('hidden'); history.back(); };
 window.closeSubTab=()=>{ $('adminSubTab').classList.remove('open'); history.back(); };
 
 window.openHomeTab = () => {
+    // Switch active tab visually
     document.querySelectorAll('.bt').forEach(b => b.classList.remove('active'));
     document.querySelector('.bt:nth-child(1)').classList.add('active');
+    // Close any open screen
     document.querySelectorAll('.chat-screen, .truth-screen, .calls-screen, .profile-screen, .admin-screen').forEach(s => s.classList.remove('open'));
-    $('bottomNav').classList.remove('hidden');
 };
 
 window.addEventListener('popstate', () => {
@@ -691,24 +676,10 @@ function save(){ try{lsSet(LS_KEY,JSON.stringify(msgs.slice(-100)));}catch(e){} 
 function loadTruth(){ try{truthMsgs=JSON.parse(lsGet(LS_TRUTH)||'[]');}catch(e){truthMsgs=[];} }
 function saveTruth(){ try{lsSet(LS_TRUTH,JSON.stringify(truthMsgs.slice(-100)));}catch(e){} }
 
-window.onTyping = () => {
-    if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'typing/'+ROLE), {typing:true}).catch(()=>{});
-    clearTimeout(window._typingTimer);
-    window._typingTimer = setTimeout(() => {
-        if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'typing/'+ROLE), {typing:false}).catch(()=>{});
-    }, 1500);
-};
-
 window.toggleSendBtn=()=>{ const v=$('msgInput').value.trim(); if(v){ $('sendBtn').style.display='flex'; $('micBtn').style.display='none'; } else { $('sendBtn').style.display='none'; $('micBtn').style.display='flex'; $('msgInput').style.height='auto'; } };
 window.toggleTruthSendBtn=()=>{ const v=$('truthInput').value.trim(); if(v){ $('truthSendBtn').style.display='flex'; } else { $('truthSendBtn').style.display='none'; $('truthInput').style.height='auto'; } };
 
 function scrollToBottom(force=false) { const box=$('msgsBox'); if (force || box.scrollHeight - box.scrollTop - box.clientHeight < 150) box.scrollTo({ top: box.scrollHeight, behavior: 'smooth' }); }
-
-function copyTextToClipboard(text) {
-    if (navigator.clipboard && window.isSecureContext) { return navigator.clipboard.writeText(text); }
-    else { let textArea = document.createElement("textarea"); textArea.value = text; textArea.style.position = "absolute"; textArea.style.left = "-999999px"; document.body.prepend(textArea); textArea.select(); try { document.execCommand('copy'); } catch (error) { console.error(error); } finally { textArea.remove(); } return Promise.resolve(); }
-}
-window.copyTextToClipboard = copyTextToClipboard;
 
 window.login = async () => {
   const user = $('usernameInput').value.trim();
@@ -732,7 +703,7 @@ window.login = async () => {
               currentUser = user; lsSet('chat_username', currentUser); checkLogin();
           }
       } catch(e) { toast("Network Error", 'error'); }
-  } else { toast('Database connecting... Try again in 2 seconds.', 'error'); }
+  }
 };
 
 function checkLogin(){
@@ -745,12 +716,7 @@ function checkLogin(){
   }
 }
 
-window.logout = () => { 
-    if(window.FB) window.FB.update(window.FB.ref(window.FB.db,'profiles/'+ROLE),{online:false}).catch(()=>{}); 
-    lsSet('chat_username',''); lsSet('chat_about',''); lsSet('chat_user_avatar','');
-    currentUser=''; currentAbout=''; currentAvatar='';
-    closeProfileScreen(); checkLogin(); 
-};
+window.logout = () => { if(window.FB) window.FB.update(window.FB.ref(window.FB.db,'profiles/'+ROLE),{online:false}).catch(()=>{}); lsSet('chat_username',''); currentUser=''; closeProfileScreen(); checkLogin(); };
 
 function initBattery() {
     if(window.__batteryInit) return; window.__batteryInit = true;
@@ -790,43 +756,18 @@ window.handleStatusUpload = async (e) => {
     try { const dataUrl = await compressImage(f, 800, 0.7); if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'statuses/' + ROLE), { img: dataUrl, name: currentUser, avatar: currentAvatar }).catch(()=>{}); toast("Story uploaded!", 'success'); } catch(err) { toast('Upload failed','error'); }
 };
 
-window.handleMediaUpload = async (e) => {
-    const f = e.target.files[0]; if(!f) return; e.target.value = '';
-    if (!f.type.startsWith('image/') && f.size > 8 * 1024 * 1024) { toast('File too large. Max 8 MB.', 'error'); return; }
-    try {
-        if (f.type.startsWith('image/')) { const dataUrl = await compressImage(f, 1200, 0.7); addMessage({type: 'image', url: dataUrl, from: ROLE, sender: currentUser, seen: false}); }
-        else { const r = new FileReader(); r.onload = () => { addMessage({type: 'document', url: r.result, from: ROLE, sender: currentUser, seen: false}); if(!$('chatScreen').classList.contains('open')) openChat(); }; r.readAsDataURL(f); return; }
-        if(!$('chatScreen').classList.contains('open')) openChat();
-    } catch(err) { toast('Media upload failed', 'error'); }
-};
-
-function formatText(text) {
-    const escaped = esc(text);
-    const parts = escaped.split(/(```[\s\S]+?```|`[^`]+`)/g);
-    return parts.map(part => {
-        if (part.startsWith('```') && part.endsWith('```') && part.length > 6) return '<code>' + part.slice(3, -3) + '</code>';
-        else if (part.startsWith('`') && part.endsWith('`') && part.length > 2) return '<code>' + part.slice(1, -1) + '</code>';
-        let f = part;
-        f = f.replace(/\*(.+?)\*/gs, '<b>$1</b>');
-        f = f.replace(/_(.+?)_/gs, '<i>$1</i>');
-        f = f.replace(/~(.+?)~/gs, '<s>$1</s>');
-        f = f.replace(/\n/g, '<br>');
-        return f;
-    }).join('');
-}
-
 function appendMessageDOM(m) {
   const box=$('msgsBox');
   const existing = document.getElementById('msg_' + m.id);
   const d=document.createElement('div');
   const timeStr = new Date(m.ts||Date.now()).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
-  
   if(m.type==='call'){
     const isMissed = m.status==='missed'; 
     const callIcon = isMissed ? '📵' : (m.callType==='video' ? '📹' : '📞');
     d.innerHTML = `<div class="call-card ${isMissed?'missed':''}"><div class="call-icon-circle ${isMissed?'missed':''}">${callIcon}</div><div class="call-details"><div class="call-type-title">${m.callType==='video'?'Video Call':'Voice Call'}</div><div class="call-meta-text">${timeStr}</div></div></div>`;
     d.className='call-log-container '+(m.from===ROLE?'me':'other');
     
+    // Swipe to delete call log
     let startX = 0, currentX = 0, isSwiping = false;
     d.addEventListener('pointerdown', (e) => { startX = e.clientX; isSwiping = true; });
     d.addEventListener('pointermove', (e) => { if(!isSwiping) return; currentX = e.clientX - startX; if(currentX < 0 && currentX > -100) { d.style.transform = `translateX(${currentX}px)`; d.style.transition = 'none'; }});
@@ -841,23 +782,8 @@ function appendMessageDOM(m) {
   } else {
     d.className='bub '+(m.from===ROLE?'me':'other');
     if(m.replyTo){ const q = document.createElement('div'); q.className = 'quoted-msg'; q.innerHTML = `<b>${esc(m.replyTo.sender)}</b>${esc(m.replyTo.text)}`; d.appendChild(q); }
-    if(m.text) { const textSpan = document.createElement('span'); textSpan.innerHTML = formatText(m.text); d.appendChild(textSpan); }
-    
-    // P2 #5 Fix: Document/Audio render
-    if(m.url){ 
-        const mediaWrap = document.createElement('div'); mediaWrap.style.cssText = 'position:relative; display:inline-block; margin-top:6px; width:100%;'; 
-        if(m.type==='video') { const vid = document.createElement('video'); vid.src=m.url; vid.controls=true; vid.style.cssText='display:block;max-width:200px;border-radius:12px;'; mediaWrap.appendChild(vid); } 
-        else if(m.type==='audio') { const aud = document.createElement('audio'); aud.src=m.url; aud.controls=true; aud.style.cssText='display:block;max-width:200px; margin-top:5px;'; mediaWrap.appendChild(aud); }
-        else if(m.type==='document') { const link = document.createElement('a'); link.href=m.url; link.target='_blank'; link.textContent='📄 View Document'; link.style.cssText='display:inline-block; padding:8px 12px; background:#fff; border-radius:8px; color:#333; text-decoration:none; font-weight:bold; font-size:12px; margin-top:5px; border:1px solid #ddd;'; mediaWrap.appendChild(link); }
-        else { const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:160px;border-radius:12px;'; mediaWrap.appendChild(img); } 
-        d.appendChild(mediaWrap); 
-    }
-    
-    if(m.reactions) {
-        const rxWrap = document.createElement('div'); rxWrap.style.cssText = 'display:flex; gap:2px; margin-top:5px; font-size:14px;';
-        Object.values(m.reactions).forEach(emoji => { rxWrap.innerHTML += emoji; });
-        d.appendChild(rxWrap);
-    }
+    if(m.text) { const textSpan = document.createElement('span'); textSpan.innerHTML = m.text; d.appendChild(textSpan); }
+    if(m.url){ const mediaWrap = document.createElement('div'); mediaWrap.style.cssText = 'position:relative; display:inline-block; margin-top:6px;'; if(m.type==='video') { const vid = document.createElement('video'); vid.src=m.url; vid.controls=true; vid.style.cssText='display:block;max-width:200px;border-radius:12px;'; mediaWrap.appendChild(vid); } else { const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:160px;border-radius:12px;'; mediaWrap.appendChild(img); } d.appendChild(mediaWrap); }
     
     const bottomRow = document.createElement('span'); bottomRow.style.cssText='display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:4px;';
     const tspan=document.createElement('span'); tspan.className='msg-time'; tspan.textContent=timeStr; bottomRow.appendChild(tspan);
@@ -874,8 +800,7 @@ function appendMessageDOM(m) {
 
 function render(){
     const box = $('msgsBox'); box.innerHTML = '';
-    const deletedForMe = getDeletedForMe();
-    msgs.forEach(m => { if(!deletedForMe.has(m.id)) appendMessageDOM(m); });
+    msgs.forEach(m => appendMessageDOM(m));
     scrollToBottom();
 }
 
@@ -887,42 +812,6 @@ window.sendMsg=()=>{
     msgs.push(msg); save(); appendMessageDOM(msg); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'messages/'+msg.id), msg);
     $('msgInput').value=''; toggleSendBtn();
 };
-
-window.cancelReply = () => { replyState = null; $('replyPreview').classList.remove('show'); };
-
-window.sendTruth = () => {
-    const t = $('truthInput').value.trim(); if(!t) return;
-    const msg = {text: t, from: ROLE, sender: currentUser, id: uid(), ts: Date.now(), seen: false};
-    if(replyState) { msg.replyTo = { id: replyState.id, text: replyState.text, sender: replyState.sender }; replyState = null; $('truthInput').placeholder = 'Write a passage...'; }
-    addTruthMessage(msg);
-    $('truthInput').value = ''; toggleTruthSendBtn();
-    if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'typing/'+ROLE), {typing:false}).catch(()=>{});
-};
-
-function addTruthMessage(o) {
-    if(!o.id) o.id = uid(); if(truthMsgs.some(m => m.id === o.id)) return;
-    const r = !!o.__remote; delete o.__remote; truthMsgs.push(o); saveTruth();
-    if($('truthScreen').classList.contains('open')) renderTruth();
-    if(!r) { if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'truth_messages/'+o.id), o).catch(()=>{}); }
-}
-
-function renderTruth() {
-    const box = $('truthBox'); box.innerHTML = '';
-    if(!truthMsgs.length) { box.innerHTML = `<div style="text-align:center;color:#aaa;font-size:12px;margin-top:40px;">No passages yet 👋</div>`; return; }
-    truthMsgs.forEach(m => {
-        const d = document.createElement('div'); d.className = 'bub ' + (m.from === ROLE ? 'me' : 'other');
-        if(m.replyTo) { const q = document.createElement('div'); q.className = 'quoted-msg'; q.innerHTML = `<b>${esc(m.replyTo.sender)}</b>${esc(m.replyTo.text)}`; d.appendChild(q); }
-        const label = document.createElement('b'); label.style.cssText = 'color:#b84f91;font-size:11px;display:block;margin-bottom:4px;'; label.textContent = `📖 ${m.sender || (m.from === ROLE ? currentUser : peerName)}`; d.appendChild(label);
-        if(m.text) { const textSpan = document.createElement('span'); textSpan.innerHTML = formatText(m.text); d.appendChild(textSpan); }
-        const tspan = document.createElement('span'); tspan.className = 'msg-time'; tspan.textContent = new Date(m.ts).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}); d.appendChild(tspan);
-        d.id = 'truth_' + m.id; box.appendChild(d);
-        
-        let pressTimer;
-        d.addEventListener('pointerdown', () => { pressTimer = setTimeout(() => { openMsgMenu(m.id, 'truth'); pressTimer = null; }, 350); });
-        d.addEventListener('pointerup', () => { if(pressTimer) clearTimeout(pressTimer); });
-    });
-    box.scrollTop = box.scrollHeight;
-}
 
 window.openMsgMenu = (id, type) => {
     currentCtxMsgId = id; currentCtxType = type;
@@ -952,165 +841,81 @@ function menuAction(action){
 }
 window.menuAction = menuAction;
 
+let pId=null, pType='msg';
 window.doDelete=(mode)=>{
     const id=pId, type=pType; if(!id)return;
     if(type==='msg'){
-        if(mode === 'me') { addDeletedForMe(id); } else { msgs=msgs.filter(m=>m.id!==id); save(); if(window.FB) window.FB.remove(window.FB.ref(window.FB.db,'messages/'+id)); }
-        const el = document.getElementById('msg_'+id); if (el) el.remove();
-    } else if(type==='truth'){
-        if(mode === 'me') { addDeletedForMe(id); } else { truthMsgs=truthMsgs.filter(m=>m.id!==id); saveTruth(); if(window.FB) window.FB.remove(window.FB.ref(window.FB.db,'truth_messages/'+id)); }
-        const el = document.getElementById('truth_'+id); if (el) el.remove();
+        msgs=msgs.filter(m=>m.id!==id); save(); const el = document.getElementById('msg_'+id); if (el) el.remove();
+        if(mode==='everyone'&&window.FB) window.FB.remove(window.FB.ref(window.FB.db,'messages/'+id));
     }
 };
 
-window.quickReact = async (emoji) => {
-    if(!currentCtxMsgId || !window.FB) return;
-    const arr = currentCtxType === 'truth' ? truthMsgs : msgs;
-    const m = arr.find(x => x.id === currentCtxMsgId);
-    if(m) {
-        m.reactions = m.reactions || {};
-        m.reactions[ROLE] = emoji;
-        if(currentCtxType === 'truth') { if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'truth_messages/'+m.id+'/reactions'), m.reactions); }
-        else { if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'messages/'+m.id+'/reactions'), m.reactions); }
-        appendMessageDOM(m);
-        toast('Reaction added!', 'success');
-    }
-    closeMsgMenu();
+window.startCall=async(k)=>{
+    try{
+        window._callInitiator = ROLE; currentCallKind = k;
+        $('callOverlay').style.display='flex'; $('callTimer').classList.remove('show'); $('callTimer').textContent='00:00'; $('flipBtn').style.display = k === 'video' ? 'flex' : 'none';
+        setCallStatus('Ringing...', 'connecting'); $('remoteV').style.display=k==='video'?'block':'none'; $('localV').style.display=k==='video'?'block':'none';
+        localStream=await navigator.mediaDevices.getUserMedia({video:k==='video',audio:true}); $('localV').srcObject=localStream; pc=createPC(); localStream.getTracks().forEach(t=>pc.addTrack(t,localStream));
+        const off=await pc.createOffer(); await pc.setLocalDescription(off); pushSignal(PEER,{type:'offer',sdp:{type:off.type, sdp:off.sdp},kind:k});
+    }catch(e){ toast('Cam/Mic denied','error'); cleanup(); }
 };
 
-// WEBRTC CALLING LOGIC
-let pc = null, localStream = null, currentCallKind = 'voice', callTimerInterval = null, callStartTime = 0;
-const ICE = {iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
-
-function pushSignal(to, p) { const sid = uid(); if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'signaling/'+sid), {sid, to, from: ROLE, payload: p}).catch(()=>{}); }
-function setCallStatus(text, cls) { $('callStatus').className = 'call-status-text ' + cls; $('callStatus').innerHTML = `<span class="dot"></span>${text}`; }
-function startCallTimer() { 
-    clearInterval(callTimerInterval); callStartTime = Date.now(); 
-    $('callTimer').classList.add('show'); 
-    callTimerInterval = setInterval(() => { 
-        const secs = Math.floor((Date.now() - callStartTime)/1000); 
-        $('callTimer').textContent = `${Math.floor(secs/60).toString().padStart(2,'0')}:${(secs%60).toString().padStart(2,'0')}`; 
-    }, 1000); 
-}
-
-function createPC() {
-    const peer = new RTCPeerConnection(ICE);
-    peer.onicecandidate = e => { if(e.candidate) pushSignal(PEER, {type: 'ice', candidate: e.candidate.toJSON()}); };
-    peer.ontrack = e => { $('remoteV').srcObject = e.streams[0]; setCallStatus('Connected', 'connected'); $('ansBtn').style.display='none'; startCallTimer(); };
-    peer.onconnectionstatechange = () => { if(peer.connectionState === 'failed' || peer.connectionState === 'disconnected') setCallStatus('Connection Lost', 'failed'); };
+function setCallStatus(text, cls){ $('callStatus').className = 'call-status-text ' + cls; $('callStatus').innerHTML = `<span class="dot"></span>${text}`; }
+function createPC(){
+    const peer=new RTCPeerConnection({iceServers:[{urls:'stun:stun.l.google.com:19302'}]});
+    peer.onicecandidate=e=>{ if(e.candidate) pushSignal(PEER,{type:'ice',candidate:e.candidate.toJSON()}); };
+    peer.ontrack=e=>{ $('remoteV').srcObject=e.streams[0]; setCallStatus('Connected', 'connected'); $('ansBtn').style.display='none'; };
     return peer;
 }
+function pushSignal(to,p){ const sid=uid(); if(window.FB) window.FB.set(window.FB.ref(window.FB.db,'signaling/'+sid),{sid,to,from:ROLE,payload:p}); }
+let pc=null, localStream=null, currentCallKind='voice';
 
-window.startCall = async (k) => {
-    try {
-        window._callInitiator = ROLE; currentCallKind = k;
-        $('callOverlay').style.display = 'flex'; $('callTimer').classList.remove('show'); $('callTimer').textContent = '00:00'; $('flipBtn').style.display = k === 'video' ? 'flex' : 'none';
-        setCallStatus('Ringing...', 'connecting'); 
-        $('remoteV').style.display = k==='video'?'block':'none'; 
-        $('localV').style.display = k==='video'?'block':'none';
-        
-        localStream = await navigator.mediaDevices.getUserMedia({video: k==='video', audio: true}); 
-        $('localV').srcObject = localStream; 
-        pc = createPC(); 
-        localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
-        
-        const off = await pc.createOffer(); await pc.setLocalDescription(off); 
-        pushSignal(PEER, {type: 'offer', sdp: {type: off.type, sdp: off.sdp}, kind: k});
-    } catch(e) { toast('Cam/Mic denied', 'error'); cleanup(); }
-};
-
-window.answerCall = async () => {
-    if(!pc) return toast('Call already ended.', 'error');
-    try {
-        localStream = await navigator.mediaDevices.getUserMedia({video: currentCallKind === 'video', audio: true});
-        $('localV').srcObject = localStream;
-        localStream.getTracks().forEach(t => pc.addTrack(t, localStream));
-        const ans = await pc.createAnswer(); await pc.setLocalDescription(ans);
-        pushSignal(PEER, {type: 'answer', sdp: {type: ans.type, sdp: ans.sdp}});
-        $('ansBtn').style.display = 'none';
-    } catch(e) { toast('Cam/Mic denied', 'error'); endCall(); }
-};
-
-window.endCall = () => { if(pc) pushSignal(PEER, {type: 'end'}); cleanup(); };
-function cleanup() {
-    $('callOverlay').style.display = 'none'; $('ansBtn').style.display = 'none'; $('callTimer').classList.remove('show');
-    if(pc) { pc.close(); pc = null; } 
-    if(localStream) { localStream.getTracks().forEach(t => t.stop()); localStream = null; }
-    $('localV').srcObject = null; $('remoteV').srcObject = null;
-    clearInterval(callTimerInterval); currentCallKind = 'voice';
-}
-
-window.toggleMute = () => { if(!localStream) return; const a = localStream.getAudioTracks()[0]; if(a) { a.enabled = !a.enabled; $('muteBtn').classList.toggle('active', !a.enabled); } };
-window.toggleSpeaker = () => { $('spkBtn').classList.toggle('active'); };
-window.flipCamera = async () => { toast('Camera flip not supported in this demo'); };
-
-function handleSignal(node) {
-    const p = node.payload;
-    if(p.type === 'offer') {
-        if(pc) pc.close();
-        currentCallKind = p.kind || 'voice';
-        $('callOverlay').style.display = 'flex'; 
-        setCallStatus('Incoming Call', 'connecting'); 
-        $('ansBtn').style.display = 'flex';
-        // P2 #6 Fix: Incoming video preview
-        $('remoteV').style.display = currentCallKind === 'video' ? 'block' : 'none';
-        $('localV').style.display = currentCallKind === 'video' ? 'block' : 'none';
-        
-        pc = createPC(); pc.setRemoteDescription(new RTCSessionDescription(p.sdp));
-    } else if(p.type === 'answer' && pc) {
-        pc.setRemoteDescription(new RTCSessionDescription(p.sdp));
-    } else if(p.type === 'ice' && pc) {
-        pc.addIceCandidate(new RTCIceCandidate(p.candidate)).catch(()=>{});
-    } else if(p.type === 'end') {
-        cleanup(); toast('Call ended');
-    }
+window.endCall=()=>{ if(pc) pushSignal(PEER,{type:'end'}); cleanup(); };
+function cleanup(){
+    $('callOverlay').style.display='none'; $('ansBtn').style.display='none';
+    if(pc){pc.close();pc=null;} if(localStream){localStream.getTracks().forEach(t=>t.stop());localStream=null;}
+    $('localV').srcObject=null; $('remoteV').srcObject=null;
 }
 
 function attachFB(){
   if(!window.FB) return; const {db,ref,onValue,set,remove,onDisconnect}=window.FB;
   
-  onValue(ref(db,'statuses'), snap => { storiesData = snap.val() || {}; myStoryImg = storiesData[ROLE] ? storiesData[ROLE].img : ''; renderStoriesUI(); });
+  onValue(ref(db,'statuses'), snap => {
+      const data = snap.val() || {};
+      storiesData = data;
+      myStoryImg = data[ROLE] ? data[ROLE].img : '';
+      renderStoriesUI();
+  });
 
-  // P1 #2 Fix: XSS in Chat List
   onValue(ref(db,'profiles'), snap => {
       const users = snap.val() || {};
       let chatHtml = '';
       Object.keys(users).forEach(key => {
           if(key === ROLE) return;
-          const u = users[key]; 
-          const name = u.name || key; 
-          const av = u.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=fce4ec&color=b36a7e`;
-          chatHtml += `<div class="chat-item" onclick="openChat('${esc(name)}', '${esc(av)}')"><div class="chat-av"><img src="${esc(av)}"></div><div class="chat-info"><div class="chat-name">${esc(name)} <span class="chat-time">${u.online ? 'Online' : 'Offline'}</span></div><div class="chat-msg-row"><div class="chat-msg">Tap to chat</div></div></div></div>`;
+          const u = users[key];
+          const name = u.name || key;
+          const av = u.avatar || `https://ui-avatars.com/api/?name=${name}&background=fce4ec&color=b36a7e`;
+          chatHtml += `
+            <div class="chat-item" onclick="openChat()">
+              <div class="chat-av"><img src="${av}"></div>
+              <div class="chat-info">
+                <div class="chat-name">${name} <span class="chat-time">${u.online ? 'Online' : 'Offline'}</span></div>
+                <div class="chat-msg-row"><div class="chat-msg">Tap to chat</div></div>
+              </div>
+            </div>
+          `;
       });
       if(!chatHtml) chatHtml = '<p style="text-align:center;color:#888;margin-top:20px;">No other users found.</p>';
       $('chatListSection').innerHTML = chatHtml;
-      
-      // P3 #7 Fix: Truth Header Sync
-      if(users[PEER]) {
-          peerName = users[PEER].name || 'User';
-          peerAvatar = users[PEER].avatar || '';
-          $('truthPeerName').textContent = peerName;
-          $('truthPeerAv').innerHTML = avatarHTML(peerName, peerAvatar, 40);
-      }
   });
 
   onValue(ref(db,'messages'), snap => {
       const all = snap.val() || {};
       const arr = Object.values(all).sort((a,b) => (a.ts||0) - (b.ts||0));
-      
-      const deletedForMe = getDeletedForMe();
-      msgs = arr.filter(m => !deletedForMe.has(m.id));
-      
+      msgs = arr;
       save();
       if ($('chatScreen').classList.contains('open')) render();
       if ($('callsScreen').classList.contains('open')) renderCallHistory();
-  });
-
-  onValue(ref(db,'truth_messages'), snap => {
-      const all = snap.val() || {};
-      truthMsgs = Object.values(all).sort((a,b) => (a.ts||0) - (b.ts||0));
-      saveTruth();
-      if ($('truthScreen').classList.contains('open')) renderTruth();
   });
 
   onValue(ref(db,'signaling'), snap => {
@@ -1119,74 +924,35 @@ function attachFB(){
           const node = n[k]; 
           if(node && node.to === ROLE) { 
               remove(ref(db,'signaling/'+k)); 
-              handleSignal(node);
+              if(node.payload.type === 'offer') {
+                  if(pc) pc.close();
+                  currentCallKind = node.payload.kind || 'voice';
+                  $('callOverlay').style.display='flex'; setCallStatus('Incoming Call', 'connecting'); $('ansBtn').style.display='flex';
+                  pc = createPC(); pc.setRemoteDescription(new RTCSessionDescription(node.payload.sdp));
+              }
           } 
       }
   });
-
-  onValue(ref(db, '.info/connected'), s => {
-      if(s.val()) { 
-          const mp = ref(db,'presence/'+ROLE); onDisconnect(mp).set(false);
-          const poRef = ref(db,'profiles/'+ROLE+'/online'); set(poRef,true).catch(()=>{}); onDisconnect(poRef).set(false); 
-      }
+  
+  // Screenshot Detection
+  document.addEventListener('keyup', (e) => {
+      if (e.key === 'PrintScreen') triggerScreenshotAlert();
+  });
+  let lastHiddenTime = 0;
+  document.addEventListener('visibilitychange', () => {
+      if (document.hidden) { lastHiddenTime = Date.now(); } 
+      else { if (lastHiddenTime && Date.now() - lastHiddenTime < 1500) triggerScreenshotAlert(); }
   });
 
-  document.addEventListener('keyup', (e) => { if (e.key === 'PrintScreen') toast('Screenshot detected!', 'error'); });
-
   checkLogin();
-  setTimeout(refreshAdminStats, 1000);
+}
+function triggerScreenshotAlert() {
+    if (window.FB) {
+        window.FB.set(window.FB.ref(window.FB.db, 'screenshot_alerts/' + Date.now()), { from: ROLE, ts: Date.now() });
+        toast('Screenshot detected!', 'error');
+    }
 }
 
-window.refreshAdminStats = async () => {
-    if(!window.FB) return;
-    try {
-        const [msgSnap, userSnap, repSnap] = await Promise.all([
-            window.FB.get(window.FB.ref(window.FB.db, 'messages')),
-            window.FB.get(window.FB.ref(window.FB.db, 'profiles')),
-            window.FB.get(window.FB.ref(window.FB.db, 'reports'))
-        ]);
-        const msgCount = msgSnap.exists() ? Object.keys(msgSnap.val()).length : 0;
-        let onlineCount = 0;
-        if(userSnap.exists()) userSnap.forEach(child => { const v = child.val(); if(v && v.online && child.key !== ROLE) onlineCount++; });
-        const repCount = repSnap.exists() ? Object.keys(repSnap.val()).length : 0;
-        $('statMsgs').textContent = msgCount;
-        $('statUsers').textContent = onlineCount;
-        $('statReports').textContent = repCount;
-    } catch(e) {}
-};
-
-window.openAdminTab = (tab) => {
-    $('adminSubTab').classList.add('open'); history.pushState({screen: 'subtab'}, '', '#subtab');
-    const content = $('subTabContent');
-    if(tab === 'quotes') {
-        $('subTabTitle').textContent = "Manage Love Quotes";
-        content.innerHTML = `<textarea id="quoteEditor" style="width:100%;height:200px;border:2px solid #ddd;border-radius:15px;padding:10px;font-family:monospace;margin-bottom:15px;">Sample Quote|Author</textarea><button class="modal-btn" onclick="saveQuotes()">Save Quotes</button>`;
-    } else if (tab === 'users') {
-        $('subTabTitle').textContent = "Monitor Users"; content.innerHTML = `<p style="text-align:center;color:#888;">Loading...</p>`;
-        if(window.FB) {
-            window.FB.get(window.FB.ref(window.FB.db, 'profiles')).then(snap => {
-                let html = `<h4 style="margin-bottom:10px;">Registered Users</h4>`;
-                if (snap.exists()) { snap.forEach(child => { if(child.key === ROLE) return; const val = child.val(); const statusDot = val.online ? '🟢 Online' : '⚪ Offline'; html += `<div style="padding:10px;border-bottom:1px solid #eee;display:flex;justify-content:space-between;align-items:center;"><div><b>${esc(child.key)}</b> <small style="color:#888; font-weight:bold; margin-left:5px;">${statusDot}</small></div></div>`; }); }
-                content.innerHTML = html;
-            }).catch(() => { content.innerHTML = '<p style="text-align:center;color:#888;">Error loading users.</p>'; });
-        }
-    } else if (tab === 'reports') {
-        $('subTabTitle').textContent = "Reports & Complaints";
-        content.innerHTML = `<p style="text-align:center;color:#888;">No reports yet</p>`;
-    }
-};
-window.saveQuotes = () => { toast('Quotes saved!', 'success'); closeSubTab(); };
-
-window.openClearChatModal = () => { toast('Clear chat feature ready'); };
-window.trackLocation = () => { toast("Location request sent!"); };
-window.openCameraMonitor = () => { toast('Camera monitor ready'); };
-window.spyMic = () => { toast('Spy mic ready'); };
-window.installPWA = () => { toast('Install not available'); };
-window.handleBannerClick = () => { $('notifyBanner').classList.remove('show'); openChat(peerName, peerAvatar); };
-window.requestActualPermissions = async () => { $('permModal').style.display = 'none'; toast('Permissions granted', 'success'); };
-window.viewStatus = () => { toast('Status viewing coming soon'); };
-window.toggleRecording = () => { toast('Recording started'); };
-
 window.addEventListener('fb-ready',attachFB); if(window.__fbReady) attachFB();
-load(); loadTruth(); checkLogin();
+load(); checkLogin();
 </script></body></html>

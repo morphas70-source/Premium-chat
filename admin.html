@@ -100,7 +100,14 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .ig-send-btn svg{width:20px;height:20px;stroke:white;fill:none;margin-left:-2px;stroke-width:2.5;}
 .ig-send-btn:active{transform:scale(0.9);}
 
-/* REPLY PREVIEW FIX (BUG 10) */
+/* P2 #4 Missing CSS */
+.quoted-msg { padding: 8px 12px; margin-bottom: 8px; border-left: 4px solid #a5aaff; background: rgba(255,255,255,0.7); border-radius: 8px; font-size: 12px; color: #555; }
+.quoted-msg b { display: block; color: #b84f91; font-size: 11px; margin-bottom: 2px; }
+.call-log-container { display: flex; width: 100%; margin-bottom: 10px; }
+.call-log-container.me { justify-content: flex-end; }
+.call-log-container.other { justify-content: flex-start; }
+
+/* REPLY PREVIEW */
 #replyPreview { display: none; margin: 0 10px 6px; padding: 10px 14px; background: rgba(255,255,255,0.9); border-left: 3px solid #a5aaff; border-radius: 12px; align-items: center; gap: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); z-index: 5; }
 #replyPreview.show { display: flex; }
 #replyPreviewText { flex: 1; font-size: 12px; color: #666; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 600; }
@@ -132,7 +139,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .profile-settings-list { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
 .profile-setting-item { background: white; padding: 15px; border-radius: 18px; display: flex; flex-direction: column; box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #f9f0f3;}
 .profile-setting-label { font-size: 12px; color: #b36a7e; font-weight: 800; margin-bottom: 5px; }
-.profile-setting-value { font-size: 16px; color: #201a35; font-weight: 600; }
 .profile-action-btn { background: #ff8da1; color: white; border: none; padding: 15px; border-radius: 18px; font-weight: 800; font-size: 15px; margin-top: 10px; cursor: pointer; box-shadow: 0 5px 15px rgba(255,141,161,0.3); }
 
 /* STORY VIEWER */
@@ -168,7 +174,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .call-icon-circle.missed { background: #ffebee; }
 .call-details { flex: 1; text-align: left; min-width: 0; }
 .call-type-title { font-weight: 800; font-size: 14px; color: #201a35; }
-.call-meta-text { font-size: 11px; color: #888; margin-top: 3px; font-weight: 600; display: flex; gap: 6px; align-items: center; }
+.call-meta-text { font-size: 11px; color: #888; margin-top: 3px; font-weight: 600; display: flex; gap: 6px; align-items: center;}
 
 /* MODALS & OVERLAYS */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(5px);display:none;justify-content:center;align-items:center;z-index:9999;padding:20px;}
@@ -318,8 +324,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     </div>
     <div class="msgs-area">
       <div class="msgs" id="msgsBox"></div>
-      <div id="loveMeterAdmin">🩵</div>
-      <div id="loveMeterViewer">🩷</div>
     </div>
     <div id="replyPreview"><div style="flex:1;min-width:0;"><b style="color:#b84f91;font-size:10px;display:block;">Replying to</b><div id="replyPreviewText"></div></div><button class="reply-cancel" onclick="cancelReply()" aria-label="Cancel reply">×</button></div>
     <div class="ig-input-area">
@@ -483,7 +487,6 @@ const $=id=>document.getElementById(id);
 const LS_KEY='chat_v19_'+ROLE, LS_TRUTH='truth_v19_'+ROLE, LS_DELETED='deleted_for_me_'+ROLE;
 let msgs=[], truthMsgs=[];
 const pendingMsgs = new Set();
-let bc; try{bc=new BroadcastChannel('chat_v19_'+ROLE);}catch(e){}
 const uid=()=>Math.random().toString(36).slice(2,10);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
@@ -504,6 +507,7 @@ let __confirmCb = null;
 window.askConfirm = (title, msg, cb) => { __confirmCb = cb; $('confirmTitle').textContent = title; $('confirmMsg').textContent = msg; $('confirmModal').style.display = 'flex'; };
 $('confirmYesBtn').onclick = () => { $('confirmModal').style.display = 'none'; const cb = __confirmCb; __confirmCb = null; if(cb) cb(); };
 
+// P1 #1 Fix: addDeletedForMe logic
 function getDeletedForMe(){ try { return new Set(JSON.parse(lsGet(LS_DELETED)||'[]')); } catch { return new Set(); } }
 function addDeletedForMe(id){ const s = getDeletedForMe(); s.add(id); lsSet(LS_DELETED, JSON.stringify([...s])); }
 
@@ -539,7 +543,7 @@ let peerName='User', peerAvatar='', peerStatus='', myStoryImg='';
 let storiesData = {};
 const peerState={online:false,typing:false};
 let replyState = null, currentCtxMsgId = null, currentCtxType = 'msg';
-let pId=null, pType='msg'; // FIXED BUG 22
+let pId=null, pType='msg';
 
 window.openStoryViewer = (key) => {
     if(!storiesData[key]) return;
@@ -560,7 +564,7 @@ function renderStoriesUI() {
     let storyHtml = `
         <div class="story-item">
           <div class="story-avatar" onclick="${myStoryImg ? 'openStoryViewer(\'admin\')' : '$(\'statusInp\').click()'}">
-            <img src="${myStoryImg || currentAvatar || 'https://ui-avatars.com/api/?name='+currentUser+'&background=ffe4ec&color=d48888'}" alt="My Story">
+            <img src="${myStoryImg || currentAvatar || 'https://ui-avatars.com/api/?name='+esc(currentUser)+'&background=ffe4ec&color=d48888'}" alt="My Story">
             ${!myStoryImg ? `<div class="plus">+</div>` : `<div class="story-delete-btn" onclick="event.stopPropagation();deleteMyStory()">×</div>`}
           </div>
           <div class="story-name">My Story</div>
@@ -571,9 +575,9 @@ function renderStoriesUI() {
         if(key === ROLE) return;
         const s = storiesData[key];
         storyHtml += `
-            <div class="story-item" onclick="openStoryViewer('${key}')">
-              <div class="story-avatar"><img src="${s.img}"></div>
-              <div class="story-name">${s.name}</div>
+            <div class="story-item" onclick="openStoryViewer('${esc(key)}')">
+              <div class="story-avatar"><img src="${esc(s.img)}"></div>
+              <div class="story-name">${esc(s.name)}</div>
             </div>
         `;
     });
@@ -837,8 +841,23 @@ function appendMessageDOM(m) {
   } else {
     d.className='bub '+(m.from===ROLE?'me':'other');
     if(m.replyTo){ const q = document.createElement('div'); q.className = 'quoted-msg'; q.innerHTML = `<b>${esc(m.replyTo.sender)}</b>${esc(m.replyTo.text)}`; d.appendChild(q); }
-    if(m.text) { const textSpan = document.createElement('span'); textSpan.innerHTML = formatText(m.text); d.appendChild(textSpan); } // FIXED BUG 7 (XSS)
-    if(m.url){ const mediaWrap = document.createElement('div'); mediaWrap.style.cssText = 'position:relative; display:inline-block; margin-top:6px;'; if(m.type==='video') { const vid = document.createElement('video'); vid.src=m.url; vid.controls=true; vid.style.cssText='display:block;max-width:200px;border-radius:12px;'; mediaWrap.appendChild(vid); } else { const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:160px;border-radius:12px;'; mediaWrap.appendChild(img); } d.appendChild(mediaWrap); }
+    if(m.text) { const textSpan = document.createElement('span'); textSpan.innerHTML = formatText(m.text); d.appendChild(textSpan); }
+    
+    // P2 #5 Fix: Document/Audio render
+    if(m.url){ 
+        const mediaWrap = document.createElement('div'); mediaWrap.style.cssText = 'position:relative; display:inline-block; margin-top:6px; width:100%;'; 
+        if(m.type==='video') { const vid = document.createElement('video'); vid.src=m.url; vid.controls=true; vid.style.cssText='display:block;max-width:200px;border-radius:12px;'; mediaWrap.appendChild(vid); } 
+        else if(m.type==='audio') { const aud = document.createElement('audio'); aud.src=m.url; aud.controls=true; aud.style.cssText='display:block;max-width:200px; margin-top:5px;'; mediaWrap.appendChild(aud); }
+        else if(m.type==='document') { const link = document.createElement('a'); link.href=m.url; link.target='_blank'; link.textContent='📄 View Document'; link.style.cssText='display:inline-block; padding:8px 12px; background:#fff; border-radius:8px; color:#333; text-decoration:none; font-weight:bold; font-size:12px; margin-top:5px; border:1px solid #ddd;'; mediaWrap.appendChild(link); }
+        else { const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:160px;border-radius:12px;'; mediaWrap.appendChild(img); } 
+        d.appendChild(mediaWrap); 
+    }
+    
+    if(m.reactions) {
+        const rxWrap = document.createElement('div'); rxWrap.style.cssText = 'display:flex; gap:2px; margin-top:5px; font-size:14px;';
+        Object.values(m.reactions).forEach(emoji => { rxWrap.innerHTML += emoji; });
+        d.appendChild(rxWrap);
+    }
     
     const bottomRow = document.createElement('span'); bottomRow.style.cssText='display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:4px;';
     const tspan=document.createElement('span'); tspan.className='msg-time'; tspan.textContent=timeStr; bottomRow.appendChild(tspan);
@@ -936,21 +955,30 @@ window.menuAction = menuAction;
 window.doDelete=(mode)=>{
     const id=pId, type=pType; if(!id)return;
     if(type==='msg'){
-        msgs=msgs.filter(m=>m.id!==id); save(); const el = document.getElementById('msg_'+id); if (el) el.remove();
-        if(mode==='everyone'&&window.FB) window.FB.remove(window.FB.ref(window.FB.db,'messages/'+id));
+        if(mode === 'me') { addDeletedForMe(id); } else { msgs=msgs.filter(m=>m.id!==id); save(); if(window.FB) window.FB.remove(window.FB.ref(window.FB.db,'messages/'+id)); }
+        const el = document.getElementById('msg_'+id); if (el) el.remove();
     } else if(type==='truth'){
-        truthMsgs=truthMsgs.filter(m=>m.id!==id); saveTruth(); const el = document.getElementById('truth_'+id); if (el) el.remove();
-        if(mode==='everyone'&&window.FB) window.FB.remove(window.FB.ref(window.FB.db,'truth_messages/'+id));
+        if(mode === 'me') { addDeletedForMe(id); } else { truthMsgs=truthMsgs.filter(m=>m.id!==id); saveTruth(); if(window.FB) window.FB.remove(window.FB.ref(window.FB.db,'truth_messages/'+id)); }
+        const el = document.getElementById('truth_'+id); if (el) el.remove();
     }
 };
 
 window.quickReact = async (emoji) => {
-    if(!currentCtxMsgId) return;
-    toast('Reaction added!', 'success');
+    if(!currentCtxMsgId || !window.FB) return;
+    const arr = currentCtxType === 'truth' ? truthMsgs : msgs;
+    const m = arr.find(x => x.id === currentCtxMsgId);
+    if(m) {
+        m.reactions = m.reactions || {};
+        m.reactions[ROLE] = emoji;
+        if(currentCtxType === 'truth') { if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'truth_messages/'+m.id+'/reactions'), m.reactions); }
+        else { if(window.FB) window.FB.set(window.FB.ref(window.FB.db, 'messages/'+m.id+'/reactions'), m.reactions); }
+        appendMessageDOM(m);
+        toast('Reaction added!', 'success');
+    }
     closeMsgMenu();
 };
 
-// WEBRTC CALLING LOGIC (FIXED BUG 4, 13, 14)
+// WEBRTC CALLING LOGIC
 let pc = null, localStream = null, currentCallKind = 'voice', callTimerInterval = null, callStartTime = 0;
 const ICE = {iceServers:[{urls:'stun:stun.l.google.com:19302'}]};
 
@@ -977,7 +1005,9 @@ window.startCall = async (k) => {
     try {
         window._callInitiator = ROLE; currentCallKind = k;
         $('callOverlay').style.display = 'flex'; $('callTimer').classList.remove('show'); $('callTimer').textContent = '00:00'; $('flipBtn').style.display = k === 'video' ? 'flex' : 'none';
-        setCallStatus('Ringing...', 'connecting'); $('remoteV').style.display = k==='video'?'block':'none'; $('localV').style.display = k==='video'?'block':'none';
+        setCallStatus('Ringing...', 'connecting'); 
+        $('remoteV').style.display = k==='video'?'block':'none'; 
+        $('localV').style.display = k==='video'?'block':'none';
         
         localStream = await navigator.mediaDevices.getUserMedia({video: k==='video', audio: true}); 
         $('localV').srcObject = localStream; 
@@ -1019,7 +1049,13 @@ function handleSignal(node) {
     if(p.type === 'offer') {
         if(pc) pc.close();
         currentCallKind = p.kind || 'voice';
-        $('callOverlay').style.display = 'flex'; setCallStatus('Incoming Call', 'connecting'); $('ansBtn').style.display = 'flex';
+        $('callOverlay').style.display = 'flex'; 
+        setCallStatus('Incoming Call', 'connecting'); 
+        $('ansBtn').style.display = 'flex';
+        // P2 #6 Fix: Incoming video preview
+        $('remoteV').style.display = currentCallKind === 'video' ? 'block' : 'none';
+        $('localV').style.display = currentCallKind === 'video' ? 'block' : 'none';
+        
         pc = createPC(); pc.setRemoteDescription(new RTCSessionDescription(p.sdp));
     } else if(p.type === 'answer' && pc) {
         pc.setRemoteDescription(new RTCSessionDescription(p.sdp));
@@ -1035,16 +1071,27 @@ function attachFB(){
   
   onValue(ref(db,'statuses'), snap => { storiesData = snap.val() || {}; myStoryImg = storiesData[ROLE] ? storiesData[ROLE].img : ''; renderStoriesUI(); });
 
+  // P1 #2 Fix: XSS in Chat List
   onValue(ref(db,'profiles'), snap => {
       const users = snap.val() || {};
       let chatHtml = '';
       Object.keys(users).forEach(key => {
           if(key === ROLE) return;
-          const u = users[key]; const name = u.name || key; const av = u.avatar || `https://ui-avatars.com/api/?name=${name}&background=fce4ec&color=b36a7e`;
-          chatHtml += `<div class="chat-item" onclick="openChat('${name}', '${av}')"><div class="chat-av"><img src="${av}"></div><div class="chat-info"><div class="chat-name">${name} <span class="chat-time">${u.online ? 'Online' : 'Offline'}</span></div><div class="chat-msg-row"><div class="chat-msg">Tap to chat</div></div></div></div>`;
+          const u = users[key]; 
+          const name = u.name || key; 
+          const av = u.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=fce4ec&color=b36a7e`;
+          chatHtml += `<div class="chat-item" onclick="openChat('${esc(name)}', '${esc(av)}')"><div class="chat-av"><img src="${esc(av)}"></div><div class="chat-info"><div class="chat-name">${esc(name)} <span class="chat-time">${u.online ? 'Online' : 'Offline'}</span></div><div class="chat-msg-row"><div class="chat-msg">Tap to chat</div></div></div></div>`;
       });
       if(!chatHtml) chatHtml = '<p style="text-align:center;color:#888;margin-top:20px;">No other users found.</p>';
       $('chatListSection').innerHTML = chatHtml;
+      
+      // P3 #7 Fix: Truth Header Sync
+      if(users[PEER]) {
+          peerName = users[PEER].name || 'User';
+          peerAvatar = users[PEER].avatar || '';
+          $('truthPeerName').textContent = peerName;
+          $('truthPeerAv').innerHTML = avatarHTML(peerName, peerAvatar, 40);
+      }
   });
 
   onValue(ref(db,'messages'), snap => {

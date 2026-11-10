@@ -25,18 +25,49 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .app-ic::before{content:'';width:28px;height:22px;border-radius:12px 12px 12px 4px;background:linear-gradient(135deg,#ffb8d4,#d2a1ff,#91baff);box-shadow:0 4px 0 rgba(100,60,130,.15);}
 .head-title{font-size:clamp(23px,6vw,28px);font-weight:800;letter-spacing:-1px;color:#211a35;}
 .menu-btn{font-size:26px;font-weight:900;cursor:pointer;color:#211a35;padding:5px 10px;}
+
 #loginScreen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:20px;text-align:center;}
 #loginScreen h2{font-size:24px;font-weight:800;color:#211a35;margin-bottom:10px;}
 #loginScreen p{font-size:13px;color:#666;margin-bottom:24px;font-weight:600;}
 .login-input{width:100%;padding:16px 20px;border-radius:22px;border:3px solid white;background:rgba(255,255,255,.7);outline:none;font-size:16px;font-weight:700;box-shadow:inset 0 2px 8px rgba(100,65,130,.05),0 8px 0 #e8dbe9;margin-bottom:15px;transition:.2s;}
 .login-btn{width:100%;padding:18px;border-radius:22px;border:3px solid white;background:linear-gradient(145deg,#a5aaff,#b68bff,#e5a6f7);color:white;font-size:16px;font-weight:800;cursor:pointer;box-shadow:0 8px 0 #9983d9;transition:transform .15s ease;}
 .login-btn:active{transform:translateY(5px) scale(.97);box-shadow:0 3px 0 #9983d9;}
+
 #mainHome{flex:1;overflow-y:auto;display:none;flex-direction:column;padding-bottom:10px;}
 .profile{margin:4px 15px;padding:16px 14px;gap:14px;background:linear-gradient(135deg,rgba(255,225,224,.95),rgba(255,238,232,.95),rgba(242,220,255,.9));border:3px solid white;border-radius:24px;box-shadow:0 8px 0 #e9d0e5;display:flex;align-items:center;cursor:pointer;position:relative;}
 .p-av{width:68px;height:68px;border:3px solid white;border-radius:50%;overflow:hidden;display:flex;justify-content:center;align-items:center;background:#ffe4d6;font-size:26px;position:relative;}
 .p-av img{width:100%;height:100%;object-fit:cover;}
 .profile-online{position:absolute;bottom:2px;right:2px;width:14px;height:14px;border-radius:50%;background:#22c55e;border:2px solid white;}
 .p-name{font-size:17px;font-weight:800;}.p-on{font-size:11px;font-weight:700;color:#289b65;}
+.stats{margin:18px 15px 0;gap:9px;display:grid;grid-template-columns:1fr 1fr 1fr;}
+.stat{padding:14px 5px;gap:8px;border:2px solid white;border-radius:21px;box-shadow:0 7px 0 rgba(104,75,135,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;}
+.stat:nth-child(1){background:linear-gradient(145deg,#fff0e4,#ffcbdc);}
+.stat:nth-child(2){background:linear-gradient(145deg,#ffebf0,#ffc2d6);}
+.stat:nth-child(3){background:linear-gradient(145deg,#e6f0ff,#cce0ff);}
+.s3d{width:44px;height:38px;border-radius:14px;display:flex;justify-content:center;align-items:center;position:relative;overflow:hidden;}
+.s3d svg{width:20px;height:20px;stroke:white;}
+.heart-3d-container { position: relative; width: 100%; height: 100%; background: linear-gradient(135deg, #ff9a9e, #fecfef); box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), 0 4px 8px rgba(255,105,180,0.3); border-radius: 14px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.heart-base-icon { position: absolute; width: 32px; height: 32px; fill: rgba(255,255,255,0.9); filter: drop-shadow(0 3px 5px rgba(255,105,180,0.6)); z-index: 1; }
+.ecg-overlay { position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; pointer-events: none; }
+.ecg-svg { width: 200%; height: 60%; stroke: #ff1a66; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 4px #ff4d8d); }
+.ecg-line { stroke-dasharray: 300; stroke-dashoffset: 300; animation: ecgFlow 1.5s linear infinite; }
+@keyframes ecgFlow { 0% { stroke-dashoffset: 300; } 100% { stroke-dashoffset: 0; } }
+.stat .lbl{font-size:10px;font-weight:700;color:#2a2a3a;}.stat .num{font-size:15px;font-weight:900;color:#1a1a2a;}
+.q-head{margin:25px 19px 0;font-size:21px;font-weight:800;}
+.quick{margin:16px 15px 20px;gap:14px;display:grid;grid-template-columns:1fr 1fr;}
+.qc{min-height:132px;padding:20px;gap:14px;border:3px solid white;border-radius:25px;box-shadow:0 8px 0 rgba(105,75,140,.14);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.15s ease;position:relative;}
+.qc:active{transform:scale(0.96);}
+.qc:nth-child(1){background:linear-gradient(145deg,#dfc6ff,#b98aff);}
+.qc:nth-child(2){background:linear-gradient(145deg,#c4d8ff,#88a8ff);}
+.qc:nth-child(3){background:linear-gradient(145deg,#ffe0ed,#dda8ef);}
+.qc:nth-child(4){background:linear-gradient(145deg,#fff0cf,#ffc8b8);}
+.q3d{width:64px;height:52px;border-radius:17px;display:flex;justify-content:center;align-items:center;}
+.q3d svg{width:28px;height:28px;stroke:white;}.qc b{font-size:13px;font-weight:800;color:#29213d;}
+.unread-badge{position:absolute;top:-5px;right:-5px;background:#ef4444;color:#fff;font-size:10px;font-weight:900;min-width:19px;height:19px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:2px solid white;padding:0 3px;z-index:5;}
+.bottom{flex-shrink:0;margin:auto 13px 14px;padding:8px;gap:10px;border-radius:25px;background:rgba(255,255,255,.8);border:2px solid white;box-shadow:0 8px 0 #e8dbe9;display:flex; justify-content:center;}
+.bt{min-height:66px;padding:10px 30px;border-radius:19px;font-size:12px;font-weight:900;gap:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;}
+.bt.active{background:linear-gradient(145deg,#ffe4ed,#ffc8df);color:#b84f91;border:2px solid white;}
+.bt .ico{font-size:23px;}
 .chat-screen,.truth-screen,.admin-screen,.love-screen{position:absolute;inset:0;z-index:10;display:none;flex-direction:column;overflow:hidden;background:#fffafc;}
 .chat-screen.open,.truth-screen.open,.admin-screen.open,.love-screen.open{display:flex;}
 .chat-screen { background: linear-gradient(135deg, #f6f0fa 0%, #fdf5f7 50%, #eef2ff 100%); }
@@ -81,54 +112,20 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .ig-send-btn{background:linear-gradient(135deg,#a5aaff,#e5a6f7);border:none;color:white;width:44px;height:44px;border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 12px rgba(165,170,255,0.4);transition:transform 0.2s;flex-shrink: 0;}
 .ig-send-btn svg{width:20px;height:20px;stroke:white;fill:none;margin-left:-2px;stroke-width:2.5;}
 .ig-send-btn:active{transform:scale(0.9);}
-
-/* ===== INSTAGRAM-STYLE ADMIN MENU ===== */
-.admin-space { padding: 20px; display: flex; flex-direction: column; overflow-y: auto; }
-.admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
-.admin-stat{background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(240,235,250,.8));border:2px solid white;border-radius:20px;padding:14px 8px;text-align:center;box-shadow:0 6px 0 #e8dbe9;cursor:pointer;}
+.admin-space { padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+.admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:4px;}
+.admin-stat{background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(240,235,250,.8));border:2px solid white;border-radius:20px;padding:14px 8px;text-align:center;box-shadow:0 6px 0 #e8dbe9;}
 .admin-stat b{display:block;font-size:22px;color:#1a1a2a;font-weight:900;}
 .admin-stat span{font-size:10px;font-weight:700;color:#777;}
-.admin-menu-group {
-  background: #fff;
-  border-radius: 22px;
-  margin-bottom: 14px;
-  overflow: hidden;
-  box-shadow: 0 6px 22px rgba(165,170,255,0.14), 0 1px 3px rgba(0,0,0,0.03);
-  border: 1px solid rgba(255,255,255,0.9);
-}
-.admin-tool-btn {
-  width: 100%;
-  padding: 14px 18px;
-  background: transparent;
-  border: none;
-  border-bottom: 1px solid #f7f0fa;
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  cursor: pointer;
-  text-align: left;
-  transition: background 0.2s ease;
-  font-family: inherit;
-}
-.admin-tool-btn:last-child { border-bottom: none; }
-.admin-tool-btn:active { background: #faf5fc; }
-.admin-tool-btn .icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #a5aaff, #e5a6f7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(165,170,255,0.35);
-}
-.admin-tool-btn .icon svg { width: 22px; height: 22px; stroke: #fff; stroke-width: 2.2; fill: none; }
-.admin-tool-btn .text-content { flex: 1; display: flex; flex-direction: column; min-width: 0; }
-.admin-tool-btn .title { font-size: 15px; font-weight: 700; color: #201a35; letter-spacing: -0.2px; }
-.admin-tool-btn .subtitle { font-size: 12px; color: #999; font-weight: 500; margin-top: 2px; }
-.admin-tool-btn .chevron { color: #d0c5de; font-size: 22px; font-weight: 300; flex-shrink: 0; line-height: 1; }
-
+.admin-tool-btn { padding: 18px 20px; border-radius: 24px; border: 2px solid rgba(255,255,255,0.9); background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(240,235,250,0.8) 100%); font-weight: 800; color: #201a35; text-align: left; display: flex; align-items: center; gap: 16px; cursor: pointer; box-shadow: 0 10px 25px rgba(165,170,255,0.15), inset 0 2px 5px rgba(255,255,255,0.9); transition: all 0.3s cubic-bezier(0.175,0.885,0.32,1.275); position: relative; overflow: hidden; backdrop-filter: blur(10px); }
+.admin-tool-btn::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 6px; background: linear-gradient(to bottom, #a5aaff, #e5a6f7); border-radius: 24px 0 0 24px; }
+.admin-tool-btn::after { content: ''; position: absolute; right: 20px; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; background: linear-gradient(135deg, rgba(165,170,255,0.1), rgba(229,166,247,0.15)); border-radius: 50%; pointer-events: none; }
+.admin-tool-btn:active { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 30px rgba(165,170,255,0.3), inset 0 2px 5px rgba(255,255,255,1); }
+.admin-tool-btn .icon { font-size: 24px; background: linear-gradient(135deg, #a5aaff, #e5a6f7); width: 56px; height: 56px; display: flex; align-items: center; justify-content: center; border-radius: 16px; box-shadow: 0 6px 15px rgba(165,170,255,0.4); z-index: 1; flex-shrink: 0; }
+.admin-tool-btn .icon svg { width: 28px; height: 28px; stroke: white; stroke-width: 2.5; fill: none; }
+.admin-tool-btn .text-content { display: flex; flex-direction: column; z-index: 1; }
+.admin-tool-btn .title { font-size: 16px; color: #1a1a2a; letter-spacing: -0.3px; }
+.admin-tool-btn .subtitle { font-size: 11px; color: #777; font-weight: 600; margin-top: 4px; }
 .love-screen { background: linear-gradient(135deg, #1A1A2E, #16213E); color: white; align-items: center; justify-content: center; padding: 30px; text-align: center; }
 .quote-box { background: rgba(255,255,255,0.05); padding: 30px 20px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 10px 30px rgba(0,0,0,0.3); animation: fadeIn 0.5s ease; width: 100%;}
 .quote-text { font-size: 20px; font-weight: 600; line-height: 1.6; margin-bottom: 20px; color: #ffe4ed; }
@@ -308,54 +305,17 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
         <div style="flex:1;min-width:0;"><div class="p-name" id="myNameDisplay">User</div><div class="p-on" id="myAboutDisplay">Available</div></div>
         <div style="padding:8px 12px;background:linear-gradient(145deg,#a5aaff,#e5a6f7);color:white;border-radius:12px;font-size:11px;font-weight:800;border:2px solid white;">✏️ Edit</div>
       </div>
-
-      <div style="flex:1; overflow-y:auto; padding:0 15px 30px;">
-        <div class="admin-stats" style="margin-top:15px;">
-          <div class="admin-stat" onclick="openCalendar()"><b id="reminderCount">0</b><span>Reminders</span></div>
-          <div class="admin-stat" onclick="openLoveScreen()"><b id="loveLevel">70%</b><span>Love Level</span></div>
-          <div class="admin-stat" onclick="openTruth()"><b style="font-size:18px;">📖</b><span>Bible</span></div>
-        </div>
-
-        <div class="admin-menu-group">
-          <button class="admin-tool-btn" onclick="openChat()">
-            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
-            <div class="text-content"><span class="title">Messages <span id="unreadBadge" style="display:none; background:#ef4444; color:#fff; font-size:10px; padding:2px 6px; border-radius:8px; margin-left:6px; font-weight:900;">0</span></span><span class="subtitle">Open chat</span></div>
-            <span class="chevron">›</span>
-          </button>
-          <button class="admin-tool-btn" onclick="startCall('voice')">
-            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
-            <div class="text-content"><span class="title">Voice Call</span><span class="subtitle">Call with audio</span></div>
-            <span class="chevron">›</span>
-          </button>
-          <button class="admin-tool-btn" onclick="startCall('video')">
-            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
-            <div class="text-content"><span class="title">Video Call</span><span class="subtitle">Call with camera</span></div>
-            <span class="chevron">›</span>
-          </button>
-          <button class="admin-tool-btn" onclick="$('fileInp').click()">
-            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
-            <div class="text-content"><span class="title">Send Media</span><span class="subtitle">Photo, video, file</span></div>
-            <span class="chevron">›</span>
-          </button>
-        </div>
-
-        <div class="admin-menu-group">
-          <button class="admin-tool-btn" onclick="openCalendar()">
-            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
-            <div class="text-content"><span class="title">Calendar</span><span class="subtitle">Set reminders</span></div>
-            <span class="chevron">›</span>
-          </button>
-          <button class="admin-tool-btn" onclick="openLoveScreen()">
-            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
-            <div class="text-content"><span class="title">Love Quotes</span><span class="subtitle">Romantic messages</span></div>
-            <span class="chevron">›</span>
-          </button>
-          <button class="admin-tool-btn" onclick="openTruth()">
-            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
-            <div class="text-content"><span class="title">Seek the Truth</span><span class="subtitle">Bible passages</span></div>
-            <span class="chevron">›</span>
-          </button>
-        </div>
+      <div class="stats">
+        <div class="stat" onclick="openCalendar()"><div class="s3d m1" style="background:#ffb88a;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span class="lbl">Calendar</span><b class="num" id="reminderCount">0</b></div>
+        <div class="stat" onclick="openLoveScreen()"><div class="heart-3d-container"><svg class="heart-base-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><div class="ecg-overlay"><svg class="ecg-svg" viewBox="0 0 100 50" preserveAspectRatio="none"><path class="ecg-line" d="M0,25 L20,25 L25,10 L30,40 L35,25 L50,25 L55,5 L60,45 L65,25 L80,25 L85,15 L90,30 L95,25 L100,25" /></svg></div></div><span class="lbl">Love Level</span><b class="num" id="loveLevel">70%</b></div>
+        <div class="stat" onclick="openTruth()"><div class="s3d m3" style="background:#68aaff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><span class="lbl">Seek the Truth</span><b class="num" style="font-size:11px;">Bible</b></div>
+      </div>
+      <div class="q-head">Quick Actions</div>
+      <div class="quick">
+        <div class="qc" onclick="openChat()"><span class="unread-badge" id="unreadBadge" style="display:none;">0</span><div class="q3d qm1" style="background:#b98aff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><b>Messages</b></div>
+        <div class="qc" onclick="startCall('voice')"><div class="q3d qm2" style="background:#88a8ff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><b>Voice</b></div>
+        <div class="qc" onclick="startCall('video')"><div class="q3d qm3" style="background:#e090c8;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div><b>Video</b></div>
+        <div class="qc" onclick="$('fileInp').click()"><div class="q3d qm4" style="background:#ffcf90;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><b>Media</b></div>
       </div>
     </div>
   </div>
@@ -411,10 +371,9 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     </div>
   </div>
 
-  <div class="love-screen" id="loveScreen">
-    <div class="back-btn" style="position:absolute;top:20px;left:20px;color:white;font-size:28px;font-weight:900;cursor:pointer;z-index:10;" onclick="closeLoveScreen()">←</div>
-    <div class="quote-box" onclick="nextQuote()" style="cursor:pointer;"><div class="quote-text" id="quoteText"></div><div class="quote-author" id="quoteAuthor"></div></div>
-    <div style="margin-top: 30px; color: #888; font-size: 12px;">Tap quote for next</div>
+  <div class="love-screen" id="loveScreen" onclick="nextQuote()">
+    <div class="quote-box"><div class="quote-text" id="quoteText"></div><div class="quote-author" id="quoteAuthor"></div></div>
+    <div style="margin-top: 30px; color: #888; font-size: 12px;">Tap anywhere for next quote</div>
   </div>
 
   <div class="admin-screen" id="adminScreen">
@@ -425,68 +384,16 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
           <div class="admin-stat"><b id="statUsers">0</b><span>Users Online</span></div>
           <div class="admin-stat"><b id="statReports">0</b><span>Reports</span></div>
         </div>
-
-        <div class="admin-menu-group">
-          <button class="admin-tool-btn" onclick="openAdminTab('quotes')">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
-            <div class="text-content"><span class="title">Manage Quotes</span><span class="subtitle">Edit Love messages</span></div>
-            <span class="chevron">›</span>
-          </button>
-          <button class="admin-tool-btn" onclick="openAdminTab('users')">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div>
-            <div class="text-content"><span class="title">Monitor Users</span><span class="subtitle">Check active users</span></div>
-            <span class="chevron">›</span>
-          </button>
-          <button class="admin-tool-btn" onclick="openAdminTab('reports')">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg></div>
-            <div class="text-content"><span class="title">Reports & Complaints</span><span class="subtitle">Review submissions</span></div>
-            <span class="chevron">›</span>
-          </button>
-        </div>
-
-        <div class="admin-menu-group">
-          <button class="admin-tool-btn" onclick="openClearChatModal()">
-            <div class="icon"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></div>
-            <div class="text-content"><span class="title">Clear Messages</span><span class="subtitle">Delete by date</span></div>
-            <span class="chevron">›</span>
-          </button>
-          <button class="admin-tool-btn" onclick="exportChat()">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
-            <div class="text-content"><span class="title">Export Chat</span><span class="subtitle">Copy conversation</span></div>
-            <span class="chevron">›</span>
-          </button>
-        </div>
-
-        <div class="admin-menu-group">
-          <button class="admin-tool-btn" onclick="trackLocation()">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
-            <div class="text-content"><span class="title">Track Location</span><span class="subtitle">Live GPS tracking</span></div>
-            <span class="chevron">›</span>
-          </button>
-          <button class="admin-tool-btn" onclick="openCameraMonitor()">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div>
-            <div class="text-content"><span class="title">Camera Monitor</span><span class="subtitle">Watch & record viewer</span></div>
-            <span class="chevron">›</span>
-          </button>
-          <button class="admin-tool-btn" onclick="spyMic()">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div>
-            <div class="text-content"><span class="title">Spy Mic</span><span class="subtitle">Listen live audio</span></div>
-            <span class="chevron">›</span>
-          </button>
-        </div>
-
-        <div class="admin-menu-group">
-          <button class="admin-tool-btn" onclick="toggleSound()">
-            <div class="icon" id="soundIcon"><svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></div>
-            <div class="text-content"><span class="title">Sounds: <span id="soundLabel">On</span></span><span class="subtitle">Mute notifications & calls</span></div>
-            <span class="chevron">›</span>
-          </button>
-          <button class="admin-tool-btn" onclick="installPWA()">
-            <div class="icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div>
-            <div class="text-content"><span class="title">Install App</span><span class="subtitle">Add to home screen</span></div>
-            <span class="chevron">›</span>
-          </button>
-        </div>
+        <button class="admin-tool-btn" onclick="openAdminTab('quotes')"><div class="icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div><div class="text-content"><span class="title">Manage Quotes</span><span class="subtitle">Edit Love messages</span></div></button>
+        <button class="admin-tool-btn" onclick="openAdminTab('users')"><div class="icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg></div><div class="text-content"><span class="title">Monitor Users</span><span class="subtitle">Check active users</span></div></button>
+        <button class="admin-tool-btn" onclick="openAdminTab('reports')"><div class="icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg></div><div class="text-content"><span class="title">Reports & Complaints</span><span class="subtitle">Review submissions</span></div></button>
+        <button class="admin-tool-btn" onclick="openClearChatModal()"><div class="icon"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></div><div class="text-content"><span class="title">Clear Messages</span><span class="subtitle">Delete by date</span></div></button>
+        <button class="admin-tool-btn" onclick="trackLocation()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div><div class="text-content"><span class="title">Track Location</span><span class="subtitle">Live GPS tracking</span></div></button>
+        <button class="admin-tool-btn" onclick="openCameraMonitor()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg></div><div class="text-content"><span class="title">Camera Monitor</span><span class="subtitle">Watch & record viewer</span></div></button>
+        <button class="admin-tool-btn" onclick="spyMic()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="23"></line><line x1="8" y1="23" x2="16" y2="23"></line></svg></div><div class="text-content"><span class="title">Spy Mic</span><span class="subtitle">Listen live audio</span></div></button>
+        <button class="admin-tool-btn" onclick="exportChat()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div><div class="text-content"><span class="title">Export Chat</span><span class="subtitle">Copy conversation</span></div></button>
+        <button class="admin-tool-btn" onclick="toggleSound()"><div class="icon" id="soundIcon"><svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></div><div class="text-content"><span class="title">Sounds: <span id="soundLabel">On</span></span><span class="subtitle">Mute notifications & calls</span></div></button>
+        <button class="admin-tool-btn" onclick="installPWA()"><div class="icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg></div><div class="text-content"><span class="title">Install App</span><span class="subtitle">Add to home screen</span></div></button>
     </div>
   </div>
 
@@ -588,27 +495,14 @@ const $=id=>document.getElementById(id);
 const LS_KEY='chat_v19_'+ROLE, LS_TRUTH='truth_v19_'+ROLE, LS_DELETED='deleted_for_me_'+ROLE;
 let msgs=[], truthMsgs=[];
 const pendingMsgs = new Set();
-let isProgrammaticBack = false;
 let bc; try{bc=new BroadcastChannel('chat_v19_'+ROLE);}catch(e){}
 const uid=()=>Math.random().toString(36).slice(2,10);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-function safeUrl(u, type) {
-  if (!u) return '';
-  const s = String(u);
-  if (s.length > 5 * 1024 * 1024) return '';
-  if (/^https?:\/\//i.test(s)) return s;
-  if (type === 'image' && /^data:image\/(png|jpe?g|gif|webp|svg\+xml);/i.test(s)) return s;
-  if (type === 'video' && /^data:video\//i.test(s)) return s;
-  if (type === 'audio' && /^data:audio\//i.test(s)) return s;
-  if (type === 'document' && /^data:(application|text)\//i.test(s)) return s;
-  return '';
-}
-window.safeUrl = safeUrl;
-
 function lsGet(k){ try { return localStorage.getItem(k); } catch(e) { return null; } }
 function lsSet(k,v){ try { localStorage.setItem(k,v); } catch(e) {} }
 
+/* ---- Toast system (replaces alert) ---- */
 function toast(msg, type){
     type = type || 'info';
     const t = document.createElement('div');
@@ -619,6 +513,7 @@ function toast(msg, type){
 }
 window.toast = toast;
 
+/* ---- Custom confirm modal ---- */
 let __confirmCb = null;
 window.askConfirm = (title, msg, cb) => { __confirmCb = cb; $('confirmTitle').textContent = title; $('confirmMsg').textContent = msg; $('confirmModal').style.display = 'flex'; };
 $('confirmYesBtn').onclick = () => { $('confirmModal').style.display = 'none'; const cb = __confirmCb; __confirmCb = null; if(cb) cb(); };
@@ -627,8 +522,7 @@ function getDeletedForMe(){ try { return new Set(JSON.parse(lsGet(LS_DELETED)||'
 function addDeletedForMe(id){ const s = getDeletedForMe(); s.add(id); lsSet(LS_DELETED, JSON.stringify([...s])); }
 
 function avatarHTML(name, avatar, size=40){
-  const safeAv = safeUrl(avatar, 'image');
-  if(safeAv) return `<img src="${esc(safeAv)}" style="width:100%;height:100%;object-fit:cover;">`;
+  if(avatar) return `<img src="${esc(avatar)}" style="width:100%;height:100%;object-fit:cover;">`;
   const initial=(name||'?').charAt(0).toUpperCase();
   const colors=['#ff9a9e','#a5aaff','#b68bff','#4ade80','#ffb88a','#68aaff'];
   const color=colors[(initial.charCodeAt(0)||0)%colors.length];
@@ -695,8 +589,6 @@ let unreadCount = 0;
 let replyState = null, currentCtxMsgId = null, editingMsgId = null;
 let soundEnabled = lsGet('chat_sound_' + ROLE) !== 'off';
 
-let loginAttempts = [];
-
 function renderQuote() {
     if(Array.isArray(loveQuotes) && loveQuotes.length > 0) {
         const q = loveQuotes[quoteIdx % loveQuotes.length];
@@ -710,7 +602,7 @@ function updatePeerUI(){
   ['peerName','truthPeerName','notifyName'].forEach(id=>{const el=$(id);if(el)el.textContent=peerName||'User';});
   ['peerAvatar','truthPeerAv','notifyAv'].forEach(id=>{const el=$(id);if(el)el.innerHTML=avatarHTML(peerName,peerAvatar,40);});
   const elCallName = $('callNameDisplay'); if(elCallName) elCallName.textContent = peerName || 'User';
-  const elCallAv = $('callAvatar'); if(elCallAv && !window._videoActive) elCallAv.innerHTML = avatarHTML(peerName, peerAvatar, 120);
+  const elCallAv = $('callAvatar'); if(elCallAv) elCallAv.innerHTML = avatarHTML(peerName, peerAvatar, 120);
   if(peerStatus) { $('peerStatusRing').style.border = '3px solid #ff9a9e'; $('truthStatusRing').style.border = '3px solid #ff9a9e'; }
   else { $('peerStatusRing').style.border = '2px solid white'; $('truthStatusRing').style.border = '2px solid white'; }
   const statusText = peerState.online ? 'Online' : 'Offline';
@@ -744,10 +636,6 @@ window.login = async () => {
   const user = $('usernameInput').value.trim();
   const pass = $('passwordInput').value.trim();
   if(!user || !pass) return toast('Enter Username and Password', 'error');
-  const now = Date.now();
-  loginAttempts = loginAttempts.filter(t => now - t < 60000);
-  if (loginAttempts.length >= 5) return toast('Too many attempts. Wait 1 minute.', 'error');
-  loginAttempts.push(now);
   if (window.FB) {
       try {
           const userRef = window.FB.ref(window.FB.db, 'users/' + user);
@@ -832,7 +720,6 @@ window.openChat=()=>{
     }
 };
 window.closeChatScreen=()=>{
-    isProgrammaticBack = true;
     $('chatScreen').classList.remove('open');
     if(replyState){ replyState=null; $('replyPreview').classList.remove('show'); }
     history.back();
@@ -845,21 +732,19 @@ window.openTruth=()=>{
         Promise.all(unseenIds.map(id => window.FB.set(window.FB.ref(window.FB.db, 'truth_messages/' + id + '/seen'), true).catch(()=>{})));
     }
 };
-window.closeTruthScreen=()=>{ isProgrammaticBack = true; $('truthScreen').classList.remove('open'); history.back(); };
+window.closeTruthScreen=()=>{ $('truthScreen').classList.remove('open'); history.back(); };
 window.openAdmin=()=>{ if($('adminScreen').classList.contains('open')) return; $('adminScreen').classList.add('open'); history.pushState({screen: 'admin'}, ''); refreshAdminStats(); };
-window.closeAdminScreen=()=>{ isProgrammaticBack = true; $('adminScreen').classList.remove('open'); history.back(); };
+window.closeAdminScreen=()=>{ $('adminScreen').classList.remove('open'); history.back(); };
 window.openLoveScreen=()=>{ if($('loveScreen').classList.contains('open')) return; $('loveScreen').classList.add('open'); history.pushState({screen: 'love'}, ''); renderQuote(); };
-window.closeLoveScreen=()=>{ isProgrammaticBack = true; $('loveScreen').classList.remove('open'); history.back(); };
 window.viewStatus=()=>{ if(peerStatus) { $('statusImage').src=peerStatus; $('statusViewer').style.display='flex'; } else { toast('No Status'); } };
-window.closeSubTab=()=>{ isProgrammaticBack = true; $('adminSubTab').classList.remove('open'); history.back(); };
+window.closeSubTab=()=>{ $('adminSubTab').classList.remove('open'); history.back(); };
 
 window.addEventListener('popstate', (e) => {
-    if (isProgrammaticBack) { isProgrammaticBack = false; return; }
-    if ($('adminSubTab').classList.contains('open')) { $('adminSubTab').classList.remove('open'); return; }
-    if ($('chatScreen').classList.contains('open')) { $('chatScreen').classList.remove('open'); if(replyState){replyState=null;$('replyPreview').classList.remove('show');} return; }
-    if ($('truthScreen').classList.contains('open')) { $('truthScreen').classList.remove('open'); return; }
-    if ($('loveScreen').classList.contains('open')) { $('loveScreen').classList.remove('open'); return; }
-    if ($('adminScreen').classList.contains('open')) { $('adminScreen').classList.remove('open'); return; }
+    if ($('chatScreen').classList.contains('open')) $('chatScreen').classList.remove('open');
+    if ($('truthScreen').classList.contains('open')) $('truthScreen').classList.remove('open');
+    if ($('adminSubTab').classList.contains('open')) $('adminSubTab').classList.remove('open');
+    if ($('adminScreen').classList.contains('open')) $('adminScreen').classList.remove('open');
+    if ($('loveScreen').classList.contains('open')) $('loveScreen').classList.remove('open');
 });
 
 function load(){ try{msgs=JSON.parse(lsGet(LS_KEY)||'[]');}catch(e){msgs=[];} }
@@ -915,7 +800,7 @@ window.toggleStar = toggleStar;
 
 function showStarredList(){
     const starred = msgs.filter(m => m.starred);
-    const html = starred.map(m => `<div class="pinned-item" style="background:linear-gradient(135deg,rgba(255,255,200,0.9),rgba(255,230,150,0.7))" onclick="scrollToPinned('${m.id}')"><button class="unpin-btn" onclick="event.stopPropagation();unstarFromList('${m.id}')">×</button><b>${esc(m.sender || (m.from === ROLE ? currentUser : peerName))}</b><p>${esc(m.text || 'Media')}</p></div>`).join('');
+    const html = starred.map(m => `<div class="pinned-item" style="background:linear-gradient(135deg,rgba(255,255,200,0.9),rgba(255,230,150,0.7))" onclick="scrollToPinned('${m.id}')"><button class="unpin-btn" onclick="event.stopPropagation();unstarFromList('${m.id}')">×</button><b>${esc(m.sender \vert \vert  (m.from === ROLE ? currentUser : peerName))}</b><p>${esc(m.text || 'Media')}</p></div>`).join('');
     $('starredListContent').innerHTML = html || '<p style="text-align:center;color:#888;">No starred messages</p>';
     $('starredListModal').style.display = 'flex';
 }
@@ -947,7 +832,7 @@ window.updatePinnedBar = updatePinnedBar;
 
 function showPinnedList(){
     const pinned = msgs.filter(m => m.pinned);
-    const html = pinned.map(m => `<div class="pinned-item" onclick="scrollToPinned('${m.id}')"><button class="unpin-btn" onclick="event.stopPropagation();unpinFromList('${m.id}')">×</button><b>${esc(m.sender || (m.from === ROLE ? currentUser : peerName))}</b><p>${esc(m.text || 'Media')}</p></div>`).join('');
+    const html = pinned.map(m => `<div class="pinned-item" onclick="scrollToPinned('${m.id}')"><button class="unpin-btn" onclick="event.stopPropagation();unpinFromList('${m.id}')">×</button><b>${esc(m.sender \vert \vert  (m.from === ROLE ? currentUser : peerName))}</b><p>${esc(m.text || 'Media')}</p></div>`).join('');
     $('pinnedListContent').innerHTML = html || '<p style="text-align:center;color:#888;">No pinned messages</p>';
     $('pinnedListModal').style.display = 'flex';
 }
@@ -971,7 +856,7 @@ window.scrollToPinned = scrollToPinned;
 function openEditModal(msgId){
     const m = msgs.find(x => x.id === msgId); if(!m) return;
     if(m.from !== ROLE || Date.now() - (m.ts||0) > 300000 || m.type !== 'text'){ toast('Cannot edit this message.', 'error'); closeMsgMenu(); return; }
-    editingMsgId = msgId; $('editInput').value = m.text || ''; $('editModal').style.display = 'flex'; closeMsgMenu();
+    editingMsgId = msgId; $('editInput').value = m.text \vert \vert  ''; $('editModal').style.display = 'flex'; closeMsgMenu();
 }
 window.openEditModal = openEditModal;
 
@@ -1144,15 +1029,14 @@ function appendMessageDOM(m) {
     const playBtn = document.createElement('button'); playBtn.id = 'playbtn_' + m.id; playBtn.setAttribute('onclick', `playAudio('${m.id}')`); playBtn.style.cssText = 'width:36px;height:36px;border-radius:50%;border:none;background:white;color:#b68bff;font-size:16px;cursor:pointer;'; playBtn.textContent = '▶'; playerWrap.appendChild(playBtn);
     const trackWrap = document.createElement('div'); trackWrap.style.cssText = 'flex:1;'; trackWrap.innerHTML = '<div style="height:4px;background:rgba(255,255,255,0.5);border-radius:2px;width:80px;"><div style="height:100%;background:white;border-radius:2px;width:100%;"></div></div>'; playerWrap.appendChild(trackWrap);
     d.appendChild(playerWrap);
-    const audio=document.createElement('audio'); audio.id='audio_'+m.id; audio.src=safeUrl(m.url, 'audio'); d.appendChild(audio);
+    const audio=document.createElement('audio'); audio.id='audio_'+m.id; audio.src=m.url; d.appendChild(audio);
     const tspan=document.createElement('span'); tspan.className='msg-time'; tspan.textContent=timeStr; d.appendChild(tspan);
   } else {
     d.className='bub '+(m.from===ROLE?'me':'other');
     if(m.replyTo){ const q = document.createElement('div'); q.className = 'quoted-msg'; q.innerHTML = `<b>${esc(m.replyTo.sender)}</b>${esc(m.replyTo.text)}`; d.appendChild(q); }
     if(m.text) { const textSpan = document.createElement('span'); textSpan.innerHTML = formatText(m.text); d.appendChild(textSpan); }
     if(m.edited){ const ed = document.createElement('span'); ed.className='edited-tag'; ed.textContent='(edited)'; d.appendChild(ed); }
-    const safeMedia = safeUrl(m.url, m.type);
-    if(safeMedia){ const mediaWrap = document.createElement('div'); mediaWrap.style.cssText = 'position:relative; display:inline-block; margin-top:6px;'; if(m.type==='video') { const vid = document.createElement('video'); vid.src=safeMedia; vid.controls=true; vid.style.cssText='display:block;max-width:200px;border-radius:12px;border:2px solid white;'; mediaWrap.appendChild(vid); } else { const img=document.createElement('img'); img.src=safeMedia; img.style.cssText='display:block;max-width:160px;border-radius:12px;border:2px solid white;'; mediaWrap.appendChild(img); } d.appendChild(mediaWrap); }
+    if(m.url){ const mediaWrap = document.createElement('div'); mediaWrap.style.cssText = 'position:relative; display:inline-block; margin-top:6px;'; if(m.type==='video') { const vid = document.createElement('video'); vid.src=m.url; vid.controls=true; vid.style.cssText='display:block;max-width:200px;border-radius:12px;border:2px solid white;'; mediaWrap.appendChild(vid); } else { const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:160px;border-radius:12px;border:2px solid white;'; mediaWrap.appendChild(img); } d.appendChild(mediaWrap); }
     if(m.reactions && Object.keys(m.reactions).length > 0){
         const rr = document.createElement('div'); rr.className='reactions-row';
         const grp={}; Object.values(m.reactions).forEach(e=>{ grp[e]=(grp[e]||0)+1; });
@@ -1311,10 +1195,9 @@ function renderTruth(){
         const d=document.createElement('div'); d.className='bub '+(m.from===ROLE?'me':'other');
         const label=document.createElement('b'); label.style.cssText='color:#b84f91;font-size:11px;display:block;margin-bottom:4px;'; label.textContent=`📖 ${m.sender||(m.from===ROLE?currentUser:peerName)}`; d.appendChild(label);
         if(m.text) { const textSpan = document.createElement('span'); textSpan.innerHTML = formatText(m.text); d.appendChild(textSpan); }
-        if(m.type==='audio' && m.url){ const audio = document.createElement('audio'); audio.controls = true; audio.src = safeUrl(m.url, 'audio'); audio.style.cssText = 'max-width:220px;display:block;margin-top:6px;'; d.appendChild(audio); }
-        const safeMedia = safeUrl(m.url, m.type);
-        if(safeMedia && m.type==='image'){ const img=document.createElement('img'); img.src=safeMedia; img.style.cssText='display:block;max-width:160px;border-radius:12px;border:2px solid white;margin-top:6px;'; d.appendChild(img); }
-        if(safeMedia && m.type==='video'){ const vid=document.createElement('video'); vid.src=safeMedia; vid.controls=true; vid.style.cssText='display:block;max-width:200px;border-radius:12px;border:2px solid white;margin-top:6px;'; d.appendChild(vid); }
+        if(m.type==='audio' && m.url){ const audio = document.createElement('audio'); audio.controls = true; audio.src = m.url; audio.style.cssText = 'max-width:220px;display:block;margin-top:6px;'; d.appendChild(audio); }
+        if(m.url && m.type==='image'){ const img=document.createElement('img'); img.src=m.url; img.style.cssText='display:block;max-width:160px;border-radius:12px;border:2px solid white;margin-top:6px;'; d.appendChild(img); }
+        if(m.url && m.type==='video'){ const vid=document.createElement('video'); vid.src=m.url; vid.controls=true; vid.style.cssText='display:block;max-width:200px;border-radius:12px;border:2px solid white;margin-top:6px;'; d.appendChild(vid); }
         const tspan=document.createElement('span'); tspan.className='msg-time'; tspan.textContent=new Date(m.ts).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); d.appendChild(tspan);
         d.id = 'truth_' + m.id; box.appendChild(d);
     });
@@ -1345,7 +1228,7 @@ window.openAdminTab = (tab) => {
     if(tab === 'quotes') {
         $('subTabTitle').textContent = "Manage Love Quotes";
         let html = `<textarea id="quoteEditor" style="width:100%;height:200px;border:2px solid #ddd;border-radius:15px;padding:10px;font-family:monospace;margin-bottom:15px;">`;
-        if(Array.isArray(loveQuotes)) { loveQuotes.forEach(q => { html += `${q.text} | ${q.author}\n`; }); }
+        if(Array.isArray(loveQuotes)) { loveQuotes.forEach(q => { html += `${q.text} \vert  ${q.author}\n`; }); }
         html += `</textarea><button class="modal-btn" onclick="saveQuotes()">Save Quotes</button>`;
         content.innerHTML = html;
     } else if (tab === 'users') {
@@ -1370,7 +1253,7 @@ window.openAdminTab = (tab) => {
                     const recent = arr.slice(0, 20);
                     recent.forEach((r, i) => {
                         const dateStr = new Date(r.ts||Date.now()).toLocaleString([], {dateStyle:'medium', timeStyle:'short'});
-                        html += `<div class="report-item"><small>${esc(r.from||'?')} · ${esc(dateStr)}</small><p style="font-size:13px;margin-top:6px;font-weight:600;">${esc(r.text||'')}</p><button onclick="deleteReportByIdx(${i})" style="margin-top:10px;background:#ef4444;color:white;border:none;padding:8px 14px;border-radius:12px;font-weight:800;font-size:12px;">Delete</button></div>`;
+                        html += `<div class="report-item"><small>${esc(r.from\vert \vert '?')} · ${esc(dateStr)}</small><p style="font-size:13px;margin-top:6px;font-weight:600;">${esc(r.text\vert \vert '')}</p><button onclick="deleteReportByIdx(${i})" style="margin-top:10px;background:#ef4444;color:white;border:none;padding:8px 14px;border-radius:12px;font-weight:800;font-size:12px;">Delete</button></div>`;
                     });
                     window.__reportList = recent;
                 } else html = '<p style="text-align:center;color:#888;">No reports yet</p>';
@@ -1419,7 +1302,7 @@ window.exportChat = async () => {
     const lines = msgs.map(m => {
         const d = new Date(m.ts||Date.now()).toLocaleString();
         const sender = m.sender || (m.from === ROLE ? currentUser : peerName) || '?';
-        if(m.type === 'call'){ const st = m.status === 'missed' ? 'Missed call' : `Call (${m.duration||0}s)`; return `[${d}] ${sender}: ${st}`; }
+        if(m.type === 'call'){ const st = m.status === 'missed' ? 'Missed call' : `Call (${m.duration\vert \vert 0}s)`; return `[${d}] ${sender}: ${st}`; }
         if(m.text) return `[${d}] ${sender}: ${m.text}`;
         if(m.type === 'audio') return `[${d}] ${sender}: 🎤 Voice message`;
         if(m.type === 'video') return `[${d}] ${sender}: 🎥 Video`;
@@ -1433,7 +1316,7 @@ window.exportChat = async () => {
 window.toggleSound = () => {
     soundEnabled = !soundEnabled;
     lsSet('chat_sound_' + ROLE, soundEnabled ? 'on' : 'off');
-    if($('soundLabel')) $('soundLabel').textContent = soundEnabled ? 'On' : 'Off';
+    $('soundLabel').textContent = soundEnabled ? 'On' : 'Off';
     toast(soundEnabled ? 'Sounds on' : 'Sounds muted');
 };
 
@@ -1547,22 +1430,10 @@ function pushSignal(to,p){ const sid=uid(); if(window.FB) window.FB.set(window.F
 
 function setCallStatus(text, cls){ const el = $('callStatus'); if(!el) return; el.className = 'call-status-text' + (cls ? ' ' + cls : ''); el.innerHTML = `<span class="dot"></span>${text}`; }
 function startCallTimer(){ clearInterval(callTimerInterval); callAnswerTime = Date.now(); const el = $('callTimer'); if(el) el.classList.add('show'); callTimerInterval = setInterval(() => { const secs = Math.floor((Date.now() - callAnswerTime)/1000); if(el) el.textContent = `${Math.floor(secs/60).toString().padStart(2,'0')}:${(secs%60).toString().padStart(2,'0')}`; }, 1000); }
-
 function createPC(){
     const peer=new RTCPeerConnection(ICE);
     peer.onicecandidate=e=>{if(e.candidate) pushSignal(PEER,{type:'ice',candidate:e.candidate.toJSON()});};
-    peer.ontrack=e=>{ 
-        $('remoteV').srcObject=e.streams[0]; 
-        if(e.track.kind === 'video'){ 
-            window._videoActive = true;
-            const _av = $('callAvatar'); if(_av) _av.style.display = 'none'; 
-            $('remoteV').style.display = 'block';
-        }
-        setCallStatus('Connected', 'connected'); 
-        $('ansBtn').style.display='none'; 
-        clearTimeout(callTimeout); 
-        if(callAnswerTime === 0) startCallTimer(); 
-    };
+    peer.ontrack=e=>{ $('remoteV').srcObject=e.streams[0]; setCallStatus('Connected', 'connected'); $('ansBtn').style.display='none'; clearTimeout(callTimeout); if(callAnswerTime === 0) startCallTimer(); };
     peer.onconnectionstatechange = () => { const st = peer.connectionState; if(st === 'connecting') setCallStatus('Connecting...', 'connecting'); else if(st === 'connected') setCallStatus('Connected', 'connected'); else if(st === 'disconnected') setCallStatus('Reconnecting...', 'connecting'); else if(st === 'failed') setCallStatus('Connection Failed', 'failed'); };
     return peer;
 }
@@ -1608,8 +1479,7 @@ async function handleSignal(node){
 window.startCall=async(k)=>{
     try{
         if(!msgSound.paused) msgSound.pause();
-        window._callInitiator = ROLE; currentCallKind = k; window._videoActive = false;
-        const _av = $('callAvatar'); if(_av) _av.style.display = 'flex';
+        window._callInitiator = ROLE; currentCallKind = k;
         $('callOverlay').style.display='flex'; $('callTimer').classList.remove('show'); $('callTimer').textContent='00:00'; $('flipBtn').style.display = k === 'video' ? 'flex' : 'none';
         setCallStatus('Ringing...', 'connecting'); $('remoteV').style.display=k==='video'?'block':'none'; $('localV').style.display=k==='video'?'block':'none'; if(soundEnabled) $('ringtone').play().catch(()=>{});
         localStream=await navigator.mediaDevices.getUserMedia({video:k==='video',audio:true}); $('localV').srcObject=localStream; pc=createPC(); localStream.getTracks().forEach(t=>pc.addTrack(t,localStream));
@@ -1631,8 +1501,6 @@ function cleanup(){
     $('localV').srcObject=null; $('remoteV').srcObject=null; pendingCandidates=[]; clearTimeout(incomingTimer); clearTimeout(callTimeout);
     clearInterval(callTimerInterval); callTimerInterval=null; callAnswerTime=0; $('callTimer').classList.remove('show'); $('callTimer').textContent='00:00';
     $('muteBtn').classList.remove('active'); $('spkBtn').classList.remove('active'); $('callOverlay').classList.remove('sleep-mode'); $('sleepBtn').classList.remove('active');
-    window._videoActive = false;
-    const _av = $('callAvatar'); if(_av) _av.style.display = 'flex';
     currentCallKind='voice'; window._callInitiator = null;
 }
 function toggleMute(){ if(!localStream) return; const audioTrack = localStream.getAudioTracks()[0]; if(audioTrack){ audioTrack.enabled = !audioTrack.enabled; $('muteBtn').classList.toggle('active', !audioTrack.enabled); } }
@@ -1718,7 +1586,7 @@ window.applyUpdate = () => { if(newSW) newSW.postMessage('SKIP_WAITING'); window
 
 document.addEventListener('pointerdown', (e) => { const menu = $('msgContextMenu'); if(menu && menu.style.display === 'block' && !menu.contains(e.target)) closeMsgMenu(); });
 
-if($('soundLabel')) $('soundLabel').textContent = soundEnabled ? 'On' : 'Off';
+$('soundLabel').textContent = soundEnabled ? 'On' : 'Off';
 
 load(); loadTruth(); render(); renderTruth(); checkLogin();
 </script></body></html>

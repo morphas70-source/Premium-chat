@@ -37,35 +37,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 .p-av img{width:100%;height:100%;object-fit:cover;}
 .profile-online{position:absolute;bottom:2px;right:2px;width:14px;height:14px;border-radius:50%;background:#22c55e;border:2px solid white;}
 .p-name{font-size:17px;font-weight:800;}.p-on{font-size:11px;font-weight:700;color:#289b65;}
-.stats{margin:18px 15px 0;gap:9px;display:grid;grid-template-columns:1fr 1fr 1fr;}
-.stat{padding:14px 5px;gap:8px;border:2px solid white;border-radius:21px;box-shadow:0 7px 0 rgba(104,75,135,.12);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;position:relative;}
-.stat:nth-child(1){background:linear-gradient(145deg,#fff0e4,#ffcbdc);}
-.stat:nth-child(2){background:linear-gradient(145deg,#ffebf0,#ffc2d6);}
-.stat:nth-child(3){background:linear-gradient(145deg,#e6f0ff,#cce0ff);}
-.s3d{width:44px;height:38px;border-radius:14px;display:flex;justify-content:center;align-items:center;position:relative;overflow:hidden;}
-.s3d svg{width:20px;height:20px;stroke:white;}
-.heart-3d-container { position: relative; width: 100%; height: 100%; background: linear-gradient(135deg, #ff9a9e, #fecfef); box-shadow: inset 0 2px 5px rgba(255,255,255,0.5), 0 4px 8px rgba(255,105,180,0.3); border-radius: 14px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.heart-base-icon { position: absolute; width: 32px; height: 32px; fill: rgba(255,255,255,0.9); filter: drop-shadow(0 3px 5px rgba(255,105,180,0.6)); z-index: 1; }
-.ecg-overlay { position: absolute; inset: 0; z-index: 2; display: flex; align-items: center; justify-content: center; pointer-events: none; }
-.ecg-svg { width: 200%; height: 60%; stroke: #ff1a66; stroke-width: 2.5; fill: none; stroke-linecap: round; stroke-linejoin: round; filter: drop-shadow(0 0 4px #ff4d8d); }
-.ecg-line { stroke-dasharray: 300; stroke-dashoffset: 300; animation: ecgFlow 1.5s linear infinite; }
-@keyframes ecgFlow { 0% { stroke-dashoffset: 300; } 100% { stroke-dashoffset: 0; } }
-.stat .lbl{font-size:10px;font-weight:700;color:#2a2a3a;}.stat .num{font-size:15px;font-weight:900;color:#1a1a2a;}
-.q-head{margin:25px 19px 0;font-size:21px;font-weight:800;}
-.quick{margin:16px 15px 20px;gap:14px;display:grid;grid-template-columns:1fr 1fr;}
-.qc{min-height:132px;padding:20px;gap:14px;border:3px solid white;border-radius:25px;box-shadow:0 8px 0 rgba(105,75,140,.14);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:transform 0.15s ease;position:relative;}
-.qc:active{transform:scale(0.96);}
-.qc:nth-child(1){background:linear-gradient(145deg,#dfc6ff,#b98aff);}
-.qc:nth-child(2){background:linear-gradient(145deg,#c4d8ff,#88a8ff);}
-.qc:nth-child(3){background:linear-gradient(145deg,#ffe0ed,#dda8ef);}
-.qc:nth-child(4){background:linear-gradient(145deg,#fff0cf,#ffc8b8);}
-.q3d{width:64px;height:52px;border-radius:17px;display:flex;justify-content:center;align-items:center;}
-.q3d svg{width:28px;height:28px;stroke:white;}.qc b{font-size:13px;font-weight:800;color:#29213d;}
-.unread-badge{position:absolute;top:-5px;right:-5px;background:#ef4444;color:#fff;font-size:10px;font-weight:900;min-width:19px;height:19px;border-radius:10px;display:flex;align-items:center;justify-content:center;border:2px solid white;padding:0 3px;z-index:5;}
-.bottom{flex-shrink:0;margin:auto 13px 14px;padding:8px;gap:10px;border-radius:25px;background:rgba(255,255,255,.8);border:2px solid white;box-shadow:0 8px 0 #e8dbe9;display:flex; justify-content:center;}
-.bt{min-height:66px;padding:10px 30px;border-radius:19px;font-size:12px;font-weight:900;gap:5px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;}
-.bt.active{background:linear-gradient(145deg,#ffe4ed,#ffc8df);color:#b84f91;border:2px solid white;}
-.bt .ico{font-size:23px;}
 .chat-screen,.truth-screen,.admin-screen,.love-screen{position:absolute;inset:0;z-index:10;display:none;flex-direction:column;overflow:hidden;background:#fffafc;}
 .chat-screen.open,.truth-screen.open,.admin-screen.open,.love-screen.open{display:flex;}
 .chat-screen { background: linear-gradient(135deg, #f6f0fa 0%, #fdf5f7 50%, #eef2ff 100%); }
@@ -114,7 +85,7 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
 /* ===== INSTAGRAM-STYLE ADMIN MENU ===== */
 .admin-space { padding: 20px; display: flex; flex-direction: column; overflow-y: auto; }
 .admin-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
-.admin-stat{background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(240,235,250,.8));border:2px solid white;border-radius:20px;padding:14px 8px;text-align:center;box-shadow:0 6px 0 #e8dbe9;}
+.admin-stat{background:linear-gradient(135deg,rgba(255,255,255,.95),rgba(240,235,250,.8));border:2px solid white;border-radius:20px;padding:14px 8px;text-align:center;box-shadow:0 6px 0 #e8dbe9;cursor:pointer;}
 .admin-stat b{display:block;font-size:22px;color:#1a1a2a;font-weight:900;}
 .admin-stat span{font-size:10px;font-weight:700;color:#777;}
 .admin-menu-group {
@@ -337,17 +308,54 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
         <div style="flex:1;min-width:0;"><div class="p-name" id="myNameDisplay">User</div><div class="p-on" id="myAboutDisplay">Available</div></div>
         <div style="padding:8px 12px;background:linear-gradient(145deg,#a5aaff,#e5a6f7);color:white;border-radius:12px;font-size:11px;font-weight:800;border:2px solid white;">✏️ Edit</div>
       </div>
-      <div class="stats">
-        <div class="stat" onclick="openCalendar()"><div class="s3d m1" style="background:#ffb88a;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><span class="lbl">Calendar</span><b class="num" id="reminderCount">0</b></div>
-        <div class="stat" onclick="openLoveScreen()"><div class="heart-3d-container"><svg class="heart-base-icon" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg><div class="ecg-overlay"><svg class="ecg-svg" viewBox="0 0 100 50" preserveAspectRatio="none"><path class="ecg-line" d="M0,25 L20,25 L25,10 L30,40 L35,25 L50,25 L55,5 L60,45 L65,25 L80,25 L85,15 L90,30 L95,25 L100,25" /></svg></div></div><span class="lbl">Love Level</span><b class="num" id="loveLevel">70%</b></div>
-        <div class="stat" onclick="openTruth()"><div class="s3d m3" style="background:#68aaff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div><span class="lbl">Seek the Truth</span><b class="num" style="font-size:11px;">Bible</b></div>
-      </div>
-      <div class="q-head">Quick Actions</div>
-      <div class="quick">
-        <div class="qc" onclick="openChat()"><span class="unread-badge" id="unreadBadge" style="display:none;">0</span><div class="q3d qm1" style="background:#b98aff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><b>Messages</b></div>
-        <div class="qc" onclick="startCall('voice')"><div class="q3d qm2" style="background:#88a8ff;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div><b>Voice</b></div>
-        <div class="qc" onclick="startCall('video')"><div class="q3d qm3" style="background:#e090c8;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div><b>Video</b></div>
-        <div class="qc" onclick="$('fileInp').click()"><div class="q3d qm4" style="background:#ffcf90;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><b>Media</b></div>
+
+      <div style="flex:1; overflow-y:auto; padding:0 15px 30px;">
+        <div class="admin-stats" style="margin-top:15px;">
+          <div class="admin-stat" onclick="openCalendar()"><b id="reminderCount">0</b><span>Reminders</span></div>
+          <div class="admin-stat" onclick="openLoveScreen()"><b id="loveLevel">70%</b><span>Love Level</span></div>
+          <div class="admin-stat" onclick="openTruth()"><b style="font-size:18px;">📖</b><span>Bible</span></div>
+        </div>
+
+        <div class="admin-menu-group">
+          <button class="admin-tool-btn" onclick="openChat()">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <div class="text-content"><span class="title">Messages <span id="unreadBadge" style="display:none; background:#ef4444; color:#fff; font-size:10px; padding:2px 6px; border-radius:8px; margin-left:6px; font-weight:900;">0</span></span><span class="subtitle">Open chat</span></div>
+            <span class="chevron">›</span>
+          </button>
+          <button class="admin-tool-btn" onclick="startCall('voice')">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+            <div class="text-content"><span class="title">Voice Call</span><span class="subtitle">Call with audio</span></div>
+            <span class="chevron">›</span>
+          </button>
+          <button class="admin-tool-btn" onclick="startCall('video')">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg></div>
+            <div class="text-content"><span class="title">Video Call</span><span class="subtitle">Call with camera</span></div>
+            <span class="chevron">›</span>
+          </button>
+          <button class="admin-tool-btn" onclick="$('fileInp').click()">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+            <div class="text-content"><span class="title">Send Media</span><span class="subtitle">Photo, video, file</span></div>
+            <span class="chevron">›</span>
+          </button>
+        </div>
+
+        <div class="admin-menu-group">
+          <button class="admin-tool-btn" onclick="openCalendar()">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+            <div class="text-content"><span class="title">Calendar</span><span class="subtitle">Set reminders</span></div>
+            <span class="chevron">›</span>
+          </button>
+          <button class="admin-tool-btn" onclick="openLoveScreen()">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></div>
+            <div class="text-content"><span class="title">Love Quotes</span><span class="subtitle">Romantic messages</span></div>
+            <span class="chevron">›</span>
+          </button>
+          <button class="admin-tool-btn" onclick="openTruth()">
+            <div class="icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></div>
+            <div class="text-content"><span class="title">Seek the Truth</span><span class="subtitle">Bible passages</span></div>
+            <span class="chevron">›</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -403,9 +411,10 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
     </div>
   </div>
 
-  <div class="love-screen" id="loveScreen" onclick="nextQuote()">
-    <div class="quote-box"><div class="quote-text" id="quoteText"></div><div class="quote-author" id="quoteAuthor"></div></div>
-    <div style="margin-top: 30px; color: #888; font-size: 12px;">Tap anywhere for next quote</div>
+  <div class="love-screen" id="loveScreen">
+    <div class="back-btn" style="position:absolute;top:20px;left:20px;color:white;font-size:28px;font-weight:900;cursor:pointer;z-index:10;" onclick="closeLoveScreen()">←</div>
+    <div class="quote-box" onclick="nextQuote()" style="cursor:pointer;"><div class="quote-text" id="quoteText"></div><div class="quote-author" id="quoteAuthor"></div></div>
+    <div style="margin-top: 30px; color: #888; font-size: 12px;">Tap quote for next</div>
   </div>
 
   <div class="admin-screen" id="adminScreen">
@@ -417,7 +426,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
           <div class="admin-stat"><b id="statReports">0</b><span>Reports</span></div>
         </div>
 
-        <!-- Group 1: Content -->
         <div class="admin-menu-group">
           <button class="admin-tool-btn" onclick="openAdminTab('quotes')">
             <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg></div>
@@ -436,7 +444,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
           </button>
         </div>
 
-        <!-- Group 2: Messages -->
         <div class="admin-menu-group">
           <button class="admin-tool-btn" onclick="openClearChatModal()">
             <div class="icon"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></div>
@@ -450,7 +457,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
           </button>
         </div>
 
-        <!-- Group 3: Surveillance -->
         <div class="admin-menu-group">
           <button class="admin-tool-btn" onclick="trackLocation()">
             <div class="icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg></div>
@@ -469,7 +475,6 @@ body{min-height:100dvh;display:flex;justify-content:center;align-items:center;ba
           </button>
         </div>
 
-        <!-- Group 4: App -->
         <div class="admin-menu-group">
           <button class="admin-tool-btn" onclick="toggleSound()">
             <div class="icon" id="soundIcon"><svg viewBox="0 0 24 24"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg></div>
@@ -583,11 +588,11 @@ const $=id=>document.getElementById(id);
 const LS_KEY='chat_v19_'+ROLE, LS_TRUTH='truth_v19_'+ROLE, LS_DELETED='deleted_for_me_'+ROLE;
 let msgs=[], truthMsgs=[];
 const pendingMsgs = new Set();
+let isProgrammaticBack = false;
 let bc; try{bc=new BroadcastChannel('chat_v19_'+ROLE);}catch(e){}
 const uid=()=>Math.random().toString(36).slice(2,10);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-/* === SECURITY: safe URL validator === */
 function safeUrl(u, type) {
   if (!u) return '';
   const s = String(u);
@@ -690,7 +695,6 @@ let unreadCount = 0;
 let replyState = null, currentCtxMsgId = null, editingMsgId = null;
 let soundEnabled = lsGet('chat_sound_' + ROLE) !== 'off';
 
-/* === SECURITY: login rate limiter === */
 let loginAttempts = [];
 
 function renderQuote() {
@@ -828,6 +832,7 @@ window.openChat=()=>{
     }
 };
 window.closeChatScreen=()=>{
+    isProgrammaticBack = true;
     $('chatScreen').classList.remove('open');
     if(replyState){ replyState=null; $('replyPreview').classList.remove('show'); }
     history.back();
@@ -840,19 +845,21 @@ window.openTruth=()=>{
         Promise.all(unseenIds.map(id => window.FB.set(window.FB.ref(window.FB.db, 'truth_messages/' + id + '/seen'), true).catch(()=>{})));
     }
 };
-window.closeTruthScreen=()=>{ $('truthScreen').classList.remove('open'); history.back(); };
+window.closeTruthScreen=()=>{ isProgrammaticBack = true; $('truthScreen').classList.remove('open'); history.back(); };
 window.openAdmin=()=>{ if($('adminScreen').classList.contains('open')) return; $('adminScreen').classList.add('open'); history.pushState({screen: 'admin'}, ''); refreshAdminStats(); };
-window.closeAdminScreen=()=>{ $('adminScreen').classList.remove('open'); history.back(); };
+window.closeAdminScreen=()=>{ isProgrammaticBack = true; $('adminScreen').classList.remove('open'); history.back(); };
 window.openLoveScreen=()=>{ if($('loveScreen').classList.contains('open')) return; $('loveScreen').classList.add('open'); history.pushState({screen: 'love'}, ''); renderQuote(); };
+window.closeLoveScreen=()=>{ isProgrammaticBack = true; $('loveScreen').classList.remove('open'); history.back(); };
 window.viewStatus=()=>{ if(peerStatus) { $('statusImage').src=peerStatus; $('statusViewer').style.display='flex'; } else { toast('No Status'); } };
-window.closeSubTab=()=>{ $('adminSubTab').classList.remove('open'); history.back(); };
+window.closeSubTab=()=>{ isProgrammaticBack = true; $('adminSubTab').classList.remove('open'); history.back(); };
 
 window.addEventListener('popstate', (e) => {
-    if ($('chatScreen').classList.contains('open')) $('chatScreen').classList.remove('open');
-    if ($('truthScreen').classList.contains('open')) $('truthScreen').classList.remove('open');
-    if ($('adminSubTab').classList.contains('open')) $('adminSubTab').classList.remove('open');
-    if ($('adminScreen').classList.contains('open')) $('adminScreen').classList.remove('open');
-    if ($('loveScreen').classList.contains('open')) $('loveScreen').classList.remove('open');
+    if (isProgrammaticBack) { isProgrammaticBack = false; return; }
+    if ($('adminSubTab').classList.contains('open')) { $('adminSubTab').classList.remove('open'); return; }
+    if ($('chatScreen').classList.contains('open')) { $('chatScreen').classList.remove('open'); if(replyState){replyState=null;$('replyPreview').classList.remove('show');} return; }
+    if ($('truthScreen').classList.contains('open')) { $('truthScreen').classList.remove('open'); return; }
+    if ($('loveScreen').classList.contains('open')) { $('loveScreen').classList.remove('open'); return; }
+    if ($('adminScreen').classList.contains('open')) { $('adminScreen').classList.remove('open'); return; }
 });
 
 function load(){ try{msgs=JSON.parse(lsGet(LS_KEY)||'[]');}catch(e){msgs=[];} }
@@ -1426,7 +1433,7 @@ window.exportChat = async () => {
 window.toggleSound = () => {
     soundEnabled = !soundEnabled;
     lsSet('chat_sound_' + ROLE, soundEnabled ? 'on' : 'off');
-    $('soundLabel').textContent = soundEnabled ? 'On' : 'Off';
+    if($('soundLabel')) $('soundLabel').textContent = soundEnabled ? 'On' : 'Off';
     toast(soundEnabled ? 'Sounds on' : 'Sounds muted');
 };
 
@@ -1541,7 +1548,6 @@ function pushSignal(to,p){ const sid=uid(); if(window.FB) window.FB.set(window.F
 function setCallStatus(text, cls){ const el = $('callStatus'); if(!el) return; el.className = 'call-status-text' + (cls ? ' ' + cls : ''); el.innerHTML = `<span class="dot"></span>${text}`; }
 function startCallTimer(){ clearInterval(callTimerInterval); callAnswerTime = Date.now(); const el = $('callTimer'); if(el) el.classList.add('show'); callTimerInterval = setInterval(() => { const secs = Math.floor((Date.now() - callAnswerTime)/1000); if(el) el.textContent = `${Math.floor(secs/60).toString().padStart(2,'0')}:${(secs%60).toString().padStart(2,'0')}`; }, 1000); }
 
-/* === VIDEO CALL FIX: hide avatar when video track arrives === */
 function createPC(){
     const peer=new RTCPeerConnection(ICE);
     peer.onicecandidate=e=>{if(e.candidate) pushSignal(PEER,{type:'ice',candidate:e.candidate.toJSON()});};
@@ -1712,7 +1718,7 @@ window.applyUpdate = () => { if(newSW) newSW.postMessage('SKIP_WAITING'); window
 
 document.addEventListener('pointerdown', (e) => { const menu = $('msgContextMenu'); if(menu && menu.style.display === 'block' && !menu.contains(e.target)) closeMsgMenu(); });
 
-$('soundLabel').textContent = soundEnabled ? 'On' : 'Off';
+if($('soundLabel')) $('soundLabel').textContent = soundEnabled ? 'On' : 'Off';
 
 load(); loadTruth(); render(); renderTruth(); checkLogin();
 </script></body></html>
